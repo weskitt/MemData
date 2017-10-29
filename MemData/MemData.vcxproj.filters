@@ -21,12 +21,24 @@
     <ClInclude Include="targetver.h">
       <Filter>头文件</Filter>
     </ClInclude>
+    <ClInclude Include="DATA_NET.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="GENERAL_DATA.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="stdafx.cpp">
       <Filter>源文件</Filter>
     </ClCompile>
     <ClCompile Include="MemData.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="DATA_NET.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="GENERAL_DATA.cpp">
       <Filter>源文件</Filter>
     </ClCompile>
   </ItemGroup>

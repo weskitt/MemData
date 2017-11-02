@@ -30,6 +30,15 @@
     <ClInclude Include="FRAGMENT.h">
       <Filter>头文件</Filter>
     </ClInclude>
+    <ClInclude Include="CENTER.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="WISH.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="SENSOR.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="stdafx.cpp">
@@ -45,6 +54,15 @@
       <Filter>源文件</Filter>
     </ClCompile>
     <ClCompile Include="FRAGMENT.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="CENTER.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="WISH.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="SENSOR.cpp">
       <Filter>源文件</Filter>
     </ClCompile>
   </ItemGroup>

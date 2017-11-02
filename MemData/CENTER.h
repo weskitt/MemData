@@ -1,7 +1,7 @@
 #pragma once
 class CENTER
 {
-	WISH mainWISH; //主期望，
+	WISH sensorWISH; //传感器期望，
 	vector<WISH> wish; //临时的期望
 public:
 	CENTER();

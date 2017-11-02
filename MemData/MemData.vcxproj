@@ -147,6 +147,7 @@
     <ClInclude Include="DATA_NET.h" />
     <ClInclude Include="FRAGMENT.h" />
     <ClInclude Include="GENERAL_DATA.h" />
+    <ClInclude Include="SENSOR.h" />
     <ClInclude Include="stdafx.h" />
     <ClInclude Include="targetver.h" />
     <ClInclude Include="WISH.h" />
@@ -157,6 +158,7 @@
     <ClCompile Include="FRAGMENT.cpp" />
     <ClCompile Include="GENERAL_DATA.cpp" />
     <ClCompile Include="MemData.cpp" />
+    <ClCompile Include="SENSOR.cpp" />
     <ClCompile Include="stdafx.cpp">
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Create</PrecompiledHeader>
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Create</PrecompiledHeader>

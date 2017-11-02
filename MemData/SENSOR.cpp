@@ -2,6 +2,10 @@
 #include "SENSOR.h"
 
 
+void SENSOR::self_Updata()
+{
+}
+
 SENSOR::SENSOR()
 {
 }

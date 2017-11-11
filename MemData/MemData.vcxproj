@@ -147,6 +147,7 @@
     <ClInclude Include="DATA_NET.h" />
     <ClInclude Include="FRAGMENT.h" />
     <ClInclude Include="GENERAL_DATA.h" />
+    <ClInclude Include="HeadFile.h" />
     <ClInclude Include="SENSOR.h" />
     <ClInclude Include="stdafx.h" />
     <ClInclude Include="targetver.h" />

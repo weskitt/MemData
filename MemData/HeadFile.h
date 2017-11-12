@@ -19,6 +19,6 @@ const int senType  =2;
 const int senCount =8;
 
 
-const int fragLocal = 4;
-const int fragType = 2;
-const int fragCount = 10000;
+const int unitLocal = 4;
+const int unitType = 2;
+const int unitCount = 10000;

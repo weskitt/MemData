@@ -145,9 +145,10 @@
   <ItemGroup>
     <ClInclude Include="CENTER.h" />
     <ClInclude Include="DATA_NET.h" />
-    <ClInclude Include="FRAGMENT.h" />
+    <ClInclude Include="UNIT.h" />
     <ClInclude Include="GENERAL_DATA.h" />
     <ClInclude Include="HeadFile.h" />
+    <ClInclude Include="SENSE.h" />
     <ClInclude Include="SENSOR.h" />
     <ClInclude Include="stdafx.h" />
     <ClInclude Include="targetver.h" />
@@ -156,9 +157,10 @@
   <ItemGroup>
     <ClCompile Include="CENTER.cpp" />
     <ClCompile Include="DATA_NET.cpp" />
-    <ClCompile Include="FRAGMENT.cpp" />
+    <ClCompile Include="UNIT.cpp" />
     <ClCompile Include="GENERAL_DATA.cpp" />
     <ClCompile Include="MemData.cpp" />
+    <ClCompile Include="SENSE.cpp" />
     <ClCompile Include="SENSOR.cpp" />
     <ClCompile Include="stdafx.cpp">
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Create</PrecompiledHeader>

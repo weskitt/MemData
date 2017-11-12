@@ -27,9 +27,6 @@
     <ClInclude Include="GENERAL_DATA.h">
       <Filter>头文件</Filter>
     </ClInclude>
-    <ClInclude Include="FRAGMENT.h">
-      <Filter>头文件</Filter>
-    </ClInclude>
     <ClInclude Include="CENTER.h">
       <Filter>头文件</Filter>
     </ClInclude>
@@ -40,6 +37,12 @@
       <Filter>头文件</Filter>
     </ClInclude>
     <ClInclude Include="HeadFile.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="SENSE.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="UNIT.h">
       <Filter>头文件</Filter>
     </ClInclude>
   </ItemGroup>
@@ -56,9 +59,6 @@
     <ClCompile Include="GENERAL_DATA.cpp">
       <Filter>源文件</Filter>
     </ClCompile>
-    <ClCompile Include="FRAGMENT.cpp">
-      <Filter>源文件</Filter>
-    </ClCompile>
     <ClCompile Include="CENTER.cpp">
       <Filter>源文件</Filter>
     </ClCompile>
@@ -66,6 +66,12 @@
       <Filter>源文件</Filter>
     </ClCompile>
     <ClCompile Include="SENSOR.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="SENSE.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="UNIT.cpp">
       <Filter>源文件</Filter>
     </ClCompile>
   </ItemGroup>

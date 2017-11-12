@@ -17,3 +17,8 @@ const int senSkin	= 3;	//·ÖÎöÎÂ¶ÈÊª¶È
 const int senLocal =4;
 const int senType  =2;
 const int senCount =8;
+
+
+const int fragLocal = 4;
+const int fragType = 2;
+const int fragCount = 10000;

@@ -21,4 +21,4 @@ const int senCount =8;
 
 const int unitLocal = 4;
 const int unitType = 2;
-const int unitCount = 10000;
+const int unitCollection = 10000;

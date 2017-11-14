@@ -4,7 +4,7 @@ class CENTER
 	WISH sensorWISH; //传感器期望，
 	vector<WISH> wish; //临时的期望
 
-	UNIT memory[unitLocal][unitType][unitCollection]; //
+	UNIT memory[unitLocal][unitType][unitCount];
 public:
 	CENTER();
 	~CENTER();

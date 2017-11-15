@@ -7,7 +7,6 @@ class SENSOR  //传感器 actor
 	int senty; //灵敏度,分辨率  //作用于UNIT的senseFrag感觉片段vector长度
 	int local; //位置
 	int type; //类型 温度 颜色 亮度 波响度 波频率 等一系列被分解后的基本  或者  虚拟构造的
-	int id;  //该类型传感器编号
 	void self_Updata();
 
 public:

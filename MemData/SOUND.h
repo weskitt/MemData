@@ -2,9 +2,9 @@
 
 class SOUND
 {
-	int power;  //总气长
+	int power;  //呼吸总气量
 
-	int p1;     //实时气长
+	int p1;     //呼吸实时气量
 	int sf;     //频率
 	int fb;     //韧性
 
@@ -17,7 +17,7 @@ class SOUND
 
 
 
-	void dataUpdate()
+	void breathUpdate()   //呼吸实时气量更新
 	{
 		p1 = power*sin(bt); //计算实时气长
 	}

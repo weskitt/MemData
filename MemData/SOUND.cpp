@@ -3,6 +3,16 @@
 
 
 
+int SOUND::getPRPT()
+{
+	return 0;
+}
+
+void SOUND::Analyse(char * soundData, vector<pair<int, int>>& result)
+{
+
+}
+
 void SOUND::wave0()
 {
 

@@ -57,6 +57,9 @@
     <ClInclude Include="LEARNSOUND.h">
       <Filter>Tools</Filter>
     </ClInclude>
+    <ClInclude Include="READWAVE.h">
+      <Filter>Tools</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="stdafx.cpp">
@@ -93,6 +96,9 @@
       <Filter>源文件</Filter>
     </ClCompile>
     <ClCompile Include="LEARNSOUND.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="READWAVE.cpp">
       <Filter>源文件</Filter>
     </ClCompile>
   </ItemGroup>

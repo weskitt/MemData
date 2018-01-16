@@ -147,6 +147,7 @@
     <ClInclude Include="DATA_NET.h" />
     <ClInclude Include="LEARNSOUND.h" />
     <ClInclude Include="READSOUND.h" />
+    <ClInclude Include="READWAVE.h" />
     <ClInclude Include="SOUND.h" />
     <ClInclude Include="UNIT.h" />
     <ClInclude Include="GENERAL_DATA.h" />
@@ -162,6 +163,7 @@
     <ClCompile Include="DATA_NET.cpp" />
     <ClCompile Include="LEARNSOUND.cpp" />
     <ClCompile Include="READSOUND.cpp" />
+    <ClCompile Include="READWAVE.cpp" />
     <ClCompile Include="SOUND.cpp" />
     <ClCompile Include="UNIT.cpp" />
     <ClCompile Include="GENERAL_DATA.cpp" />

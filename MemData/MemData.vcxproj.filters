@@ -51,9 +51,6 @@
     <ClInclude Include="SOUND.h">
       <Filter>头文件</Filter>
     </ClInclude>
-    <ClInclude Include="READSOUND.h">
-      <Filter>Tools</Filter>
-    </ClInclude>
     <ClInclude Include="LEARNSOUND.h">
       <Filter>Tools</Filter>
     </ClInclude>
@@ -90,9 +87,6 @@
       <Filter>源文件</Filter>
     </ClCompile>
     <ClCompile Include="SOUND.cpp">
-      <Filter>源文件</Filter>
-    </ClCompile>
-    <ClCompile Include="READSOUND.cpp">
       <Filter>源文件</Filter>
     </ClCompile>
     <ClCompile Include="LEARNSOUND.cpp">

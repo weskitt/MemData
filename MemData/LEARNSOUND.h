@@ -5,9 +5,7 @@
 class LEARNSOUND
 {
 	READWAVE Rwave;
-	char *py = "py1816";
-	char *cpy = " ";
-	char *data;
+	vector<AWAVE> splitWaves;
 public:
 	
 	LEARNSOUND();

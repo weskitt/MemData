@@ -13,22 +13,24 @@ int READWAVE::GetData(char * url)
 	char *samples=new char[srcSize];
 	short * samnums = new short[srcSize/2];
 
-	//复原采样数据到vSample
+	//复原采样数据到ListSamples
 	fin.read(samples, srcSize);
 	memcpy(samnums, samples, srcSize);
 	for (size_t i = 0; i < srcSize/2; i++)
-		vSample.push_back(samnums[i]);
+		ListSamples.push_back(samnums[i]);
 
 	delete(samples);
 	delete(samnums);
-	return vSample.size();
+	return ListSamples.size();
 }
 
 void READWAVE::split(vector<AWAVE>& splitWave)
 {
-	short samF(0),samC(0),samB(0);
 	AWAVE Awave;
-	for each (short var in vSample)
+	short samUp(0), samDown(0);
+	short diff; //相邻采样点振幅偏差，用于检查修正异常采样点
+
+	for (auto iter = ListSamples.begin(); iter != ListSamples.end(); ++iter)
 	{
 
 	}

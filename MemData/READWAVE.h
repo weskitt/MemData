@@ -1,5 +1,6 @@
 #pragma once
 
+
 struct WAVE_HEAD
 {
 	char	riff_id[4];			//4byte,资源交换文件标志:RIFF 
@@ -19,7 +20,8 @@ struct WAVE_HEAD
 
 struct AWAVE
 {
-	short *data;
+	short *dataUp;
+	short *dataDown;
 	int period;		//周期
 	int freq;		//频率
 	int energy;		//振幅能量
@@ -31,9 +33,9 @@ class READWAVE
 {
 	WAVE_HEAD wave_tag;
 	ifstream fin;
-	vector<short> vSample;
+	list<short> ListSamples;
 public:
-	int GetData(char *); //返回采集到vSample中的样本数量
+	int GetData(char *); //返回采集到ListSamples中的样本数量
 	void split(vector<AWAVE> &splitWave);
 
 	READWAVE();

@@ -29,6 +29,14 @@ struct AWAVE
 	int spread;		//时域分布(F2，F4，C6，B4，B2)
 };
 
+struct KEY_CHUNK
+{
+
+	vector<short>::iterator risePoint; //上升沿起始采样点
+	vector<short>::iterator downPoint; //下降沿末端采样点
+
+};
+
 class READWAVE
 {
 	WAVE_HEAD wave_tag;

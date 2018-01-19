@@ -27,27 +27,32 @@ int READWAVE::GetData(char * url)
 void READWAVE::split(vector<AWAVE>& splitWave)
 {
 	AWAVE Awave;
+	KEY_CHUNK keyChunk;
 	short samUp(0), samDown(0);
-	short diff; //相邻采样点振幅偏差，用于检查修正异常采样点
+	short diff; //相邻采样点振幅偏差，用于检查修正异常关键采样点
 	bool start(true);//默认起步开关
-	bool waveState; bool waveRise(true), waveDown(false); //波形上升下降开关
+	bool waveState; bool waveRise(true), waveDown(false); //关键波形上升下降开关
 	
-	short StartSample(10);  //起步最小可识别采样门槛,过滤低于该值以下的采样
+	short StartSampleGate(10);  //起步采样阀门,起步时过滤低于该值以下的采样
 	short samA, samB;
-	short sWave(0),StartWave(10);  //识别形成波的最低样本数
+	
+	const short WAVE_COUNT(10);  //识别形成波的最低样本数
+	short waveCount(0);          //样本计数器
 
 	for (auto iter = ListSamples.begin(); iter != ListSamples.end(); ++iter)
 	{
 		if (start) {
-			if (*iter > StartSample) {
+			if (*iter > StartSampleGate) {
 				samA = *iter;
 				samB = *(++iter);
 				start = false; //检测启动迭代器
 				//启动结束iter的值等于samB;
 			}
 		}
+		//以上启动结束，下面开始寻找关键样本
 		else
 		{
+			keyChunk.startPoint = iter;
 			if()
 		}
 	}

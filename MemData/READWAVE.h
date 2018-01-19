@@ -20,8 +20,8 @@ struct WAVE_HEAD
 
 struct AWAVE
 {
-	short *dataUp;
-	short *dataDown;
+	short *dataTop;
+	short *dataLow;
 	int period;		//周期
 	int freq;		//频率
 	int energy;		//振幅能量
@@ -31,9 +31,10 @@ struct AWAVE
 
 struct KEY_CHUNK
 {
-
-	vector<short>::iterator risePoint; //上升沿起始采样点
-	vector<short>::iterator downPoint; //下降沿末端采样点
+	short topKeyValue;
+	short lowKeyValue;
+	list<short>::iterator startPoint; //起始采样点
+	list<short>::iterator endPoint; //末端采样点
 
 };
 

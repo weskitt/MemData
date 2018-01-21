@@ -27,7 +27,7 @@ int READWAVE::GetData(char * url)
 void READWAVE::split(vector<AWAVE>& splitWave)
 {
 	AWAVE Awave;
-	KEY_CHUNK keyChunk;
+	ALL_KEY_CHUNKS keyChunks;
 	short samUp(0), samDown(0);
 	short diff; //相邻采样点振幅偏差，用于检查修正异常关键采样点
 	bool start(true);//默认起步开关
@@ -35,25 +35,45 @@ void READWAVE::split(vector<AWAVE>& splitWave)
 	
 	short StartSampleGate(10);  //起步采样阀门,起步时过滤低于该值以下的采样
 	short samA, samB;
-	
-	const short WAVE_COUNT(10);  //识别形成波的最低样本数
+	const short PositiveApproximateZERO(2);  //正向近似零点
+	const short NegativeApproximateZERO(-2); //负向近似零点
+	const short WAVE_COUNT(5);  //识别形成波的最低样本数
 	short waveCount(0);          //样本计数器
 
 	for (auto iter = ListSamples.begin(); iter != ListSamples.end(); ++iter)
 	{
 		if (start) {
 			if (*iter > StartSampleGate) {
-				samA = *iter;
-				samB = *(++iter);
-				start = false; //检测启动迭代器
-				//启动结束iter的值等于samB;
+				while ( (*iter)>PositiveApproximateZERO && (*iter)<NegativeApproximateZERO ){ //找最接近零点样本samA
+					++iter;
+				}
+				samA = *iter;      //最接近零点样本samA
+				samB = *(++iter);  //最接近零点样本samA的下一个样本samB
+				start = false;	   //结束启动
+				//iter的值等于samB;
 			}
 		}
 		//以上启动结束，下面开始寻找关键样本
 		else
-		{
-			keyChunk.startPoint = iter;
-			if()
+		{	//寻找波峰或波谷
+			keyChunks.startPoint = iter;
+			pair<short, int> pt;
+			if (samA > samB) {		//预测波谷
+
+			}
+			else if(samA < samB){	//预测波峰
+
+			}
+			else   //相等，跳过当前样本
+			{
+
+			}
+			{
+					
+			}
+			{
+
+			}
 		}
 	}
 }

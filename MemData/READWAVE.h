@@ -29,10 +29,10 @@ struct AWAVE
 	int spread;		//时域分布(F2，F4，C6，B4，B2)
 };
 
-struct KEY_CHUNK
+struct ALL_KEY_CHUNKS
 {
-	short topKeyValue;
-	short lowKeyValue;
+	map<short, int> PeakSamples;   //波峰集合，第二个参数为相对第一个采样的位置偏移
+	map<short, int> TroughSamples; //波谷集合，第二个参数为相对第一个采样的位置偏移
 	list<short>::iterator startPoint; //起始采样点
 	list<short>::iterator endPoint; //末端采样点
 

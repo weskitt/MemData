@@ -31,20 +31,18 @@ struct AWAVE
 
 struct ALL_KEY_CHUNKS
 {
-	map<short, int> PeakSamples;   //波峰集合，第二个参数为相对第一个采样的位置偏移
-	map<short, int> TroughSamples; //波谷集合，第二个参数为相对第一个采样的位置偏移
-	list<short>::iterator startPoint; //起始采样点
-	list<short>::iterator endPoint; //末端采样点
-
+	vector< pair<short, int> > PeakSamples;   //波峰集合，第1个参数为相对第一个采样的位置偏移
+	vector< pair<short, int> > TroughSamples; //波谷集合，第1个参数为相对第一个采样的位置偏移
 };
 
 class READWAVE
 {
 	WAVE_HEAD wave_tag;
 	ifstream fin;
-	list<short> ListSamples;
+	//list<short> vSamples;
+	vector<short> vSamples;
 public:
-	int GetData(char *); //返回采集到ListSamples中的样本数量
+	int GetData(char *); //返回采集到vSamples中的样本数量
 	void split(vector<AWAVE> &splitWave);
 
 	READWAVE();

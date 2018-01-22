@@ -33,6 +33,7 @@ void READWAVE::split(vector<AWAVE>& splitWave)
 	bool		start(true);//默认起步开关
 	int			WaveState(0); 
 	int			WAVE_RISE(1), WAVE_DOWN(2); //关键波形上升下降开关
+	bool		IsValidRise, IsValidDown;
 	short		samA, samB;	
 	const short WAVE_COUNT(5);  //识别形成波的最低样本数
 	short		WaveRiseCount(0), WaveDownCount(0);//上升下降样本计数器
@@ -54,50 +55,53 @@ void READWAVE::split(vector<AWAVE>& splitWave)
 				}
 				samA = *iter;      //最接近零点样本samA
 				samB = *(++iter);  //最接近零点样本samA的下一个样本samB
-				start = false;	   //结束启动
+				if (samB < samA) WaveState = WAVE_RISE;//预测波峰
+				else			 WaveState = WAVE_DOWN;//预测波谷
 				++offset;
+				start = false;	   //结束启动
+				
 				//iter的值等于samB;
 			}
 		}
 		//以上启动结束，下面开始寻找关键样本
 		else
-		{	//寻找波峰或波谷
-			//keyChunks.startPoint = iter;
-			//pair<int, short> pt;
-			//   sample offset
-			if (samB < samA) {		//预测波峰
-				//pt.first = samA;
-				//pt.second = offset;
-				while (WaveState = WAVE_RISE)
-				{
-					++WaveRiseCount;
-					//步进
-					samB = samA;
-					samA = *(++iter);
-					if (samB > samA && WaveRiseCount > WAVE_COUNT) //探到波峰samB,且上升样本数量足够
-					{
-						keyChunks.PeakSamples.insert(ma)
+		{
+			while (iter != vSamples.end())
+			{
+				while (WaveState == WAVE_RISE) {
+					if (samB < samA) {  //寻波峰
+						samB = samA;
+						samA = *(++iter);
+						++offset;
+					}
+					else {	//探到波峰samB,此时samB > samA
+						if (WAVE_COUNT < WaveRiseCount) //上升样本数量充足
+							PeakSamples.push_back(make_pair(samB, offset));//记录样本
+						//开始探索波谷
+						WaveState = WAVE_DOWN;
+						WaveRiseCount = 1;
+						break;
 					}
 
-					++offset;
+				}
 
-
+				while (WaveState == WAVE_DOWN) {
+					if (samB > samA) {  //寻波谷
+						samB = samA;
+						samA = *(++iter);
+						++offset;
+					}
+					else {	//探到波谷samB,此时samB < samA
+						if (WAVE_COUNT < WaveDownCount) //下降样本数量充足
+							PeakSamples.push_back(make_pair(samB, offset));//记录样本
+						//开始探索波峰
+						WaveState = WAVE_RISE;
+						WaveRiseCount = 1;
+						break;
+					}
 
 				}
-				
 			}
-			else if(samB > samA){	//预测波谷
-
-				if (WaveRiseCount > WAVE_COUNT) {
-					pt.first = samB;
-					pt.second = offset;
-				}
-			}
-			else   //相等，跳过当前样本
-			{
-
-			}
-			++offset;
 		}
 	}
 }

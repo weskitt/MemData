@@ -31,9 +31,8 @@ void READWAVE::split(vector<AWAVE>& splitWave)
 	//short samUp(0), samDown(0);
 	short		diff; //相邻采样点振幅偏差，用于检查修正异常关键采样点
 	bool		start(true);//默认起步开关
-	int			WaveState(0); 
-	int			WAVE_RISE(1), WAVE_DOWN(2); //关键波形上升下降开关
-	bool		IsValidRise, IsValidDown;
+	bool		WaveStateRise(false), WaveStateDown(false);//关键波形上升下降开关
+	//bool		IsValidRise, IsValidDown;
 	short		samA, samB;	
 	const short WAVE_COUNT(5);  //识别形成波的最低样本数
 	short		WaveRiseCount(0), WaveDownCount(0);//上升下降样本计数器
@@ -55,8 +54,8 @@ void READWAVE::split(vector<AWAVE>& splitWave)
 				}
 				samA = *iter;      //最接近零点样本samA
 				samB = *(++iter);  //最接近零点样本samA的下一个样本samB
-				if (samB < samA) WaveState = WAVE_RISE;//预测波峰
-				else			 WaveState = WAVE_DOWN;//预测波谷
+				if (samB < samA) WaveStateRise = true;//预测波峰
+				else			 WaveStateDown = true;//预测波谷
 				++offset;
 				start = false;	   //结束启动
 				
@@ -68,7 +67,7 @@ void READWAVE::split(vector<AWAVE>& splitWave)
 		{
 			while (iter != vSamples.end())
 			{
-				while (WaveState == WAVE_RISE) {
+				while (WaveStateRise) {	
 					if (samB < samA) {  //寻波峰
 						samB = samA;
 						samA = *(++iter);
@@ -78,14 +77,14 @@ void READWAVE::split(vector<AWAVE>& splitWave)
 						if (WAVE_COUNT < WaveRiseCount) //上升样本数量充足
 							PeakSamples.push_back(make_pair(samB, offset));//记录样本
 						//开始探索波谷
-						WaveState = WAVE_DOWN;
-						WaveRiseCount = 1;
-						break;
+						WaveStateRise = false;
+						WaveStateDown = true;
+						WaveDownCount = 1;
 					}
 
 				}
 
-				while (WaveState == WAVE_DOWN) {
+				while (WaveStateDown) {
 					if (samB > samA) {  //寻波谷
 						samB = samA;
 						samA = *(++iter);
@@ -93,11 +92,11 @@ void READWAVE::split(vector<AWAVE>& splitWave)
 					}
 					else {	//探到波谷samB,此时samB < samA
 						if (WAVE_COUNT < WaveDownCount) //下降样本数量充足
-							PeakSamples.push_back(make_pair(samB, offset));//记录样本
+							TroughSamples.push_back(make_pair(samB, offset));//记录样本
 						//开始探索波峰
-						WaveState = WAVE_RISE;
+						WaveStateRise = true;
+						WaveStateDown = false;
 						WaveRiseCount = 1;
-						break;
 					}
 
 				}

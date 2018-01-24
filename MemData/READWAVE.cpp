@@ -34,14 +34,14 @@ void READWAVE::split(vector<AWAVE>& splitWave)
 	bool		WaveStateRise(false), WaveStateDown(false);//关键波形上升下降开关
 	//bool		IsValidRise, IsValidDown;
 	short		samA, samB;	
-	const short WAVE_COUNT(5);  //识别形成波的最低样本数
+	const short WAVE_COUNT(3);  //识别形成波的最低样本数
 	short		WaveRiseCount(0), WaveDownCount(0);//上升下降样本计数器
 	short		waveCount(0);          //样本计数器
 	int			offset = 0;
-
 	vector< pair<short, int> > PeakSamples;   //波峰集合，第1个参数为相对第一个采样的位置偏移
 	vector< pair<short, int> > TroughSamples; //波谷集合，第1个参数为相对第一个采样的位置偏移
-	short		StartSampleGate(10);  //起步采样阀门,起步时过滤低于该值以下的采样
+
+	short		StartSampleGate(400);  //起步采样阀门,起步时过滤低于该值以下的采样
 	const short PositiveApproximateZERO(2);  //正向近似零点
 	const short NegativeApproximateZERO(-2); //负向近似零点
 
@@ -83,7 +83,6 @@ void READWAVE::split(vector<AWAVE>& splitWave)
 					}
 
 				}
-
 				while (WaveStateDown) {
 					if (samB > samA) {  //寻波谷
 						samB = samA;
@@ -103,6 +102,17 @@ void READWAVE::split(vector<AWAVE>& splitWave)
 			}
 		}
 	}
+	//---------------------------------------------------------------------------------------
+	//Scheme A 逐波分离
+	short CheckLine = SHRT_MAX;
+
+	while (CheckLine)
+	{
+
+
+		--CheckLine;
+	}
+
 }
 
 READWAVE::READWAVE()

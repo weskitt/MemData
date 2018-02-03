@@ -3,24 +3,28 @@
 
 
 int READWAVE::GetData(char * url)
-{   //在外部更新文件地址
+{
+	//在外部更新文件地址
 	//打开wav文件并获取wav头信息
-	fin.open(url, ios::binary);
-	fin.read((char*)&wave_tag, sizeof(WAVE_HEAD));
-	int srcSize = wave_tag.dataSize;//数据长度
-
+	//fin.open(url, ios::binary);
+	//fin.read((char*)&wave_tag, sizeof(WAVE_HEAD));
+	//int srcSize = wave_tag.dataSize;//数据长度
+	//
 	//分配转换空间
-	char *samples=new char[srcSize];
-	short * samnums = new short[srcSize/2];
-
+	//char *samples=new char[srcSize];
+	//short * samnums = new short[srcSize/2];
+	//
 	//复原采样数据到vSamples
-	fin.read(samples, srcSize);
-	memcpy(samnums, samples, srcSize);
-	for (size_t i = 0; i < srcSize/2; i++)
-		vSamples.push_back(samnums[i]);
+	//fin.read(samples, srcSize);
+	//memcpy(samnums, samples, srcSize);
+	short *FormatSamples;
+	int FormatSampleSize = method.AudioSampleGetFromFile(url, &FormatSamples);
 
-	delete(samples);
-	delete(samnums);
+	for (size_t i = 0; i < FormatSampleSize; i++)
+		vSamples.push_back(FormatSamples[i]);
+
+	delete(FormatSamples);
+	
 	return vSamples.size();
 }
 
@@ -42,18 +46,20 @@ void READWAVE::split(vector<AWAVE>& splitWave)
 	vector< pair<short, int> > TroughSamples; //波谷集合，第1个参数为相对第一个采样的位置偏移
 
 	short		StartSampleGate(400);  //起步采样阀门,起步时过滤低于该值以下的采样
-	const short PositiveApproximateZERO(2);  //正向近似零点
-	const short NegativeApproximateZERO(-2); //负向近似零点
+//	const short PositiveApproximateZERO(2);  //正向近似零点
+//	const short NegativeApproximateZERO(-2); //负向近似零点
 
 	for (auto iter = vSamples.begin(); iter != vSamples.end(); ++iter)
 	{
 		if (start) {
 			if (*iter > StartSampleGate) {
-				while ( (*iter)>PositiveApproximateZERO && (*iter)<NegativeApproximateZERO ){ //找最接近零点样本samA
-					++iter;
-				}
-				samA = *iter;      //最接近零点样本samA
-				samB = *(++iter);  //最接近零点样本samA的下一个样本samB
+				method.AudioSampleFindZero(iter, &samA, &samB); //找最接近零点样本samA以及下一个样本samB
+																
+				//while ( (*iter)>PositiveApproximateZERO && (*iter)<NegativeApproximateZERO ){ //找最接近零点样本samA
+				//	++iter;
+				//}
+				//samA = *iter;      //最接近零点样本samA
+				//samB = *(++iter);  //最接近零点样本samA的下一个样本samB
 				if (samB < samA) WaveStateRise = true;//预测波峰
 				else			 WaveStateDown = true;//预测波谷
 				++offset;

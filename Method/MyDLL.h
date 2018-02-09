@@ -3,8 +3,25 @@
 #include<fstream>
 using namespace std;
 
+
+
 typedef vector<short> Vshort;
 typedef vector<short>::iterator VshortIter;
+
+typedef vector< pair<short, int> > Vpair;
+typedef vector< pair<short, int> > VpairIter;
+
+struct RichSample
+{
+	short data;
+	int	  addr;
+
+	char attr[10];
+};
+
+
+
+
 
 struct WAVE_HEAD
 {
@@ -23,14 +40,55 @@ struct WAVE_HEAD
 	short	dataSize;			//2byte,数据块大小  
 };
 
-class METHOD
+struct AWAVE
 {
-	WAVE_HEAD wave_tag;
-	ifstream fin;
-	static const short PositiveApproximateZERO = 2;  //正向近似零点
-	static const short NegativeApproximateZERO = -2; //负向近似零点
+	short *dataTop;
+	short *dataLow;
+	int period;		//周期
+	int freq;		//频率
+	int energy;		//振幅能量
+	int ways;		//能量方法
+	int spread;		//时域分布(F2，F4，C6，B4，B2)
+};
+
+typedef vector<AWAVE> vAwave;
+typedef vector<AWAVE>::iterator vAwaveIter;
+
+class AUDIO_METHOD
+{
+
+	WAVE_HEAD	wave_tag;
+	ifstream	fin;
 public:
-	_declspec(dllexport) int AudioSampleGetFromFile(char * url, short **FormatSamples);
-	_declspec(dllexport) VshortIter AudioSampleFindZero(VshortIter iter, short *samA, short *samB);
-	_declspec(dllexport) VshortIter AudioSampleFindKey(VshortIter iter, short *samA, short *samB, int *offset, bool *WaveStateRise)
+	bool		start = true;//默认起步开关
+	short		StartSampleGate = 400;  //起步采样阀门,起步时过滤低于该值以下的采样
+
+private:
+	short	  *FormatSamples;
+	int			FormatSampleSize = 0;
+	short	  * BeginSample;
+	bool		WaveStateRise = false, WaveStateDown = false;//关键波形上升下降开关
+														   //bool		IsValidRise, IsValidDown;
+	short		samA, samB;
+	const short WAVE_COUNT = 3;  //识别形成波的最低样本数
+	int			WaveRiseCount = 0, WaveDownCount = 0;//上升下降样本计数器
+	short		waveCount = 0;          //样本计数器
+	int			AddrOffset = 0;
+	int			offset = 0;
+	const short PosApprZERO = 2;  //正向近似零点
+	const short NegApprZERO = -2; //负向近似零点
+
+	vector<RichSample> vSampleInPos;//
+	vector<RichSample> vSampleInNeg;//
+	
+public:
+	_declspec(dllexport) int SampleGetFromFile(char * url);
+	//_declspec(dllexport) 
+	_declspec(dllexport) void LoopAnalyseSample(Vshort &vSample);
+	_declspec(dllexport) VshortIter SampleFindKey(VshortIter &iter, VshortIter SampleEnd, Vpair &PeakSamples, Vpair &TroughSamples);
+
+private:
+
+	short* SetBeginSample();
+	//void SampleFindStart();
 };

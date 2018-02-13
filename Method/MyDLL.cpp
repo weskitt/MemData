@@ -25,18 +25,79 @@ int AUDIO_METHOD::SampleGetFromFile(char * url)
 void AUDIO_METHOD::LoopAnalyseSample(Vshort &vSample)
 {
 	SetBeginSample();
-	
-	for (; AddrOffset < FormatSampleSize; AddrOffset++) {
 
-		short t = BeginSample[AddrOffset];
+	PART part;
+
+	int PosPreOffset = 0;
+	int NegPreOffset = 0;
+	for (; AddrOffset < FormatSampleSize; AddrOffset++) 
+	{
+		part.setRsample(AddrOffset, BeginSample[AddrOffset]);
+
+		if (part.rSample.data > 0)
+		{
+			part.countSamMax();
+			part.countRelativeOffset(PosPreOffset);
+			part.SamplePart(vSampleChunk);
+
+			vSampleInPos.push_back(part.rSample);
+			PosPreOffset = AddrOffset;
+		}
+		else if (part.rSample.data < 0)
+		{
+			part.countSamMin();
+			part.countRelativeOffset(NegPreOffset);
+			part.SamplePart(vSampleChunk);
+
+			vSampleInNeg.push_back(part.rSample);
+			NegPreOffset = AddrOffset;
+		}
+		//NegPreOffset = AddrOffset;
 		vSample.push_back( BeginSample[AddrOffset] );
 	}
 		
 	delete(FormatSamples);
 }
 
+void PART::SamplePart(VsampleChunk &vSampleChunk)
+{
 
-short* AUDIO_METHOD::SetBeginSample()
+	if ( rSample.attr[RELATIVE_OFFSET] == OFFSET_DIFF_0 )
+	{
+		if (partStart) {
+			samChunkF0.AddrBegin = rSample.addr;
+			partStart = false;
+		}
+		else if()
+		{
+			vSampleChunk.push_back(samChunkF1);
+		}
+		samChunkF0.AddrEnd = rSample.addr;
+		samChunkF0.count += 1;
+
+
+		//rsam.attr[SAMPLE_PARTITION] = F0_Positive;
+	}
+	else if (rSample.attr[RELATIVE_OFFSET] <= OFFSET_DIFF_3 )
+	{
+		if (partStart) {
+			samChunkF1.AddrBegin = rSample.addr;
+			partStart = false;
+		}
+		else if ()
+		{
+			vSampleChunk.push_back(samChunkF0);
+		}
+		samChunkF1.AddrEnd = rSample.addr;
+		samChunkF1.count += 1;
+
+
+	}
+
+}
+
+
+void AUDIO_METHOD::SetBeginSample()
 {
 	int i=0;
 	while (FormatSamples[i] < StartSampleGate)
@@ -46,16 +107,12 @@ short* AUDIO_METHOD::SetBeginSample()
 	BeginSample= FormatSamples + i;
 	FormatSampleSize = FormatSampleSize - i;
 
-	samB = BeginSample[AddrOffset];
-	samA = BeginSample[++AddrOffset];
-
-	if (samB < samA) WaveStateRise = true;//Ô¤²â²¨·å
-	else			 WaveStateDown = true;//Ô¤²â²¨¹È
-
-	return BeginSample;
-
+	//samB = BeginSample[AddrOffset];
+	//samA = BeginSample[++AddrOffset];
+	//if (samB < samA) WaveStateRise = true;//Ô¤²â²¨·å
+	//else			 WaveStateDown = true;//Ô¤²â²¨¹È
+	//return BeginSample;
 }
-
 
 
 VshortIter AUDIO_METHOD::SampleFindKey(VshortIter &iter, VshortIter SampleEnd, Vpair &PeakSamples, Vpair &TroughSamples)
@@ -99,5 +156,4 @@ VshortIter AUDIO_METHOD::SampleFindKey(VshortIter &iter, VshortIter SampleEnd, V
 
 	return iter;
 }
-
 

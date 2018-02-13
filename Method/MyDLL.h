@@ -3,13 +3,29 @@
 #include<fstream>
 using namespace std;
 
+enum SampleAttribute
+{
+	OFFSET_DIFF_0,  //
+	OFFSET_DIFF_3=3
 
+};
+enum SamplePartition
+{
+	F0_Positive,
+	F0_Negative,
+	F1_Head
+};
+
+const int RELATIVE_OFFSET = 0;
+
+typedef vector<int> Vint;
+typedef vector<int>::iterator VintIter;
 
 typedef vector<short> Vshort;
 typedef vector<short>::iterator VshortIter;
 
 typedef vector< pair<short, int> > Vpair;
-typedef vector< pair<short, int> > VpairIter;
+typedef vector< pair<short, int> >::iterator VpairIter;
 
 struct RichSample
 {
@@ -18,9 +34,60 @@ struct RichSample
 
 	char attr[10];
 };
+typedef vector<RichSample> VrichSample;
+typedef vector<RichSample>::iterator VrichSampleIter;
+
+struct SampleChunk
+{
+	int part;
+	int amplitude=0;//振幅
+	int AddrBegin;
+	int AddrEnd;
+	int count=0;
+};
+typedef vector<SampleChunk> VsampleChunk;
+typedef vector<SampleChunk>::iterator VsampleChunkIter;
+
+class PART
+{
+public:
+	bool  partStart = true;
+	RichSample  rSample;
+	short	    maxSample = 0;
+	short	    minSample = 0;
+	RichSample  rSample;
+	SampleChunk samChunkF0;
+	SampleChunk samChunkF1;
+	enum  SamplePartition partType;
+public:
+	void setRsample(int addr, int data) {
+		rSample.addr = addr;
+		rSample.data = data;
+	}
+	void countSamMax() {
+		if (rSample.data > maxSample)
+			maxSample = rSample.data;
+	}
+	void countSamMin() {
+		if (rSample.data < minSample)
+			maxSample = rSample.data;
+	}
+	void countRelativeOffset(int addr2) {
+		rSample.attr[RELATIVE_OFFSET] = rSample.addr - addr2;
+	}
+	void SamplePart(VsampleChunk &vSampleChunk);
+	PART();
+	~PART();
 
 
+};
 
+PART::PART()
+{
+}
+PART::~PART()
+{
+}
 
 
 struct WAVE_HEAD
@@ -50,9 +117,8 @@ struct AWAVE
 	int ways;		//能量方法
 	int spread;		//时域分布(F2，F4，C6，B4，B2)
 };
-
-typedef vector<AWAVE> vAwave;
-typedef vector<AWAVE>::iterator vAwaveIter;
+typedef vector<AWAVE> Vawave;
+typedef vector<AWAVE>::iterator VawaveIter;
 
 class AUDIO_METHOD
 {
@@ -64,7 +130,7 @@ public:
 	short		StartSampleGate = 400;  //起步采样阀门,起步时过滤低于该值以下的采样
 
 private:
-	short	  *FormatSamples;
+	short	  * FormatSamples;
 	int			FormatSampleSize = 0;
 	short	  * BeginSample;
 	bool		WaveStateRise = false, WaveStateDown = false;//关键波形上升下降开关
@@ -75,11 +141,10 @@ private:
 	short		waveCount = 0;          //样本计数器
 	int			AddrOffset = 0;
 	int			offset = 0;
-	const short PosApprZERO = 2;  //正向近似零点
-	const short NegApprZERO = -2; //负向近似零点
 
-	vector<RichSample> vSampleInPos;//
-	vector<RichSample> vSampleInNeg;//
+	VrichSample vSampleInPos;// 调试用
+	VrichSample vSampleInNeg;//调试用
+	VsampleChunk vSampleChunk;
 	
 public:
 	_declspec(dllexport) int SampleGetFromFile(char * url);
@@ -89,6 +154,6 @@ public:
 
 private:
 
-	short* SetBeginSample();
-	//void SampleFindStart();
+	void SetBeginSample();
+	//void SamplePart(PART &part);
 };

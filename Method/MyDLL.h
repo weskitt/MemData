@@ -5,9 +5,13 @@ using namespace std;
 
 enum SampleAttribute
 {
-	OFFSET_DIFF_0,  //
-	OFFSET_DIFF_3=3
-
+	OFFSET_DIFF_0,
+	OFFSET_DIFF_1,  //
+	OFFSET_DIFF_2,
+	OFFSET_DIFF_3,
+	OFFSET_DIFF_4,
+	OFFSET_DIFF_5,
+	OFFSET_DIFF_6
 };
 enum SamplePartition
 {
@@ -31,8 +35,17 @@ struct RichSample
 {
 	short data;
 	int	  addr;
+	int	  offset;
 
-	char attr[10];
+	int attr[1];
+
+	void Set(int addr, short data) {
+		this->data = data;
+		this->addr = addr;
+	}
+	void CountOffset(int preAddr) {
+		this->offset = this->addr - preAddr;
+	}
 };
 typedef vector<RichSample> VrichSample;
 typedef vector<RichSample>::iterator VrichSampleIter;
@@ -40,10 +53,18 @@ typedef vector<RichSample>::iterator VrichSampleIter;
 struct SampleChunk
 {
 	int part;
-	int amplitude=0;//振幅
+	int Limit=0;//振幅
 	int AddrBegin;
 	int AddrEnd;
 	int count=0;
+
+	void init() {
+		part = 0;
+		Limit = 0;
+		AddrBegin = 0;
+		AddrEnd = 0;
+		count = 0;
+	}
 };
 typedef vector<SampleChunk> VsampleChunk;
 typedef vector<SampleChunk>::iterator VsampleChunkIter;
@@ -51,8 +72,9 @@ typedef vector<SampleChunk>::iterator VsampleChunkIter;
 class PART
 {
 public:
+	static const int MinChunkCount = 5;
+	int diffOffset = 0;
 	bool  partStart = true;
-	RichSample  rSample;
 	short	    maxSample = 0;
 	short	    minSample = 0;
 	RichSample  rSample;
@@ -75,7 +97,7 @@ public:
 	void countRelativeOffset(int addr2) {
 		rSample.attr[RELATIVE_OFFSET] = rSample.addr - addr2;
 	}
-	void SamplePart(VsampleChunk &vSampleChunk);
+	void SamplePart(VsampleChunk &vSampleChunk, RichSample &rSample);
 	PART();
 	~PART();
 
@@ -144,7 +166,8 @@ private:
 
 	VrichSample vSampleInPos;// 调试用
 	VrichSample vSampleInNeg;//调试用
-	VsampleChunk vSampleChunk;
+	VsampleChunk vSampleChunkPos;
+	VsampleChunk vSampleChunkNeg;
 	
 public:
 	_declspec(dllexport) int SampleGetFromFile(char * url);

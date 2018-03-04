@@ -25,71 +25,109 @@ int AUDIO_METHOD::SampleGetFromFile(char * url)
 void AUDIO_METHOD::LoopAnalyseSample(Vshort &vSample)
 {
 	SetBeginSample();
-
+	RichSample rSample;
 	PART part;
 
 	int PosPreOffset = 0;
 	int NegPreOffset = 0;
+
+	int PosSampleCount = 0;
+	int NegSampleCount = 0;
+
 	for (; AddrOffset < FormatSampleSize; AddrOffset++) 
 	{
-		part.setRsample(AddrOffset, BeginSample[AddrOffset]);
+		//part.setRsample(AddrOffset, BeginSample[AddrOffset]);
+		rSample.Set(AddrOffset, BeginSample[AddrOffset]);
 
-		if (part.rSample.data > 0)
+		if (rSample.data > 0)//if (PosSampleCount == 0){
+			//	PosPreOffset = AddrOffset;
+			//	NegSampleCount = 0;}
+			//++PosSampleCount;
+			//part.countSamMax();
+			//part.countRelativeOffset(PosPreOffset);
+			//part.SamplePart(vSampleChunkPos);//PosPreOffset = AddrOffset;
 		{
-			part.countSamMax();
-			part.countRelativeOffset(PosPreOffset);
-			part.SamplePart(vSampleChunk);
-
-			vSampleInPos.push_back(part.rSample);
-			PosPreOffset = AddrOffset;
+			vSampleInPos.push_back(rSample); //样本正区间分组
 		}
-		else if (part.rSample.data < 0)
+		else if (rSample.data < 0)
 		{
-			part.countSamMin();
-			part.countRelativeOffset(NegPreOffset);
-			part.SamplePart(vSampleChunk);
-
-			vSampleInNeg.push_back(part.rSample);
-			NegPreOffset = AddrOffset;
+			vSampleInNeg.push_back(rSample); //样本负区间分组
 		}
-		//NegPreOffset = AddrOffset;
-		vSample.push_back( BeginSample[AddrOffset] );
+		//vSample.push_back( BeginSample[AddrOffset] ); //跳过振幅为零的样本
 	}
-		
 	delete(FormatSamples);
+
+	PosPreOffset = vSampleInPos[0].addr;
+	NegPreOffset = vSampleInNeg[0].addr;
+
+	for (RichSample &var : vSampleInPos)
+	{
+		var.CountOffset(PosPreOffset);
+		part.SamplePart(vSampleChunkPos, var);
+		PosPreOffset = var.addr;
+	}
+	for (RichSample &var : vSampleInNeg)
+	{
+		var.CountOffset(NegPreOffset);
+		NegPreOffset = var.addr;
+	}
 }
 
-void PART::SamplePart(VsampleChunk &vSampleChunk)
+void PART::SamplePart(VsampleChunk &vSampleChunk, RichSample &rSample)
 {
-
-	if ( rSample.attr[RELATIVE_OFFSET] == OFFSET_DIFF_0 )
+	
+	if (rSample.offset == OFFSET_DIFF_0)
+	{
+		//start 用于跳过起始样本
+		partStart = true;//分区开始
+		samChunkF0.AddrBegin = rSample.addr;
+		samChunkF1.AddrBegin = rSample.addr;
+	}
+	else if ( rSample.offset == OFFSET_DIFF_1 )  //此时相邻样本都在一分区内
 	{
 		if (partStart) {
-			samChunkF0.AddrBegin = rSample.addr;
 			partStart = false;
 		}
-		else if()
+		if(samChunkF1.count > MinChunkCount)
 		{
 			vSampleChunk.push_back(samChunkF1);
+			samChunkF1.init();
+			partStart = true;
 		}
+
 		samChunkF0.AddrEnd = rSample.addr;
 		samChunkF0.count += 1;
 
 
-		//rsam.attr[SAMPLE_PARTITION] = F0_Positive;
 	}
-	else if (rSample.attr[RELATIVE_OFFSET] <= OFFSET_DIFF_3 )
+	else if (rSample.offset <= OFFSET_DIFF_4 )  //同分区样本最大分布密度，
 	{
-		if (partStart) {
+		
+		if (samChunkF0.count > MinChunkCount)
+		{
+			samChunkF0.part = OFFSET_DIFF_1;
+			vSampleChunk.push_back(samChunkF0);
+			samChunkF0.init();
+			partStart = true;
+		}
+		else
+		{
+			samChunkF0.init();
+			partStart = true;
+		}
+
+
+
+		if (partStart) { //c创建新分区
 			samChunkF1.AddrBegin = rSample.addr;
 			partStart = false;
 		}
-		else if ()
+		else
 		{
-			vSampleChunk.push_back(samChunkF0);
+			samChunkF1.AddrEnd = rSample.addr;
+			samChunkF1.count += 1;
 		}
-		samChunkF1.AddrEnd = rSample.addr;
-		samChunkF1.count += 1;
+		
 
 
 	}

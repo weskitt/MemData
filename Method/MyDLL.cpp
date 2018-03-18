@@ -119,6 +119,11 @@ void PART::SamplePart(VsampleChunk &vSampleChunk, RichSample &rSample)
 
 
 		if (partStart) { //c创建新分区
+			if (samChunkF0.count > MinChunkCount) {
+				samChunkF0.part = OFFSET_DIFF_1;
+				vSampleChunk.push_back(samChunkF0);
+				samChunkF0.init();
+			}
 			samChunkF1.AddrBegin = rSample.addr;
 			partStart = false;
 		}

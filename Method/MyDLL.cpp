@@ -73,6 +73,7 @@ void AUDIO_METHOD::LoopAnalyseSample(Vshort &vSample)
 	}
 }
 
+
 void PART::SamplePart(VsampleChunk &vSampleChunk, RichSample &rSample)
 {
 	

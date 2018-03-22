@@ -1,6 +1,6 @@
 #include<stdexcept>
 #include "MyDLL.h"
-
+// nnntest ±‡¬Î≤‚ ‘
 int AUDIO_METHOD::SampleGetFromFile(char * url)
 {
 	fin.open(url, ios::binary);

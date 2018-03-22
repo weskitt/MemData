@@ -74,7 +74,8 @@ class PART
 public:
 	static const int MinChunkCount = 5;
 	int diffOffset = 0;
-	bool  partStart = true;
+	bool  OnOnePart = true;
+	bool  OnWavePart = true;
 	short	    maxSample = 0;
 	short	    minSample = 0;
 	RichSample  rSample;

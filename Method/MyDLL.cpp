@@ -80,20 +80,21 @@ void PART::SamplePart(VsampleChunk &vSampleChunk, RichSample &rSample)
 	if (rSample.offset == OFFSET_DIFF_0)
 	{
 		//start 用于跳过起始样本
-		partStart = true;//分区开始
+		OnOnePart = true;//分区开始
+		OnWavePart = true;
 		samChunkF0.AddrBegin = rSample.addr;
 		samChunkF1.AddrBegin = rSample.addr;
 	}
 	else if ( rSample.offset == OFFSET_DIFF_1 )  //此时相邻样本都在一分区内
 	{
-		if (partStart) {
-			partStart = false;
-		}
+		OnOnePart = true;
+		OnWavePart = false;
+
 		if(samChunkF1.count > MinChunkCount)
 		{
 			vSampleChunk.push_back(samChunkF1);
 			samChunkF1.init();
-			partStart = true;
+			OnOnePart = true;
 		}
 
 		samChunkF0.AddrEnd = rSample.addr;
@@ -109,24 +110,24 @@ void PART::SamplePart(VsampleChunk &vSampleChunk, RichSample &rSample)
 			samChunkF0.part = OFFSET_DIFF_1;
 			vSampleChunk.push_back(samChunkF0);
 			samChunkF0.init();
-			partStart = true;
+			OnOnePart = true;
 		}
 		else
 		{
 			samChunkF0.init();
-			partStart = true;
+			OnOnePart = true;
 		}
 
 
 
-		if (partStart) { //c创建新分区
+		if (OnOnePart) { //c创建新分区
 			if (samChunkF0.count > MinChunkCount) {
 				samChunkF0.part = OFFSET_DIFF_1;
 				vSampleChunk.push_back(samChunkF0);
 				samChunkF0.init();
 			}
 			samChunkF1.AddrBegin = rSample.addr;
-			partStart = false;
+			OnOnePart = false;
 		}
 		else
 		{

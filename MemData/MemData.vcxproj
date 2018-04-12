@@ -153,6 +153,7 @@
     <ClInclude Include="CENTER.h" />
     <ClInclude Include="DATA_NET.h" />
     <ClInclude Include="LEARNSOUND.h" />
+    <ClInclude Include="LoadShaders.h" />
     <ClInclude Include="READWAVE.h" />
     <ClInclude Include="SOUND.h" />
     <ClInclude Include="UNIT.h" />
@@ -168,6 +169,7 @@
     <ClCompile Include="CENTER.cpp" />
     <ClCompile Include="DATA_NET.cpp" />
     <ClCompile Include="LEARNSOUND.cpp" />
+    <ClCompile Include="LoadShaders.cpp" />
     <ClCompile Include="READWAVE.cpp" />
     <ClCompile Include="SOUND.cpp" />
     <ClCompile Include="UNIT.cpp" />

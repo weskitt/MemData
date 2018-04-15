@@ -154,7 +154,9 @@
     <ClInclude Include="DATA_NET.h" />
     <ClInclude Include="LEARNSOUND.h" />
     <ClInclude Include="LoadShaders.h" />
+    <ClInclude Include="Mygl.h" />
     <ClInclude Include="READWAVE.h" />
+    <ClInclude Include="Shader.h" />
     <ClInclude Include="SOUND.h" />
     <ClInclude Include="UNIT.h" />
     <ClInclude Include="GENERAL_DATA.h" />
@@ -170,6 +172,7 @@
     <ClCompile Include="DATA_NET.cpp" />
     <ClCompile Include="LEARNSOUND.cpp" />
     <ClCompile Include="LoadShaders.cpp" />
+    <ClCompile Include="Mygl.cpp" />
     <ClCompile Include="READWAVE.cpp" />
     <ClCompile Include="SOUND.cpp" />
     <ClCompile Include="UNIT.cpp" />

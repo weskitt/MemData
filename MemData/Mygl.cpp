@@ -25,10 +25,10 @@ GLuint Mygl::GLInit()
 	glPointSize(4);  //设置4个像素为一点
 	glLineWidth(1);  //设置线宽为4
 
-	dataInit();
+	
 }
 
-GLuint Mygl::dataInit()
+GLuint Mygl::DataInit()
 {
 	glCreateVertexArrays(NumVAOs, VAOs);  //等效glGenVertexArrays(NumVAOs, VAOs)
 										  //创建 NumVAOs 个未使用的 VAO对象 到数组VAOs中

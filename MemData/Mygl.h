@@ -44,11 +44,11 @@ class Mygl
 	GLfloat Chunk[4][2] =
 	{
 		{ -0.0025f, 0.5f },{ 0.0025f, 0.5f },
-	{ -0.0025f, -0.5f },{ 0.0025f, -0.5f }
+		{ -0.0025f, -0.5f },{ 0.0025f, -0.5f }
 	};
 public:
 	GLuint GLInit();
-	GLuint dataInit();
+	GLuint DataInit();
 	void display();
 	GLuint Run();
 	Mygl();

@@ -38,7 +38,7 @@ class Mygl
 
 	GLfloat ZeroLine[2][2] =   //定义NumVertices个二维顶点 数据
 	{
-		{ -0.98f, 0.0f },{ 0.98f, 0.0f }//,{-0.9, 0.85},  //triangle 1
+		{ -1.5f, 0.0f },{ 1.5f, 0.0f }//,{-0.9, 0.85},  //triangle 1
 									//{0.9, -0.85},{0.9, 0.9}, {-0.85, 0.9}    //triangle 2
 	};
 	GLfloat Chunk[4][2] =

@@ -78,7 +78,7 @@
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
     <LinkIncremental>true</LinkIncremental>
     <LibraryPath>C:\Users\Weskitt\OneDrive\glew\lib;C:\Users\Weskitt\OneDrive\glfw\lib;$(LibraryPath)</LibraryPath>
-    <IncludePath>C:\Users\Weskitt\OneDrive\glew\include;C:\Users\Weskitt\OneDrive\glfw\include;$(IncludePath)</IncludePath>
+    <IncludePath>C:\Users\Weskitt\OneDrive\glm;C:\Users\Weskitt\OneDrive\glew\include;C:\Users\Weskitt\OneDrive\glfw\include;$(IncludePath)</IncludePath>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
     <LinkIncremental>false</LinkIncremental>

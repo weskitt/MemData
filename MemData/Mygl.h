@@ -1,4 +1,7 @@
 #pragma once
+
+#define BUFFER_OFFSET(a) ((void*)(a))
+
 class Mygl
 {
 
@@ -43,8 +46,8 @@ class Mygl
 	};
 	GLfloat Chunk[4][2] =
 	{
-		{ -0.0025f, 0.5f },{ 0.0025f, 0.5f },
-		{ -0.0025f, -0.5f },{ 0.0025f, -0.5f }
+		{ -0.05f, 0.5f },{ 0.05f, 0.5f },   //4    12
+		{ -0.05f, -0.5f },{ 0.05f, -0.5f }  //20   28
 	};
 public:
 	GLuint GLInit();

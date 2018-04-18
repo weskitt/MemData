@@ -36,15 +36,17 @@ GLuint Mygl::DataInit()
 										   //创建 NumBuffers 个未使用的 缓冲对象VBO 到数组Buffers中
 	glBindVertexArray(VAOs[SamData]);
 	glBindBuffer(GL_ARRAY_BUFFER, Buffers[ArrayBuffer_SamData]);
-	glBufferStorage(GL_ARRAY_BUFFER, sizeof(Chunk), Chunk, 0);
-	glVertexAttribPointer(vPosition, 2, GL_FLOAT, GL_FALSE, 0, BUFFER_OFFSET(0));  //顶点索引及格式设置
+	glBufferStorage(GL_ARRAY_BUFFER, sizeof(Chunk), Chunk, GL_DYNAMIC_STORAGE_BIT);
+	glVertexAttribPointer(vPosition, 2, GL_FLOAT, GL_FALSE, 2 * sizeof(GLfloat), BUFFER_OFFSET(0));  
+	//顶点索引及格式设置
 	glEnableVertexAttribArray(vPosition); //应用该索引及格式
 
 
 	glBindVertexArray(VAOs[Xaxis]);
 	glBindBuffer(GL_ARRAY_BUFFER, Buffers[ArrayBuffer_Xaxis]);
-	glBufferStorage(GL_ARRAY_BUFFER, sizeof(ZeroLine), ZeroLine, 0);
-	glVertexAttribPointer(vPosition, 2, GL_FLOAT, GL_FALSE, 0, BUFFER_OFFSET(0));//顶点索引及格式设置
+	glBufferStorage(GL_ARRAY_BUFFER, sizeof(ZeroLine), ZeroLine, GL_DYNAMIC_STORAGE_BIT);
+	glVertexAttribPointer(vPosition, 2, GL_FLOAT, GL_FALSE, 2 * sizeof(GLfloat), BUFFER_OFFSET(0));
+	//顶点索引及格式设置
 	glEnableVertexAttribArray(vPosition); //应用该索引及格式
 
 	XaxisShader = Shader("shaders/triangles/Xaxis.vert", "shaders/triangles/Xaxis.frag");
@@ -59,13 +61,26 @@ void Mygl::display()
 	glClearBufferfv(GL_COLOR, 0, black); //设置默认清除色black
 
 
-	glBindVertexArray(VAOs[Xaxis]);
 	XaxisShader.use();
+	glBindVertexArray(VAOs[Xaxis]);
 	glDrawArrays(GL_LINES, 0, NumVertices_Xaxis);
 
+	//***************************************************************
+
+	glm::mat4 trans;
+	GLfloat t = sin(glfwGetTime());
+	trans = glm::translate(trans, glm::vec3(t, 0.0f, 0.0f));
+
+	SamDataShader.use();
+	GLuint transLoc = glGetUniformLocation(SamDataShader.ID, "trans");
+	glUniformMatrix4fv(transLoc, 1, GL_FALSE, glm::value_ptr(trans));
 
 	glBindVertexArray(VAOs[SamData]);
-	SamDataShader.use();
+	glBindBuffer(GL_ARRAY_BUFFER, Buffers[ArrayBuffer_SamData]);
+	//glBufferSubData(GL_ARRAY_BUFFER, sizeof(GLfloat), sizeof(GLfloat), &t);
+	//glBufferSubData(GL_ARRAY_BUFFER, 3 * sizeof(GLfloat), sizeof(GLfloat), &t);
+	glBufferSubData(GL_ARRAY_BUFFER, 5 * sizeof(GLfloat), sizeof(GLfloat), &t);
+	glBufferSubData(GL_ARRAY_BUFFER, 7 * sizeof(GLfloat), sizeof(GLfloat), &t);
 	glDrawArrays(GL_TRIANGLE_STRIP, 0, NumVertices_SamData);
 }
 

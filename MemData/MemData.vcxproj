@@ -193,6 +193,12 @@
       <Project>{543146b3-6b14-497e-be68-d37c5522ae0b}</Project>
     </ProjectReference>
   </ItemGroup>
+  <ItemGroup>
+    <None Include="shaders\triangles\SamData.frag" />
+    <None Include="shaders\triangles\SamData.vert" />
+    <None Include="shaders\triangles\Xaxis.frag" />
+    <None Include="shaders\triangles\Xaxis.vert" />
+  </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets" />
 </Project>

@@ -7,16 +7,25 @@ class Mygl
 
 	GLFWwindow* window;   /* 初始化glfw库 */
 
-	enum VAO_IDs { Xaxis, SamData, NumVAOs };        //顶点数组对象相关ID
-	enum Buffer_IDs { ArrayBuffer_Xaxis, ArrayBuffer_SamData, NumBuffers }; //数组缓冲相关ID
-	enum Attrib_IDs { vPosition = 0 };          //属性相关ID
+	enum VAO_IDs { VAO_Xaxis, VAO_SamData, NumVAO };        //顶点数组对象相关ID
+	
+	enum VBO_IDs { VBO_Xaxis, 
+				   VBO_SamData, 
+				   VBO_Instance_Offset, 
+				   VBO_Instance_Scale, 
+				   NumVBO }; //数组缓冲相关ID
 
-	GLuint VAOs[NumVAOs];         //定义 顶点数组对象 数组
-	GLuint Buffers[NumBuffers];   //定义 缓冲对象     数组
+	enum Attrib_IDs { vPos, vOffset, vScale };          //属性相关ID
+	enum Sample_IDs { SamUp, SamDown, NumYaxis, NumSam=2 };
+
+	GLuint VAOs[NumVAO];         //定义 顶点数组对象 数组
+	GLuint VBOs[NumVBO];   //定义 缓冲对象     数组
 	const GLuint NumVertices_Xaxis = 2; //定义 顶点	      个数
 	const GLuint NumVertices_SamData = 4;
 
-
+	GLenum error;
+	GLenum xx = (GLuint)GL_INVALID_OPERATION;
+	char* Error;
 
 	/*ShaderInfo shaders_Xaxis[] = {
 	{ GL_VERTEX_SHADER, "shaders/triangles/Xaxis.vert" },
@@ -46,12 +55,18 @@ class Mygl
 	};
 	GLfloat Chunk[4][2] =
 	{
-		{ -0.05f, 0.5f },{ 0.05f, 0.5f },   //4    12
-		{ -0.05f, -0.5f },{ 0.05f, -0.5f }  //20   28
+		{ -0.999f, 0.5f },{ -0.997f, 0.5f },   //4    12
+		{ -0.999f, -0.5f },{ -0.997f, -0.5f }  //20   28
 	};
+
+	GLfloat Sample[NumSam]= { 0.2f, -0.4f };
+
+
 public:
 	GLuint GLInit();
 	GLuint DataInit();
+	GLuint UpdateSample();
+	char* checkError();
 	void display();
 	GLuint Run();
 	Mygl();

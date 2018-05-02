@@ -16,6 +16,9 @@
     <Filter Include="Tools">
       <UniqueIdentifier>{da513fc1-dc39-494e-aba2-acfa72055949}</UniqueIdentifier>
     </Filter>
+    <Filter Include="shader">
+      <UniqueIdentifier>{6eb47e64-8fc0-4a60-a63c-668d6b457e8a}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="stdafx.h">
@@ -110,5 +113,19 @@
     <ClCompile Include="Mygl.cpp">
       <Filter>源文件</Filter>
     </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="shaders\triangles\SamData.frag">
+      <Filter>shader</Filter>
+    </None>
+    <None Include="shaders\triangles\SamData.vert">
+      <Filter>shader</Filter>
+    </None>
+    <None Include="shaders\triangles\Xaxis.frag">
+      <Filter>shader</Filter>
+    </None>
+    <None Include="shaders\triangles\Xaxis.vert">
+      <Filter>shader</Filter>
+    </None>
   </ItemGroup>
 </Project>

@@ -34,6 +34,7 @@ GLuint Mygl::DataInit()
 
 	glm::mat4 scales[SamCount];
 	glm::mat4 scale;
+	GLfloat Y_scale = 0.001f;
 	//GLfloat t = ;
 	
 
@@ -45,12 +46,14 @@ GLuint Mygl::DataInit()
 		offset.x =  X_offset;
 		offset.y = 0.0f;
 		offsets[index] = offset;
-		offset += 0.003f;;
+		X_offset += 0.003f;
 
-		scale = glm::scale(scale, glm::vec3(0.0f, sin(glfwGetTime()), 0.0f));
+		glm::mat4 scale;
+		scale = glm::scale(scale, glm::vec3(1.0f, Y_scale, 1.0f));
 		scales[index] = scale;
+		Y_scale += 0.001f;
 	}
-
+//sin(glfwGetTime())
 
 
 	glCreateVertexArrays(NumVAO, VAOs);  //等效glGenVertexArrays(NumVAOs, VAOs)
@@ -66,18 +69,28 @@ GLuint Mygl::DataInit()
 	glBufferData(GL_ARRAY_BUFFER, sizeof(Chunk), Chunk, GL_DYNAMIC_DRAW);
 	glVertexAttribPointer(vPos, 2, GL_FLOAT, GL_FALSE, 2 * sizeof(GLfloat), BUFFER_OFFSET(0));  
 	glEnableVertexAttribArray(vPos); 
-	Error = checkError();
+
 	glBindBuffer(GL_ARRAY_BUFFER, VBOs[VBO_Instance_Offset]);
 	glBufferData(GL_ARRAY_BUFFER, sizeof(glm::vec2) * 600, &offsets[0], GL_STATIC_DRAW);
 	glVertexAttribPointer(vOffset, 2, GL_FLOAT, GL_FALSE, 2 * sizeof(GLfloat), BUFFER_OFFSET(0));
 	glEnableVertexAttribArray(vOffset);
 	glVertexAttribDivisor(vOffset, 1);
-	Error = checkError();
+
 	glBindBuffer(GL_ARRAY_BUFFER, VBOs[VBO_Instance_Scale]);
 	glBufferData(GL_ARRAY_BUFFER, sizeof(glm::mat4) * 600, &scales[0], GL_STATIC_DRAW);
-	glVertexAttribPointer(vScale, 4, GL_FLOAT, GL_FALSE, 4 * sizeof(GLfloat), BUFFER_OFFSET(0));
-	glEnableVertexAttribArray(vScale);
-	glVertexAttribDivisor(vScale, 1);
+	for (int i = 0; i < 4; i++)
+	{
+		glVertexAttribPointer(vScale + i, //mat4类型会占领连续的4个位置,因此vScale占领了2,3,4,5四个索引位置。
+							  4, GL_FLOAT, GL_FALSE, // vec4
+							  sizeof(glm::mat4),	 // Stride
+							  (void *)(sizeof(glm::vec4)* i)); // Start offset
+		glEnableVertexAttribArray(vScale + i);
+		glVertexAttribDivisor(vScale + i, 1);
+	}
+	//glBindVertexArray(0);
+	//glVertexAttribPointer(vScale, 4, GL_FLOAT, GL_FALSE, 4 * sizeof(GLfloat), BUFFER_OFFSET(0));
+	//glEnableVertexAttribArray(vScale);
+	//glVertexAttribDivisor(vScale, 1);
 	Error = checkError();
 
 	glBindVertexArray(VAOs[VAO_Xaxis]);
@@ -85,6 +98,7 @@ GLuint Mygl::DataInit()
 	glBufferData(GL_ARRAY_BUFFER, sizeof(ZeroLine), ZeroLine, GL_DYNAMIC_DRAW);
 	glVertexAttribPointer(vPos, 2, GL_FLOAT, GL_FALSE, 2 * sizeof(GLfloat), BUFFER_OFFSET(0));
 	glEnableVertexAttribArray(vPos); 
+	glBindVertexArray(0);
 	Error = checkError();
 
 	XaxisShader = Shader("shaders/triangles/Xaxis.vert", "shaders/triangles/Xaxis.frag");

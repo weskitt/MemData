@@ -15,7 +15,8 @@ void main()
 {
     //gl_Position = trans * vec4(vPos + vOffset, 0.0f, 1.0f);
 	//vPos.y=0.5f;
-    gl_Position =vScale * vec4(vPos + vOffset, 0.0f, 1.0f);
-	//gl_Position = vec4(vPos + vOffset, 0.0f, 1.0f);
+    //gl_Position =vScale * vec4(vPos + vOffset, 0.0f, 1.0f);
+	//gl_Position =vec4(vPos + vOffset, 0.0f, 1.0f);
+	gl_Position = vec4(vPos, 0.0f, 1.0f);
     vertColor= vec4(0.0, 0.5, 0.0, 0.0);
 }

@@ -21,7 +21,7 @@ class Mygl
 	GLuint VAOs[NumVAO];         //定义 顶点数组对象 数组
 	GLuint VBOs[NumVBO];   //定义 缓冲对象     数组
 	const GLuint NumVertices_Xaxis = 2; //定义 顶点	      个数
-	const GLuint NumVertices_SamData = 4;
+	const GLuint NumVertices_SamData = 1000;
 
 	GLenum error;
 	GLenum xx = (GLuint)GL_INVALID_OPERATION;
@@ -47,17 +47,6 @@ class Mygl
 
 	Shader XaxisShader;
 	Shader SamDataShader;
-
-	GLfloat ZeroLine[2][2] =   //定义NumVertices个二维顶点 数据
-	{
-		{ -1.5f, 0.0f },{ 1.5f, 0.0f }//,{-0.9, 0.85},  //triangle 1
-									//{0.9, -0.85},{0.9, 0.9}, {-0.85, 0.9}    //triangle 2
-	};
-	GLfloat Chunk[4][2] =
-	{
-		{ -0.999f, 0.5f },{ -0.997f, 0.5f },   //4    12
-		{ -0.999f, -0.5f },{ -0.997f, -0.5f }  //20   28
-	};
 
 	GLfloat Sample[NumSam]= { 0.2f, -0.4f };
 

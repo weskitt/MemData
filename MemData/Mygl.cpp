@@ -30,30 +30,61 @@ GLuint Mygl::GLInit()
 
 GLuint Mygl::DataInit()
 {
-	GLuint const SamCount = 600;
+	const GLuint SamCount = 1000;
+	const GLfloat factor = 0.5f;
+	const GLfloat PI = 3.1415926f;
+	GLuint w1 = 0;
+	GLfloat X_offset = -0.999f;
+	//GLfloat x = -1000 * PI;
+	GLfloat x = 0.0f;
 
+	GLfloat preData[SamCount][2];
+	while (w1 < SamCount)
+	{
+		//preData[w1] = sin(w1);
+		preData[w1][0] = X_offset;
+		preData[w1][1] = sin(x)*factor;
+		X_offset += 0.002;
+		x += 0.1f;
+		++w1;
+
+	}
+	GLfloat ZeroLine[2][2] =   //定义NumVertices个二维顶点 数据
+	{
+		{ -1.5f, 0.0f },{ 1.5f, 0.0f }//,{-0.9, 0.85},  //triangle 1
+									//{0.9, -0.85},{0.9, 0.9}, {-0.85, 0.9}    //triangle 2
+	};
+	//GLfloat Chunk[4][2] =
+	//{
+	//	{ -0.999f, 0.5f },{ -0.997f, 0.5f },   //4    12
+	//	{ -0.999f, -0.5f },{ -0.997f, -0.5f }  //20   28
+	//};
+	GLfloat Data[1][2] = {
+		{ -0.999f, 0.0f },
+	};
+
+	
+	//缩放矩阵
 	glm::mat4 scales[SamCount];
 	glm::mat4 scale;
-	GLfloat Y_scale = 0.001f;
-	//GLfloat t = ;
-	
 
 	glm::vec2 offsets[SamCount];
 	glm::vec2 offset;
-	GLfloat X_offset = 0.001f;
+	
+	GLfloat Y_offset = 0.0f;
 	for (GLuint index = 0; index < SamCount; index++)
 	{
 		offset.x =  X_offset;
-		offset.y = 0.0f;
+		offset.y = 0.5f;
 		offsets[index] = offset;
-		X_offset += 0.003f;
+		X_offset += 0.02f;
 
 		glm::mat4 scale;
-		scale = glm::scale(scale, glm::vec3(1.0f, Y_scale, 1.0f));
+		scale = glm::scale(scale, glm::vec3(1.0f, 0.5f, 1.0f));
 		scales[index] = scale;
-		Y_scale += 0.001f;
+		//Y_scale += 0.001f;
 	}
-//sin(glfwGetTime())
+	//sin(glfwGetTime())
 
 
 	glCreateVertexArrays(NumVAO, VAOs);  //等效glGenVertexArrays(NumVAOs, VAOs)
@@ -63,21 +94,21 @@ GLuint Mygl::DataInit()
 	
 	
 
-
+	Error = checkError();
 	glBindVertexArray(VAOs[VAO_SamData]);
 	glBindBuffer(GL_ARRAY_BUFFER, VBOs[VBO_SamData]);
-	glBufferData(GL_ARRAY_BUFFER, sizeof(Chunk), Chunk, GL_DYNAMIC_DRAW);
+	glBufferData(GL_ARRAY_BUFFER, sizeof(preData), preData, GL_DYNAMIC_DRAW);
 	glVertexAttribPointer(vPos, 2, GL_FLOAT, GL_FALSE, 2 * sizeof(GLfloat), BUFFER_OFFSET(0));  
 	glEnableVertexAttribArray(vPos); 
-
+	Error = checkError();
 	glBindBuffer(GL_ARRAY_BUFFER, VBOs[VBO_Instance_Offset]);
-	glBufferData(GL_ARRAY_BUFFER, sizeof(glm::vec2) * 600, &offsets[0], GL_STATIC_DRAW);
+	glBufferData(GL_ARRAY_BUFFER, sizeof(glm::vec2) * SamCount, &offsets[0], GL_STATIC_DRAW);
 	glVertexAttribPointer(vOffset, 2, GL_FLOAT, GL_FALSE, 2 * sizeof(GLfloat), BUFFER_OFFSET(0));
 	glEnableVertexAttribArray(vOffset);
 	glVertexAttribDivisor(vOffset, 1);
-
+	Error = checkError();
 	glBindBuffer(GL_ARRAY_BUFFER, VBOs[VBO_Instance_Scale]);
-	glBufferData(GL_ARRAY_BUFFER, sizeof(glm::mat4) * 600, &scales[0], GL_STATIC_DRAW);
+	glBufferData(GL_ARRAY_BUFFER, sizeof(glm::mat4) * SamCount, &scales[0], GL_STATIC_DRAW);
 	for (int i = 0; i < 4; i++)
 	{
 		glVertexAttribPointer(vScale + i, //mat4类型会占领连续的4个位置,因此vScale占领了2,3,4,5四个索引位置。
@@ -87,10 +118,6 @@ GLuint Mygl::DataInit()
 		glEnableVertexAttribArray(vScale + i);
 		glVertexAttribDivisor(vScale + i, 1);
 	}
-	//glBindVertexArray(0);
-	//glVertexAttribPointer(vScale, 4, GL_FLOAT, GL_FALSE, 4 * sizeof(GLfloat), BUFFER_OFFSET(0));
-	//glEnableVertexAttribArray(vScale);
-	//glVertexAttribDivisor(vScale, 1);
 	Error = checkError();
 
 	glBindVertexArray(VAOs[VAO_Xaxis]);
@@ -151,7 +178,7 @@ void Mygl::display()
 
 	XaxisShader.use();
 	glBindVertexArray(VAOs[VAO_Xaxis]);
-	glDrawArrays(GL_LINES, 0, NumVertices_Xaxis);
+	glDrawArrays(GL_LINE_STRIP, 0, NumVertices_Xaxis);
 
 	//***************************************************************
 
@@ -164,11 +191,13 @@ void Mygl::display()
 
 	glBindVertexArray(VAOs[VAO_SamData]);
 	glBindBuffer(GL_ARRAY_BUFFER, VBOs[VBO_SamData]);
-	glBufferSubData(GL_ARRAY_BUFFER, sizeof(GLfloat), sizeof(GLfloat), &Sample[SamUp]);
-	glBufferSubData(GL_ARRAY_BUFFER, 3 * sizeof(GLfloat), sizeof(GLfloat), &Sample[SamUp]);
-	glBufferSubData(GL_ARRAY_BUFFER, 5 * sizeof(GLfloat), sizeof(GLfloat), &Sample[SamDown]);
-	glBufferSubData(GL_ARRAY_BUFFER, 7 * sizeof(GLfloat), sizeof(GLfloat), &Sample[SamDown]);
-	glDrawArraysInstanced(GL_TRIANGLE_STRIP, 0, NumVertices_SamData, 1000);
+	//glBufferSubData(GL_ARRAY_BUFFER, sizeof(GLfloat), sizeof(GLfloat), &Sample[SamUp]);
+	//glBufferSubData(GL_ARRAY_BUFFER, 3 * sizeof(GLfloat), sizeof(GLfloat), &Sample[SamUp]);
+	//glBufferSubData(GL_ARRAY_BUFFER, 5 * sizeof(GLfloat), sizeof(GLfloat), &Sample[SamDown]);
+	//glBufferSubData(GL_ARRAY_BUFFER, 7 * sizeof(GLfloat), sizeof(GLfloat), &Sample[SamDown]);
+	//glDrawArraysInstanced(GL_TRIANGLE_STRIP, 0, NumVertices_SamData, 1000);
+	glDrawArrays(GL_LINE_STRIP, 0, NumVertices_SamData);
+
 }
 
 GLuint Mygl::Run()

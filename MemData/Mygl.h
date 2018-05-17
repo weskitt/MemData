@@ -6,8 +6,9 @@ class Mygl
 {
 
 	GLFWwindow* window;   /* 初始化glfw库 */
+	char* Error;
 
-	enum VAO_IDs { VAO_Xaxis, VAO_SamData, NumVAO };        //顶点数组对象相关ID
+	enum VAO_IDs { VAO_Xaxis, VAO_SamData, NumVAO };    //顶点数组对象相关ID
 	
 	enum VBO_IDs { VBO_Xaxis, 
 				   VBO_SamData, 
@@ -17,38 +18,30 @@ class Mygl
 
 	enum Attrib_IDs { vPos, vOffset, vScale };          //属性相关ID
 	enum Sample_IDs { SamUp, SamDown, NumYaxis, NumSam=2 };
+	enum Wave_IDs { w0, w1, w2, w3, w4, w5, w6, w7, w8, w9, WaveCount = 10 };
+	enum DataCountInit{ Zero_Dim, One_Dim, Two_Dim, Three_Dim, 
+						SamCount=1000, NumVertices_Xaxis = 2 };
 
 	GLuint VAOs[NumVAO];         //定义 顶点数组对象 数组
-	GLuint VBOs[NumVBO];   //定义 缓冲对象     数组
-	const GLuint NumVertices_Xaxis = 2; //定义 顶点	      个数
-	const GLuint NumVertices_SamData = 1000;
-
-	GLenum error;
-	GLenum xx = (GLuint)GL_INVALID_OPERATION;
-	char* Error;
-
-	/*ShaderInfo shaders_Xaxis[] = {
-	{ GL_VERTEX_SHADER, "shaders/triangles/Xaxis.vert" },
-	{ GL_FRAGMENT_SHADER, "shaders/triangles/Xaxis.frag" },
-	{ GL_NONE, NULL }
-	};
-	GLuint program_Xaxis;
+	GLuint VBOs[NumVBO];		 //定义 缓冲对象     数组
 	
-	ShaderInfo shaders_SamData[] = {
-	{ GL_VERTEX_SHADER, "shaders/triangles/SamData.vert" },
-	{ GL_FRAGMENT_SHADER, "shaders/triangles/SamData.frag" },
-	{ GL_NONE, NULL }
-	};
-	GLuint program_SamData;
-	//GLuint program;
+
+	const GLfloat ScaleFactor = 0.2f;
+	const GLfloat PI = 3.1415926f;
+	const GLfloat Begin_offset = -1.0f;
+
+	const GLfloat wScale0 = ScaleFactor, wT0 = 0.01f, wBegin_Offset0 = 1.000f;
+	const GLfloat wScale1 = ScaleFactor, wT1 = 0.05f, wBegin_Offset1 = 0.990f;
+	const GLfloat wScale2 = ScaleFactor, wT2 = 0.10f, wBegin_Offset2 = 0.800f;
+	const GLfloat wScale3 = ScaleFactor, wT3 = 0.50f, wBegin_Offset3 = 0.980f;
+	const GLfloat wScale4 = ScaleFactor, wT4 = 1.00f, wBegin_Offset4 = 0.975f;
+
 	
-	program = LoadShaders(shaders);
-    */
+	GLfloat waveData[WaveCount][SamCount];
+	
 
 	Shader XaxisShader;
 	Shader SamDataShader;
-
-	GLfloat Sample[NumSam]= { 0.2f, -0.4f };
 
 
 public:
@@ -57,6 +50,7 @@ public:
 	GLuint UpdateSample();
 	char* checkError();
 	void display();
+	void creatTestWave(GLfloat t, GLfloat scale_Y, GLfloat beginoffset, GLuint wx,  GLfloat (&waveData)[WaveCount][SamCount]);
 	GLuint Run();
 	Mygl();
 	~Mygl();

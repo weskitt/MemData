@@ -30,42 +30,35 @@ GLuint Mygl::GLInit()
 
 GLuint Mygl::DataInit()
 {
-	const GLuint SamCount = 1000;
-	const GLfloat factor = 0.5f;
-	const GLfloat PI = 3.1415926f;
-	GLuint w1 = 0;
-	GLfloat X_offset = -0.999f;
-	//GLfloat x = -1000 * PI;
+	GLfloat preData[SamCount][Two_Dim];
+	
+	GLfloat X_offset = Begin_offset;
 	GLfloat x = 0.0f;
+	GLuint i = 0;
 
-	GLfloat preData[SamCount][2];
-	while (w1 < SamCount)
-	{
-		//preData[w1] = sin(w1);
-		preData[w1][0] = X_offset;
-		preData[w1][1] = sin(x)*factor;
+	creatTestWave(wT0, wScale0, wBegin_Offset0, w0, waveData);
+	creatTestWave(wT1, wScale1, wBegin_Offset1, w1, waveData);
+	creatTestWave(wT1, wScale2, wBegin_Offset2, w2, waveData);
+	creatTestWave(wT3, wScale3, wBegin_Offset3, w3, waveData);
+	creatTestWave(wT4, wScale4, wBegin_Offset4, w4, waveData);
+
+	while (i < SamCount) {
+		preData[i][0] = X_offset;
+		preData[i][1] = waveData[w2][i];
 		X_offset += 0.002;
-		x += 0.1f;
-		++w1;
-
+		++i;
 	}
-	GLfloat ZeroLine[2][2] =   //定义NumVertices个二维顶点 数据
-	{
-		{ -1.5f, 0.0f },{ 1.5f, 0.0f }//,{-0.9, 0.85},  //triangle 1
-									//{0.9, -0.85},{0.9, 0.9}, {-0.85, 0.9}    //triangle 2
+		
+	GLfloat ZeroLine[2][2] ={
+		{ -1.5f, 0.0f },{ 1.5f, 0.0f }
 	};
-	//GLfloat Chunk[4][2] =
-	//{
-	//	{ -0.999f, 0.5f },{ -0.997f, 0.5f },   //4    12
-	//	{ -0.999f, -0.5f },{ -0.997f, -0.5f }  //20   28
-	//};
+	
+	/*
 	GLfloat Data[1][2] = {
 		{ -0.999f, 0.0f },
 	};
 
-	
-	//缩放矩阵
-	glm::mat4 scales[SamCount];
+	glm::mat4 scales[SamCount];//缩放矩阵
 	glm::mat4 scale;
 
 	glm::vec2 offsets[SamCount];
@@ -85,7 +78,7 @@ GLuint Mygl::DataInit()
 		//Y_scale += 0.001f;
 	}
 	//sin(glfwGetTime())
-
+	*/
 
 	glCreateVertexArrays(NumVAO, VAOs);  //等效glGenVertexArrays(NumVAOs, VAOs)
 										  //创建 NumVAOs 个未使用的 VAO对象 到数组VAOs中
@@ -101,7 +94,7 @@ GLuint Mygl::DataInit()
 	glVertexAttribPointer(vPos, 2, GL_FLOAT, GL_FALSE, 2 * sizeof(GLfloat), BUFFER_OFFSET(0));  
 	glEnableVertexAttribArray(vPos); 
 	Error = checkError();
-	glBindBuffer(GL_ARRAY_BUFFER, VBOs[VBO_Instance_Offset]);
+	/*glBindBuffer(GL_ARRAY_BUFFER, VBOs[VBO_Instance_Offset]);
 	glBufferData(GL_ARRAY_BUFFER, sizeof(glm::vec2) * SamCount, &offsets[0], GL_STATIC_DRAW);
 	glVertexAttribPointer(vOffset, 2, GL_FLOAT, GL_FALSE, 2 * sizeof(GLfloat), BUFFER_OFFSET(0));
 	glEnableVertexAttribArray(vOffset);
@@ -119,7 +112,7 @@ GLuint Mygl::DataInit()
 		glVertexAttribDivisor(vScale + i, 1);
 	}
 	Error = checkError();
-
+	*/
 	glBindVertexArray(VAOs[VAO_Xaxis]);
 	glBindBuffer(GL_ARRAY_BUFFER, VBOs[VBO_Xaxis]);
 	glBufferData(GL_ARRAY_BUFFER, sizeof(ZeroLine), ZeroLine, GL_DYNAMIC_DRAW);
@@ -191,14 +184,22 @@ void Mygl::display()
 
 	glBindVertexArray(VAOs[VAO_SamData]);
 	glBindBuffer(GL_ARRAY_BUFFER, VBOs[VBO_SamData]);
-	//glBufferSubData(GL_ARRAY_BUFFER, sizeof(GLfloat), sizeof(GLfloat), &Sample[SamUp]);
-	//glBufferSubData(GL_ARRAY_BUFFER, 3 * sizeof(GLfloat), sizeof(GLfloat), &Sample[SamUp]);
-	//glBufferSubData(GL_ARRAY_BUFFER, 5 * sizeof(GLfloat), sizeof(GLfloat), &Sample[SamDown]);
-	//glBufferSubData(GL_ARRAY_BUFFER, 7 * sizeof(GLfloat), sizeof(GLfloat), &Sample[SamDown]);
 	//glDrawArraysInstanced(GL_TRIANGLE_STRIP, 0, NumVertices_SamData, 1000);
-	glDrawArrays(GL_LINE_STRIP, 0, NumVertices_SamData);
+	glDrawArrays(GL_LINE_STRIP, 0, SamCount);
 
 }
+
+void Mygl::creatTestWave(GLfloat t, GLfloat scale_Y, GLfloat beginoffset, GLuint wx, GLfloat(&waveData)[WaveCount][SamCount])
+{
+	GLfloat x = beginoffset;
+	for (GLuint i = 0; i < SamCount; i++)
+	{
+		waveData[wx][i] = sin(x)*scale_Y;
+		x += t;
+	}
+}
+
+
 
 GLuint Mygl::Run()
 {

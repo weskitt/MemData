@@ -30,24 +30,23 @@ GLuint Mygl::GLInit()
 
 GLuint Mygl::DataInit()
 {
-	GLfloat preData[SamCount][Two_Dim];
-	
-	GLfloat X_offset = Begin_offset;
-	GLfloat x = 0.0f;
-	GLuint i = 0;
+	//GLfloat preData[SamCount][Two_Dim];
+	//GLfloat X_offset = Begin_offset;
+	//GLfloat x = 0.0f;
+	//GLuint i = 0;
 
-	creatTestWave(wT0, wScale0, wBegin_Offset0, w0, waveData);
-	creatTestWave(wT1, wScale1, wBegin_Offset1, w1, waveData);
-	creatTestWave(wT1, wScale2, wBegin_Offset2, w2, waveData);
-	creatTestWave(wT3, wScale3, wBegin_Offset3, w3, waveData);
-	creatTestWave(wT4, wScale4, wBegin_Offset4, w4, waveData);
+	creatTestWave(wT0, wScale0, wBegin_Offset0, w0, vertices);
 
-	while (i < SamCount) {
-		preData[i][0] = X_offset;
-		preData[i][1] = waveData[w2][i];
-		X_offset += 0.002;
-		++i;
-	}
+	//creatTestWave(wT1, wScale1, wBegin_Offset1, w1, waveData);
+	//creatTestWave(wT1, wScale2, wBegin_Offset2, w2, waveData);
+	//creatTestWave(wT3, wScale3, wBegin_Offset3, w3, waveData);
+	//creatTestWave(wT4, wScale4, wBegin_Offset4, w4, waveData);
+	//while (i < SamCount) {
+	//	preData[i][0] = X_offset;
+	//	preData[i][1] = waveData[w2][i];
+	//	X_offset += 0.002;
+	//	++i;
+	//}
 		
 	GLfloat ZeroLine[2][2] ={
 		{ -1.5f, 0.0f },{ 1.5f, 0.0f }
@@ -90,8 +89,8 @@ GLuint Mygl::DataInit()
 	Error = checkError();
 	glBindVertexArray(VAOs[VAO_SamData]);
 	glBindBuffer(GL_ARRAY_BUFFER, VBOs[VBO_SamData]);
-	glBufferData(GL_ARRAY_BUFFER, sizeof(preData), preData, GL_DYNAMIC_DRAW);
-	glVertexAttribPointer(vPos, 2, GL_FLOAT, GL_FALSE, 2 * sizeof(GLfloat), BUFFER_OFFSET(0));  
+	glBufferData(GL_ARRAY_BUFFER, sizeof(vertices), vertices, GL_DYNAMIC_DRAW);
+	glVertexAttribPointer(vPos, 2, GL_FLOAT, GL_FALSE, sizeof(Vertex), BUFFER_OFFSET(0));  
 	glEnableVertexAttribArray(vPos); 
 	Error = checkError();
 	/*glBindBuffer(GL_ARRAY_BUFFER, VBOs[VBO_Instance_Offset]);
@@ -189,13 +188,17 @@ void Mygl::display()
 
 }
 
-void Mygl::creatTestWave(GLfloat t, GLfloat scale_Y, GLfloat beginoffset, GLuint wx, GLfloat(&waveData)[WaveCount][SamCount])
+void Mygl::creatTestWave(GLfloat t, GLfloat scale_Y, GLfloat beginoffset, GLuint wx, Vertex(&vertices)[SamCount])
 {
-	GLfloat x = beginoffset;
 	for (GLuint i = 0; i < SamCount; i++)
 	{
-		waveData[wx][i] = sin(x)*scale_Y;
-		x += t;
+		GLfloat x = -1.0f + (i / (GLfloat)(SamCount - 1))*2.0f;
+		vertices[i].Position[0] = x;//x
+		vertices[i].Position[1] =
+			sinf(x * 20) / 3
+			+ sinf(x * 40) / 4
+			+ sinf(x * 60) / 4;
+			//+ sinf(x * 50) / 5;//y
 	}
 }
 

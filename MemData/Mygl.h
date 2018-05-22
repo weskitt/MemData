@@ -37,7 +37,13 @@ class Mygl
 	const GLfloat wScale4 = ScaleFactor, wT4 = 1.00f, wBegin_Offset4 = 0.975f;
 
 	
-	GLfloat waveData[WaveCount][SamCount];
+	struct Vertex
+	{
+		GLfloat Position[2];
+	};
+
+	Vertex vertices[SamCount];
+
 	
 
 	Shader XaxisShader;
@@ -50,7 +56,8 @@ public:
 	GLuint UpdateSample();
 	char* checkError();
 	void display();
-	void creatTestWave(GLfloat t, GLfloat scale_Y, GLfloat beginoffset, GLuint wx,  GLfloat (&waveData)[WaveCount][SamCount]);
+	//void creatTestWave(GLfloat t, GLfloat scale_Y, GLfloat beginoffset, GLuint wx,  GLfloat (&waveData)[WaveCount][SamCount]);Vertex vertices[SamCount]
+	void creatTestWave(GLfloat t, GLfloat scale_Y, GLfloat beginoffset, GLuint wx, Vertex (&vertices)[SamCount]);
 	GLuint Run();
 	Mygl();
 	~Mygl();

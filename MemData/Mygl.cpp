@@ -195,9 +195,9 @@ void Mygl::creatTestWave(GLfloat t, GLfloat scale_Y, GLfloat beginoffset, GLuint
 		GLfloat x = -1.0f + (i / (GLfloat)(SamCount - 1))*2.0f;
 		vertices[i].Position[0] = x;//x
 		vertices[i].Position[1] =
-			sinf(x * 20) / 3
-			+ sinf(x * 40) / 4
-			+ sinf(x * 60) / 4;
+			sin(x * 40) / 3
+			+ sin(x * 60) / 4
+			+ sin(x * 80) / 5;
 			//+ sinf(x * 50) / 5;//y
 	}
 }

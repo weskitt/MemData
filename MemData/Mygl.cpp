@@ -11,12 +11,14 @@ GLuint Mygl::GLInit()
 	glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 5);
 	glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
 
-	window = glfwCreateWindow(1920, 960, "Hello World", NULL, NULL);		if (!window)
+	window = glfwCreateWindow(1920, 960, "Hello World", NULL, NULL);	
+	if (!window)
 	{
 		/* 没有创建会返回NULL */
 		glfwTerminate();
 		return -1;
 	}
+	glfwSetKeyCallback(window, key_callback);
 	/* 设置当前的窗口上下文 */
 	glfwMakeContextCurrent(window);
 
@@ -129,7 +131,26 @@ GLuint Mygl::DataInit()
 GLuint Mygl::UpdateSample()
 {
 	//this->Sample[]
-	return GLuint();
+	for (GLuint i = 0; i < SamCount; i++)
+	{
+		GLfloat x = -1.0f + (i / (GLfloat)(SamCount - 1))*2.0f;
+		vertices[i].Position[0] = x;//x
+		vertices[i].Position[1] =
+			sin(x * 20) / 3
+			+ sin(x * 40) / 3
+			+ sin(x * 60) / 4
+			+ sin(x * 80) / 4
+			+ sin(x * 100) / 4
+			+ sin(x * 120) / 4;
+		//+ sinf(x * 50) / 5;//y
+	}
+
+	glBindBuffer(GL_ARRAY_BUFFER, VBOs[VBO_SamData]);
+	glBufferSubData(GL_ARRAY_BUFFER, 0, sizeof(vertices), &vertices[0]);
+	glBindBuffer(GL_ARRAY_BUFFER, 0);
+
+	//Run();
+	return 0;
 }
 
 char* Mygl::checkError()
@@ -162,6 +183,26 @@ char* Mygl::checkError()
 	return "GL Undefined Error";
 }
 
+void Mygl::key_callback(GLFWwindow* window, int key, int scancode, int action, int mods)
+{
+	switch (key)
+	{
+	case GLFW_KEY_1:
+		if(action==GLFW_PRESS &&mods==GLFW_MOD_SHIFT)
+		{ }
+		else if(action == GLFW_PRESS)
+		{
+
+		}
+
+	case GLFW_KEY_ESCAPE:
+		glfwSetWindowShouldClose(window, GL_TRUE);
+		break;
+	default:
+		break;
+	}
+}
+
 void Mygl::display()
 {
 	static const float black[] = { 0.0f, 0.0f, 0.0f, 0.0f };
@@ -174,16 +215,9 @@ void Mygl::display()
 
 	//***************************************************************
 
-	//定义矩阵
-
-	//传输矩阵
 	SamDataShader.use();
-	//GLuint transLoc = glGetUniformLocation(SamDataShader.ID, "trans");
-	//glUniformMatrix4fv(transLoc, 1, GL_FALSE, glm::value_ptr(trans));
-
 	glBindVertexArray(VAOs[VAO_SamData]);
 	glBindBuffer(GL_ARRAY_BUFFER, VBOs[VBO_SamData]);
-	//glDrawArraysInstanced(GL_TRIANGLE_STRIP, 0, NumVertices_SamData, 1000);
 	glDrawArrays(GL_LINE_STRIP, 0, SamCount);
 
 }
@@ -195,10 +229,11 @@ void Mygl::creatTestWave(GLfloat t, GLfloat scale_Y, GLfloat beginoffset, GLuint
 		GLfloat x = -1.0f + (i / (GLfloat)(SamCount - 1))*2.0f;
 		vertices[i].Position[0] = x;//x
 		vertices[i].Position[1] =
-			sin(x * 40) / 3
-			+ sin(x * 60) / 4
-			+ sin(x * 80) / 5;
-			//+ sinf(x * 50) / 5;//y
+			sin(x * 20) / 6
+			+ sin(x * 40) / 6
+			+ sin(x * 60) / 8
+			+ sin(x * 80) / 6
+			+ sin(x * 100) / 6;
 	}
 }
 

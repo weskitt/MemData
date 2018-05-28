@@ -53,8 +53,11 @@ class Mygl
 public:
 	GLuint GLInit();
 	GLuint DataInit();
+
 	GLuint UpdateSample();
 	char* checkError();
+
+	static void key_callback(GLFWwindow* window, int key, int scancode, int action, int mods);
 	void display();
 	//void creatTestWave(GLfloat t, GLfloat scale_Y, GLfloat beginoffset, GLuint wx,  GLfloat (&waveData)[WaveCount][SamCount]);Vertex vertices[SamCount]
 	void creatTestWave(GLfloat t, GLfloat scale_Y, GLfloat beginoffset, GLuint wx, Vertex (&vertices)[SamCount]);

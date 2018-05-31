@@ -32,62 +32,27 @@ GLuint Mygl::GLInit()
 
 GLuint Mygl::DataInit()
 {
-	//GLfloat preData[SamCount][Two_Dim];
-	//GLfloat X_offset = Begin_offset;
-	//GLfloat x = 0.0f;
-	//GLuint i = 0;
 
-	creatTestWave(wT0, wScale0, wBegin_Offset0, w0, vertices);
+	baseT = 10.0f;
+	for (size_t i = 0; i < WaveCount; i++)
+	{
+		wPams[i].wT = baseT * i;
+		wPams[i].pScale = 10;
+	}
 
-	//creatTestWave(wT1, wScale1, wBegin_Offset1, w1, waveData);
-	//creatTestWave(wT1, wScale2, wBegin_Offset2, w2, waveData);
-	//creatTestWave(wT3, wScale3, wBegin_Offset3, w3, waveData);
-	//creatTestWave(wT4, wScale4, wBegin_Offset4, w4, waveData);
-	//while (i < SamCount) {
-	//	preData[i][0] = X_offset;
-	//	preData[i][1] = waveData[w2][i];
-	//	X_offset += 0.002;
-	//	++i;
-	//}
+	creatTestWave(vertices);
 		
 	GLfloat ZeroLine[2][2] ={
 		{ -1.5f, 0.0f },{ 1.5f, 0.0f }
 	};
 	
-	/*
-	GLfloat Data[1][2] = {
-		{ -0.999f, 0.0f },
-	};
-
-	glm::mat4 scales[SamCount];//缩放矩阵
-	glm::mat4 scale;
-
-	glm::vec2 offsets[SamCount];
-	glm::vec2 offset;
-	
-	GLfloat Y_offset = 0.0f;
-	for (GLuint index = 0; index < SamCount; index++)
-	{
-		offset.x =  X_offset;
-		offset.y = 0.5f;
-		offsets[index] = offset;
-		X_offset += 0.02f;
-
-		glm::mat4 scale;
-		scale = glm::scale(scale, glm::vec3(1.0f, 0.5f, 1.0f));
-		scales[index] = scale;
-		//Y_scale += 0.001f;
-	}
 	//sin(glfwGetTime())
-	*/
+	
 
 	glCreateVertexArrays(NumVAO, VAOs);  //等效glGenVertexArrays(NumVAOs, VAOs)
 										  //创建 NumVAOs 个未使用的 VAO对象 到数组VAOs中
 	glCreateBuffers(NumVBO, VBOs);  //等效glGenBuffers(NumBuffers, Buffers);
 										   //创建 NumBuffers 个未使用的 缓冲对象VBO 到数组Buffers中
-	
-	
-
 	Error = checkError();
 	glBindVertexArray(VAOs[VAO_SamData]);
 	glBindBuffer(GL_ARRAY_BUFFER, VBOs[VBO_SamData]);
@@ -135,13 +100,17 @@ GLuint Mygl::UpdateSample()
 	{
 		GLfloat x = -1.0f + (i / (GLfloat)(SamCount - 1))*2.0f;
 		vertices[i].Position[0] = x;//x
-		vertices[i].Position[1] =
-			sin(x * 20) / 3
-			+ sin(x * 40) / 3
-			+ sin(x * 60) / 4
-			+ sin(x * 80) / 4
-			+ sin(x * 100) / 4
-			+ sin(x * 120) / 4;
+		vertices[i].Position[1] = 
+			  sin(x * wPams[w0].wT) / wPams[w0].pScale
+			+ sin(x * wPams[w1].wT) / wPams[w1].pScale
+			+ sin(x * wPams[w2].wT) / wPams[w2].pScale
+			+ sin(x * wPams[w3].wT) / wPams[w3].pScale
+			+ sin(x * wPams[w4].wT) / wPams[w4].pScale
+			+ sin(x * wPams[w5].wT) / wPams[w5].pScale
+			+ sin(x * wPams[w6].wT) / wPams[w6].pScale
+			+ sin(x * wPams[w7].wT) / wPams[w7].pScale
+			+ sin(x * wPams[w8].wT) / wPams[w8].pScale
+			+ sin(x * wPams[w9].wT) / wPams[w9].pScale;
 		//+ sinf(x * 50) / 5;//y
 	}
 
@@ -222,18 +191,23 @@ void Mygl::display()
 
 }
 
-void Mygl::creatTestWave(GLfloat t, GLfloat scale_Y, GLfloat beginoffset, GLuint wx, Vertex(&vertices)[SamCount])
+void Mygl::creatTestWave(Vertex(&vertices)[SamCount])
 {
 	for (GLuint i = 0; i < SamCount; i++)
 	{
 		GLfloat x = -1.0f + (i / (GLfloat)(SamCount - 1))*2.0f;
 		vertices[i].Position[0] = x;//x
-		vertices[i].Position[1] =
-			sin(x * 20) / 6
-			+ sin(x * 40) / 6
-			+ sin(x * 60) / 8
-			+ sin(x * 80) / 6
-			+ sin(x * 100) / 6;
+		vertices[i].Position[1] = 
+			  sin(x * wPams[w0].wT) / wPams[w0].pScale
+			+ sin(x * wPams[w1].wT) / wPams[w1].pScale
+			+ sin(x * wPams[w2].wT) / wPams[w2].pScale
+			+ sin(x * wPams[w3].wT) / wPams[w3].pScale
+			+ sin(x * wPams[w4].wT) / wPams[w4].pScale
+			+ sin(x * wPams[w5].wT) / wPams[w5].pScale
+			+ sin(x * wPams[w6].wT) / wPams[w6].pScale
+			+ sin(x * wPams[w7].wT) / wPams[w7].pScale
+			+ sin(x * wPams[w8].wT) / wPams[w8].pScale
+			+ sin(x * wPams[w9].wT) / wPams[w9].pScale;
 	}
 }
 
@@ -267,3 +241,4 @@ Mygl::~Mygl()
 {
 	glfwTerminate();
 }
+

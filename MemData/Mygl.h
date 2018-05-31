@@ -18,7 +18,7 @@ class Mygl
 
 	enum Attrib_IDs { vPos, vOffset, vScale };          // Ù–‘œ‡πÿID
 	enum Sample_IDs { SamUp, SamDown, NumYaxis, NumSam=2 };
-	enum Wave_IDs { w0, w1, w2, w3, w4, w5, w6, w7, w8, w9, WaveCount = 10 };
+	enum Wave_IDs { w0, w1, w2, w3, w4, w5, w6, w7, w8, w9, WaveCount };
 	enum DataCountInit{ Zero_Dim, One_Dim, Two_Dim, Three_Dim, 
 						SamCount=1000, NumVertices_Xaxis = 2 };
 
@@ -36,7 +36,18 @@ class Mygl
 	const GLfloat wScale3 = ScaleFactor, wT3 = 0.50f, wBegin_Offset3 = 0.980f;
 	const GLfloat wScale4 = ScaleFactor, wT4 = 1.00f, wBegin_Offset4 = 0.975f;
 
-	
+	GLfloat baseT;
+	struct WaveParam
+	{
+		GLfloat wT = 0.0f;
+		GLfloat pScale = 0.0f;
+		GLfloat weight = 0.0f;
+
+	};
+
+
+	WaveParam wPams[WaveCount];
+
 	struct Vertex
 	{
 		GLfloat Position[2];
@@ -60,7 +71,7 @@ public:
 	static void key_callback(GLFWwindow* window, int key, int scancode, int action, int mods);
 	void display();
 	//void creatTestWave(GLfloat t, GLfloat scale_Y, GLfloat beginoffset, GLuint wx,  GLfloat (&waveData)[WaveCount][SamCount]);Vertex vertices[SamCount]
-	void creatTestWave(GLfloat t, GLfloat scale_Y, GLfloat beginoffset, GLuint wx, Vertex (&vertices)[SamCount]);
+	void creatTestWave(Vertex (&vertices)[SamCount]);
 	GLuint Run();
 	Mygl();
 	~Mygl();

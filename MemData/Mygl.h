@@ -20,12 +20,13 @@ class Mygl
 	enum Sample_IDs { SamUp, SamDown, NumYaxis, NumSam=2 };
 	enum Wave_IDs { w0, w1, w2, w3, w4, w5, w6, w7, w8, w9, WaveCount };
 	enum Wave_Operate { Adds, Subtracts, Multiplied, Divides, WeightMod, AverageMod};
-
+	static const GLint AddsOperand = 1;
+	static const GLint SubtractsOperand = -1;
 	enum DataCountInit{ Zero_Dim, One_Dim, Two_Dim, Three_Dim, 
 						SamCount=1000, NumVertices_Xaxis = 2 };
 
-	GLuint VAOs[NumVAO];         //定义 顶点数组对象 数组
-	GLuint VBOs[NumVBO];		 //定义 缓冲对象     数组
+	static GLuint VAOs[NumVAO];         //定义 顶点数组对象 数组
+	static GLuint VBOs[NumVBO];		 //定义 缓冲对象     数组
 	
 
 	const GLfloat ScaleFactor = 0.2f;
@@ -38,7 +39,7 @@ class Mygl
 	const GLfloat wScale3 = ScaleFactor, wT3 = 0.50f, wBegin_Offset3 = 0.980f;
 	const GLfloat wScale4 = ScaleFactor, wT4 = 1.00f, wBegin_Offset4 = 0.975f;
 
-	GLfloat baseT;
+	static GLfloat baseT;
 	struct WaveParam
 	{
 		GLfloat wT = 0.0f;
@@ -48,14 +49,14 @@ class Mygl
 	};
 
 
-	WaveParam wPams[WaveCount];
+	static WaveParam wPams[WaveCount];
 
 	struct Vertex
 	{
 		GLfloat Position[2];
 	};
 
-	Vertex vertices[SamCount];
+	static Vertex vertices[SamCount];
 
 	
 
@@ -67,14 +68,14 @@ public:
 	GLuint GLInit();
 	GLuint DataInit();
 
-	GLuint UpdateSample();
+	static GLuint UpdateSample();
 	char* checkError();
 
 	static void key_callback(GLFWwindow* window, int key, int scancode, int action, int mods);
 	void display();
 	//void creatTestWave(GLfloat t, GLfloat scale_Y, GLfloat beginoffset, GLuint wx,  GLfloat (&waveData)[WaveCount][SamCount]);Vertex vertices[SamCount]
-	void creatTestWave(Vertex (&vertices)[SamCount]);
-	void PscaleRedistribute(Wave_IDs wId, Wave_Operate operate, Wave_Operate rMod);
+	static void creatTestWave(Vertex (&vertices)[SamCount]);
+	static void PscaleRedistribute(Wave_IDs wId, GLint operand, Wave_Operate rMod);
 	GLuint Run();
 	Mygl();
 	~Mygl();

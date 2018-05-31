@@ -159,12 +159,10 @@ void Mygl::key_callback(GLFWwindow* window, int key, int scancode, int action, i
 	{
 	case GLFW_KEY_1:
 		if(mods==GLFW_MOD_SHIFT)
-		{
-		}
+			PscaleRedistribute(w1, SubtractsOperand, AverageMod);
 		else
-		{
-
-		}
+			PscaleRedistribute(w1, AddsOperand, AverageMod);
+		UpdateSample();
 
 	case GLFW_KEY_ESCAPE:
 		glfwSetWindowShouldClose(window, GL_TRUE);
@@ -213,8 +211,16 @@ void Mygl::creatTestWave(Vertex(&vertices)[SamCount])
 	}
 }
 
-void Mygl::PscaleRedistribute(Wave_IDs wId, Wave_Operate operate, Wave_Operate rMod)
+void Mygl::PscaleRedistribute(Wave_IDs wId, GLint operand, Wave_Operate rMod)
 {
+	GLfloat re8 = operand / 8;
+	for (size_t i = 1; i < WaveCount; i++)
+	{
+		if (i != wId)
+			wPams[i].pScale += re8;
+		else 
+			wPams[wId].pScale += operand;
+	}
 
 }
 

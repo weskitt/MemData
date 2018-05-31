@@ -95,6 +95,7 @@ GLuint Mygl::DataInit()
 
 GLuint Mygl::UpdateSample()
 {
+
 	//this->Sample[]
 	for (GLuint i = 0; i < SamCount; i++)
 	{
@@ -157,9 +158,10 @@ void Mygl::key_callback(GLFWwindow* window, int key, int scancode, int action, i
 	switch (key)
 	{
 	case GLFW_KEY_1:
-		if(action==GLFW_PRESS &&mods==GLFW_MOD_SHIFT)
-		{ }
-		else if(action == GLFW_PRESS)
+		if(mods==GLFW_MOD_SHIFT)
+		{
+		}
+		else
 		{
 
 		}
@@ -209,6 +211,11 @@ void Mygl::creatTestWave(Vertex(&vertices)[SamCount])
 			+ sin(x * wPams[w8].wT) / wPams[w8].pScale
 			+ sin(x * wPams[w9].wT) / wPams[w9].pScale;
 	}
+}
+
+void Mygl::PscaleRedistribute(Wave_IDs wId, Wave_Operate operate, Wave_Operate rMod)
+{
+
 }
 
 

@@ -19,6 +19,8 @@ class Mygl
 	enum Attrib_IDs { vPos, vOffset, vScale };          // Ù–‘œ‡πÿID
 	enum Sample_IDs { SamUp, SamDown, NumYaxis, NumSam=2 };
 	enum Wave_IDs { w0, w1, w2, w3, w4, w5, w6, w7, w8, w9, WaveCount };
+	enum Wave_Operate { Adds, Subtracts, Multiplied, Divides, WeightMod, AverageMod};
+
 	enum DataCountInit{ Zero_Dim, One_Dim, Two_Dim, Three_Dim, 
 						SamCount=1000, NumVertices_Xaxis = 2 };
 
@@ -72,6 +74,7 @@ public:
 	void display();
 	//void creatTestWave(GLfloat t, GLfloat scale_Y, GLfloat beginoffset, GLuint wx,  GLfloat (&waveData)[WaveCount][SamCount]);Vertex vertices[SamCount]
 	void creatTestWave(Vertex (&vertices)[SamCount]);
+	void PscaleRedistribute(Wave_IDs wId, Wave_Operate operate, Wave_Operate rMod);
 	GLuint Run();
 	Mygl();
 	~Mygl();

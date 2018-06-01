@@ -8,8 +8,34 @@ GLfloat Mygl::baseT;
 Mygl::WaveParam Mygl::wPams[Mygl::WaveCount];
 Mygl::Vertex Mygl::vertices[Mygl::SamCount];
 
+const GLint Mygl::AddsOperand = 1;
+const GLint Mygl::SubtractsOperand = -1;
+
+static void key_callback(GLFWwindow* window, int key, int scancode, int action, int mods)
+{
+	switch (key)
+	{
+	case GLFW_KEY_A:
+		if (mods == GLFW_MOD_SHIFT)
+			Mygl::PscaleRedistribute(Mygl::w1, Mygl::SubtractsOperand, Mygl::AverageMod);
+		else
+			Mygl::PscaleRedistribute(Mygl::w1, Mygl::AddsOperand, Mygl::AverageMod);
+		Mygl::UpdateSample();
+		break;
+	case GLFW_KEY_ESCAPE:
+		glfwSetWindowShouldClose(window, GL_TRUE);
+		break;
+	default:
+		break;
+	}
+}
+static void error_callback(int error, const char* description)
+{
+	fprintf(stderr, "Error: %s\n", description);
+}
 GLuint Mygl::GLInit()
 {
+	glfwSetErrorCallback(error_callback);
 
 	if (!glfwInit())  return -1;
 
@@ -101,7 +127,6 @@ GLuint Mygl::DataInit()
 
 GLuint Mygl::UpdateSample()
 {
-
 	//this->Sample[]
 	for (GLuint i = 0; i < SamCount; i++)
 	{
@@ -159,24 +184,7 @@ char* Mygl::checkError()
 	return "GL Undefined Error";
 }
 
-void Mygl::key_callback(GLFWwindow* window, int key, int scancode, int action, int mods)
-{
-	switch (key)
-	{
-	case GLFW_KEY_1:
-		if(mods==GLFW_MOD_SHIFT)
-			PscaleRedistribute(w1, SubtractsOperand, AverageMod);
-		else
-			PscaleRedistribute(w1, AddsOperand, AverageMod);
-		UpdateSample();
 
-	case GLFW_KEY_ESCAPE:
-		glfwSetWindowShouldClose(window, GL_TRUE);
-		break;
-	default:
-		break;
-	}
-}
 
 void Mygl::display()
 {
@@ -246,7 +254,8 @@ GLuint Mygl::Run()
 		glfwSwapBuffers(window);
 
 		/* ÂÖÑ¯ÊÂ¼þ */
-		glfwPollEvents();
+		//glfwPollEvents();
+		glfwWaitEvents();
 	}
 
 	return GLuint();

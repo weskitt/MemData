@@ -8,7 +8,11 @@ static class Mygl
 	GLFWwindow* window;   /* 初始化glfw库 */
 	char* Error;
 
-public:
+public:	
+
+	static const GLint AddsOperand;
+	static const GLint SubtractsOperand;
+
 	enum VAO_IDs { VAO_Xaxis, VAO_SamData, NumVAO };    //顶点数组对象相关ID
 	enum VBO_IDs { VBO_Xaxis,
 				   VBO_SamData, 
@@ -37,8 +41,7 @@ private:
 	enum Attrib_IDs { vPos, vOffset, vScale };          //属性相关ID
 	enum Sample_IDs { SamUp, SamDown, NumYaxis, NumSam=2 };
 
-	static const GLint AddsOperand = 1;
-	static const GLint SubtractsOperand = -1;
+
 
 
 	static GLuint VAOs[NumVAO];         //定义 顶点数组对象数组
@@ -77,7 +80,7 @@ public:
 	static GLuint UpdateSample();
 	char* checkError();
 
-	static void key_callback(GLFWwindow* window, int key, int scancode, int action, int mods);
+	
 	void display();
 	//void creatTestWave(GLfloat t, GLfloat scale_Y, GLfloat beginoffset, GLuint wx,  GLfloat (&waveData)[WaveCount][SamCount]);Vertex vertices[SamCount]
 	static void creatTestWave(Vertex (&vertices)[SamCount]);

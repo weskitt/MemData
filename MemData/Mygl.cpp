@@ -2,6 +2,12 @@
 #include "Mygl.h"
 
 
+GLuint Mygl::VAOs[Mygl::NumVAO];         //定义 顶点数组对象 数组
+GLuint Mygl::VBOs[Mygl::NumVBO];		 //定义 缓冲对象     数组
+GLfloat Mygl::baseT;
+Mygl::WaveParam Mygl::wPams[Mygl::WaveCount];
+Mygl::Vertex Mygl::vertices[Mygl::SamCount];
+
 GLuint Mygl::GLInit()
 {
 

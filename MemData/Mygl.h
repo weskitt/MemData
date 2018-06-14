@@ -26,6 +26,7 @@ public:
 		SamCount = 1000, NumVertices_Xaxis = 2
 	};
 	static GLfloat baseT;
+	static GLfloat curT;
 	struct WaveParam
 	{
 		GLfloat wT = 0.0f;
@@ -78,9 +79,10 @@ public:
 	GLuint DataInit();
 
 	static GLuint UpdateSample();
+	//static 
 	char* checkError();
 
-	
+	void glVersion();
 	void display();
 	//void creatTestWave(GLfloat t, GLfloat scale_Y, GLfloat beginoffset, GLuint wx,  GLfloat (&waveData)[WaveCount][SamCount]);Vertex vertices[SamCount]
 	static void creatTestWave(Vertex (&vertices)[SamCount]);

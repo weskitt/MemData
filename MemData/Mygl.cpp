@@ -5,6 +5,7 @@
 GLuint Mygl::VAOs[Mygl::NumVAO];         //定义 顶点数组对象 数组
 GLuint Mygl::VBOs[Mygl::NumVBO];		 //定义 缓冲对象     数组
 GLfloat Mygl::baseT;
+GLfloat Mygl::curT;
 Mygl::WaveParam Mygl::wPams[Mygl::WaveCount];
 Mygl::Vertex Mygl::vertices[Mygl::SamCount];
 
@@ -15,7 +16,7 @@ static void key_callback(GLFWwindow* window, int key, int scancode, int action, 
 {
 	switch (key)
 	{
-	case GLFW_KEY_A:
+	case GLFW_KEY_Q:
 		if (mods == GLFW_MOD_SHIFT)
 			Mygl::PscaleRedistribute(Mygl::w1, Mygl::SubtractsOperand, Mygl::AverageMod);
 		else
@@ -59,13 +60,15 @@ GLuint Mygl::GLInit()
 	glPointSize(4);  //设置4个像素为一点
 	glLineWidth(1);  //设置线宽为4
 
-	
+	glVersion();
+
 }
 
 GLuint Mygl::DataInit()
 {
 
-	baseT = 10.0f;
+	baseT = 20.0f;
+	curT = glfwGetTime();
 	for (size_t i = 0; i < WaveCount; i++)
 	{
 		wPams[i].wT = baseT * i;
@@ -186,6 +189,27 @@ char* Mygl::checkError()
 
 
 
+void Mygl::glVersion()
+{
+	system("Cls");
+
+	cout << "OpenGL:" << endl;
+	cout << glGetString(GL_VENDOR) << endl;
+	cout << glGetString(GL_RENDERER) << endl;
+	cout << glGetString(GL_VERSION) << "\n" << endl;
+	//cout << glGetString(GLEW_VERSION) << endl;
+	//glewGetString
+	cout << "GLEW:" << endl;
+	cout << glewGetString(GLEW_VERSION) << "\n" << endl;
+
+	cout << "GLFW:" << endl;
+	cout << glfwGetVersionString() << "\n" << endl;
+
+	cout << glfwGetTime() << "\n" << endl;
+
+	
+}
+
 void Mygl::display()
 {
 	static const float black[] = { 0.0f, 0.0f, 0.0f, 0.0f };
@@ -203,6 +227,7 @@ void Mygl::display()
 	glBindBuffer(GL_ARRAY_BUFFER, VBOs[VBO_SamData]);
 	glDrawArrays(GL_LINE_STRIP, 0, SamCount);
 
+	glVersion();
 }
 
 void Mygl::creatTestWave(Vertex(&vertices)[SamCount])

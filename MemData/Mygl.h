@@ -42,33 +42,16 @@ private:
 	enum Attrib_IDs { vPos, vOffset, vScale };          //属性相关ID
 	enum Sample_IDs { SamUp, SamDown, NumYaxis, NumSam=2 };
 
-
-
-
 	static GLuint VAOs[NumVAO];         //定义 顶点数组对象数组
 	static GLuint VBOs[NumVBO];		 //定义 缓冲对象     数组
 	
 
 	const GLfloat ScaleFactor = 0.2f;
 	const GLfloat PI = 3.1415926f;
-	const GLfloat Begin_offset = -1.0f;
-
-	const GLfloat wScale0 = ScaleFactor, wT0 = 0.01f, wBegin_Offset0 = 1.000f;
-	const GLfloat wScale1 = ScaleFactor, wT1 = 0.05f, wBegin_Offset1 = 0.990f;
-	const GLfloat wScale2 = ScaleFactor, wT2 = 0.10f, wBegin_Offset2 = 0.800f;
-	const GLfloat wScale3 = ScaleFactor, wT3 = 0.50f, wBegin_Offset3 = 0.980f;
-	const GLfloat wScale4 = ScaleFactor, wT4 = 1.00f, wBegin_Offset4 = 0.975f;
-
-
-
 
 	static WaveParam wPams[WaveCount];
 
-
-
 	static Vertex vertices[SamCount];
-
-	
 
 	Shader XaxisShader;
 	Shader SamDataShader;
@@ -85,7 +68,7 @@ public:
 	void glVersion();
 	void display();
 	//void creatTestWave(GLfloat t, GLfloat scale_Y, GLfloat beginoffset, GLuint wx,  GLfloat (&waveData)[WaveCount][SamCount]);Vertex vertices[SamCount]
-	static void creatTestWave(Vertex (&vertices)[SamCount]);
+	//static void creatTestWave(Vertex (&vertices)[SamCount]);
 	static void PscaleRedistribute(Wave_IDs wId, GLint operand, Wave_Operate rMod);
 	GLuint Run();
 	Mygl();

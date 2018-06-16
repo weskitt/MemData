@@ -9,7 +9,7 @@ GLfloat Mygl::curT;
 Mygl::WaveParam Mygl::wPams[Mygl::WaveCount];
 Mygl::Vertex Mygl::vertices[Mygl::SamCount];
 
-const GLint Mygl::AddsOperand = 1;
+const GLint Mygl::AddsOperand = 0.5;
 const GLint Mygl::SubtractsOperand = -1;
 
 static void key_callback(GLFWwindow* window, int key, int scancode, int action, int mods)
@@ -75,7 +75,8 @@ GLuint Mygl::DataInit()
 		wPams[i].pScale = 10;
 	}
 
-	creatTestWave(vertices);
+	//creatTestWave(vertices);
+	UpdateSample();
 		
 	GLfloat ZeroLine[2][2] ={
 		{ -1.5f, 0.0f },{ 1.5f, 0.0f }
@@ -135,9 +136,9 @@ GLuint Mygl::UpdateSample()
 	{
 		GLfloat x = -1.0f + (i / (GLfloat)(SamCount - 1))*2.0f;
 		vertices[i].Position[0] = x;//x
-		vertices[i].Position[1] = 
-			  sin(x * wPams[w0].wT) / wPams[w0].pScale
-			+ sin(x * wPams[w1].wT) / wPams[w1].pScale
+		vertices[i].Position[1] =
+			sin(x * wPams[w1].wT) / wPams[w1].pScale;
+			/*+ sin(x * wPams[w1].wT) / wPams[w1].pScale
 			+ sin(x * wPams[w2].wT) / wPams[w2].pScale
 			+ sin(x * wPams[w3].wT) / wPams[w3].pScale
 			+ sin(x * wPams[w4].wT) / wPams[w4].pScale
@@ -145,8 +146,7 @@ GLuint Mygl::UpdateSample()
 			+ sin(x * wPams[w6].wT) / wPams[w6].pScale
 			+ sin(x * wPams[w7].wT) / wPams[w7].pScale
 			+ sin(x * wPams[w8].wT) / wPams[w8].pScale
-			+ sin(x * wPams[w9].wT) / wPams[w9].pScale;
-		//+ sinf(x * 50) / 5;//y
+			+ sin(x * wPams[w9].wT) / wPams[w9].pScale;*/
 	}
 
 	glBindBuffer(GL_ARRAY_BUFFER, VBOs[VBO_SamData]);
@@ -187,11 +187,8 @@ char* Mygl::checkError()
 	return "GL Undefined Error";
 }
 
-
-
 void Mygl::glVersion()
 {
-	system("Cls");
 
 	cout << "OpenGL:" << endl;
 	cout << glGetString(GL_VENDOR) << endl;
@@ -227,27 +224,7 @@ void Mygl::display()
 	glBindBuffer(GL_ARRAY_BUFFER, VBOs[VBO_SamData]);
 	glDrawArrays(GL_LINE_STRIP, 0, SamCount);
 
-	glVersion();
-}
-
-void Mygl::creatTestWave(Vertex(&vertices)[SamCount])
-{
-	for (GLuint i = 0; i < SamCount; i++)
-	{
-		GLfloat x = -1.0f + (i / (GLfloat)(SamCount - 1))*2.0f;
-		vertices[i].Position[0] = x;//x
-		vertices[i].Position[1] = 
-			  sin(x * wPams[w0].wT) / wPams[w0].pScale
-			+ sin(x * wPams[w1].wT) / wPams[w1].pScale
-			+ sin(x * wPams[w2].wT) / wPams[w2].pScale
-			+ sin(x * wPams[w3].wT) / wPams[w3].pScale
-			+ sin(x * wPams[w4].wT) / wPams[w4].pScale
-			+ sin(x * wPams[w5].wT) / wPams[w5].pScale
-			+ sin(x * wPams[w6].wT) / wPams[w6].pScale
-			+ sin(x * wPams[w7].wT) / wPams[w7].pScale
-			+ sin(x * wPams[w8].wT) / wPams[w8].pScale
-			+ sin(x * wPams[w9].wT) / wPams[w9].pScale;
-	}
+	
 }
 
 void Mygl::PscaleRedistribute(Wave_IDs wId, GLint operand, Wave_Operate rMod)
@@ -262,8 +239,6 @@ void Mygl::PscaleRedistribute(Wave_IDs wId, GLint operand, Wave_Operate rMod)
 	}
 
 }
-
-
 
 GLuint Mygl::Run()
 {

@@ -7,6 +7,7 @@
 	回想(阅读)
 
 部件:
+	适应性感觉--长期处于一种环境取得的Suitable Sensation(OriginalSuitableSensation)
 	获取外部感觉-视觉-听觉-嗅觉-味觉-触觉
 				视觉：可以识别-波长在0.77－0.39微米的电磁波
 				听觉，可以识别-20－2000HZ的声波，分辨音调（高低）、音强（大水）和音色（波形的特点）
@@ -22,7 +23,11 @@
 	动作(力度)
 
 情绪感情变量
-
+	pre
+		积极情绪Positive Emotion(PosEmotion)
+		消极情绪Negative Emotion(NegEmotion)
+	edit
+		emo[]...
 
 
 

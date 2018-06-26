@@ -1,12 +1,12 @@
 记忆块-部件(感觉传感器)->作用->情绪感情变量(影响全局)
 
-记忆块:
+--记忆块:memory
 	创建->读取部件感觉
 	储存
 	刷新
 	回想(阅读)
 
-部件:
+--部件:objects
 	适应性感觉--长期处于一种环境取得的Suitable Sensation(OriginalSuitableSensation)
 	获取外部感觉-视觉-听觉-嗅觉-味觉-触觉
 				视觉：可以识别-波长在0.77－0.39微米的电磁波
@@ -22,7 +22,7 @@
 
 	动作(力度)
 
-情绪感情变量
+--情绪感情变量motion
 	pre
 		积极情绪Positive Emotion(PosEmotion)
 		消极情绪Negative Emotion(NegEmotion)

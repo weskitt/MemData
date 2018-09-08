@@ -1,18 +1,18 @@
 #pragma once
-class SENSOR  //传感器 actor
+class SENSOR
 {
+private:
+	int local;  //传感器地址
+	int type;   //传感器类型
+	int sensation; //实时感应量
 
-	int value1; //传感器实时值
-	int value0; //内部平衡值，基准  默认0
-	int senty; //灵敏度,分辨率  //作用于UNIT的senseFrag感觉片段vector长度
-	int local; //位置
-	int type; //类型 温度 颜色 亮度 波响度 波频率 等一系列被分解后的基本  或者  虚拟构造的
-	void self_Updata();
-
+	int sensesSpeed;   //感觉传输速率
+	int suitableSenses; //暂时适应的惯性感应量
+	int originalSuitableSenses;  //预设的可忽略的感应量
+	int diffSenses; //实时差异性感应量计算 senses - suitableSenses
 public:
-	
-	int feedback(); //调用self_Updata()检查核实并传出数据
+	virtual bool ReFreshSensor() = 0; //刷新传感器感应量
 	SENSOR();
-	~SENSOR();
+	virtual ~SENSOR();
 };
 

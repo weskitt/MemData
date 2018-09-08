@@ -61,7 +61,7 @@ GLuint Mygl::GLInit()
 	glLineWidth(1);  //ÉèÖÃÏß¿íÎª4
 
 	glVersion();
-
+	DataInit();
 }
 
 GLuint Mygl::DataInit()

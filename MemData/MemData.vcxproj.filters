@@ -39,9 +39,6 @@
     <ClInclude Include="WISH.h">
       <Filter>头文件</Filter>
     </ClInclude>
-    <ClInclude Include="SENSOR.h">
-      <Filter>头文件</Filter>
-    </ClInclude>
     <ClInclude Include="HeadFile.h">
       <Filter>头文件</Filter>
     </ClInclude>
@@ -69,6 +66,15 @@
     <ClInclude Include="Mygl.h">
       <Filter>头文件</Filter>
     </ClInclude>
+    <ClInclude Include="SENSOR.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="ViewSensor.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="HearSensor.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="stdafx.cpp">
@@ -87,9 +93,6 @@
       <Filter>源文件</Filter>
     </ClCompile>
     <ClCompile Include="WISH.cpp">
-      <Filter>源文件</Filter>
-    </ClCompile>
-    <ClCompile Include="SENSOR.cpp">
       <Filter>源文件</Filter>
     </ClCompile>
     <ClCompile Include="SENSE.cpp">
@@ -111,6 +114,15 @@
       <Filter>源文件</Filter>
     </ClCompile>
     <ClCompile Include="Mygl.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="SENSOR.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="ViewSensor.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="HearSensor.cpp">
       <Filter>源文件</Filter>
     </ClCompile>
   </ItemGroup>

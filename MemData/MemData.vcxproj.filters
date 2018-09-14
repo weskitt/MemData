@@ -75,6 +75,9 @@
     <ClInclude Include="HearSensor.h">
       <Filter>头文件</Filter>
     </ClInclude>
+    <ClInclude Include="WaveViewer.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="stdafx.cpp">
@@ -125,6 +128,9 @@
     <ClCompile Include="HearSensor.cpp">
       <Filter>源文件</Filter>
     </ClCompile>
+    <ClCompile Include="WaveViewer.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <None Include="shaders\triangles\SamData.frag">
@@ -133,10 +139,10 @@
     <None Include="shaders\triangles\SamData.vert">
       <Filter>shader</Filter>
     </None>
-    <None Include="shaders\triangles\Xaxis.frag">
+    <None Include="shaders\triangles\Frame.vert">
       <Filter>shader</Filter>
     </None>
-    <None Include="shaders\triangles\Xaxis.vert">
+    <None Include="shaders\triangles\Frame.frag">
       <Filter>shader</Filter>
     </None>
   </ItemGroup>

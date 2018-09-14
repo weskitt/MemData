@@ -11,7 +11,7 @@ private:
 	int originalSuitableSenses;  //预设的可忽略的感应量
 	int diffSenses; //实时差异性感应量计算 senses - suitableSenses
 public:
-	virtual bool ReFreshSensor() = 0; //刷新传感器感应量
+	//virtual bool ReFreshSensor(); //刷新传感器感应量
 	SENSOR();
 	virtual ~SENSOR();
 };

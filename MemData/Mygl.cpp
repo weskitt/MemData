@@ -7,7 +7,7 @@ GLuint Mygl::VBOs[Mygl::NumVBO];		 //定义 缓冲对象     数组
 GLfloat Mygl::baseT;
 GLfloat Mygl::curT;
 Mygl::WaveParam Mygl::wPams[Mygl::WaveCount];
-Mygl::Vertex Mygl::vertices[Mygl::SamCount];
+//Mygl::Vertex Mygl::vertices[Mygl::SamCount];
 
 const GLint Mygl::AddsOperand = 0.5;
 const GLint Mygl::SubtractsOperand = -1;
@@ -21,7 +21,7 @@ static void key_callback(GLFWwindow* window, int key, int scancode, int action, 
 			Mygl::PscaleRedistribute(Mygl::w1, Mygl::SubtractsOperand, Mygl::AverageMod);
 		else
 			Mygl::PscaleRedistribute(Mygl::w1, Mygl::AddsOperand, Mygl::AverageMod);
-		Mygl::UpdateSample();
+		//Mygl::UpdateSample();
 		break;
 	case GLFW_KEY_ESCAPE:
 		glfwSetWindowShouldClose(window, GL_TRUE);
@@ -61,11 +61,13 @@ GLuint Mygl::GLInit()
 	glLineWidth(1);  //设置线宽为4
 
 	glVersion();
-	DataInit();
+	//DataInit();
 }
 
 GLuint Mygl::DataInit()
 {
+	
+	//Rwave.GetData("cai3.wav");
 
 	baseT = 20.0f;
 	curT = glfwGetTime();
@@ -76,14 +78,13 @@ GLuint Mygl::DataInit()
 	}
 
 	//creatTestWave(vertices);
-	UpdateSample();
+	//UpdateSample();
 		
 	GLfloat ZeroLine[2][2] ={
 		{ -1.5f, 0.0f },{ 1.5f, 0.0f }
 	};
-	
-	//sin(glfwGetTime())
-	
+
+
 
 	glCreateVertexArrays(NumVAO, VAOs);  //等效glGenVertexArrays(NumVAOs, VAOs)
 										  //创建 NumVAOs 个未使用的 VAO对象 到数组VAOs中
@@ -115,15 +116,15 @@ GLuint Mygl::DataInit()
 	}
 	Error = checkError();
 	*/
-	glBindVertexArray(VAOs[VAO_Xaxis]);
-	glBindBuffer(GL_ARRAY_BUFFER, VBOs[VBO_Xaxis]);
+	glBindVertexArray(VAOs[VAO_Frame]);
+	glBindBuffer(GL_ARRAY_BUFFER, VBOs[VBO_Frame]);
 	glBufferData(GL_ARRAY_BUFFER, sizeof(ZeroLine), ZeroLine, GL_DYNAMIC_DRAW);
 	glVertexAttribPointer(vPos, 2, GL_FLOAT, GL_FALSE, 2 * sizeof(GLfloat), BUFFER_OFFSET(0));
 	glEnableVertexAttribArray(vPos); 
 	glBindVertexArray(0);
 	Error = checkError();
 
-	XaxisShader = Shader("shaders/triangles/Xaxis.vert", "shaders/triangles/Xaxis.frag");
+	FrameShader = Shader("shaders/triangles/Frame.vert", "shaders/triangles/Frame.frag");
 	SamDataShader = Shader("shaders/triangles/SamData.vert", "shaders/triangles/SamData.frag");
 
 	return GLuint();
@@ -132,6 +133,7 @@ GLuint Mygl::DataInit()
 GLuint Mygl::UpdateSample()
 {
 	//this->Sample[]
+	/*
 	for (GLuint i = 0; i < SamCount; i++)
 	{
 		GLfloat x = -1.0f + (i / (GLfloat)(SamCount - 1))*2.0f;
@@ -146,9 +148,9 @@ GLuint Mygl::UpdateSample()
 			+ sin(x * wPams[w6].wT) / wPams[w6].pScale
 			+ sin(x * wPams[w7].wT) / wPams[w7].pScale
 			+ sin(x * wPams[w8].wT) / wPams[w8].pScale
-			+ sin(x * wPams[w9].wT) / wPams[w9].pScale;*/
+			+ sin(x * wPams[w9].wT) / wPams[w9].pScale;
 	}
-
+	*/
 	glBindBuffer(GL_ARRAY_BUFFER, VBOs[VBO_SamData]);
 	glBufferSubData(GL_ARRAY_BUFFER, 0, sizeof(vertices), &vertices[0]);
 	glBindBuffer(GL_ARRAY_BUFFER, 0);
@@ -187,7 +189,7 @@ char* Mygl::checkError()
 	return "GL Undefined Error";
 }
 
-void Mygl::glVersion()
+ void Mygl::glVersion()
 {
 
 	cout << "OpenGL:" << endl;
@@ -202,29 +204,29 @@ void Mygl::glVersion()
 	cout << "GLFW:" << endl;
 	cout << glfwGetVersionString() << "\n" << endl;
 
-	cout << glfwGetTime() << "\n" << endl;
-
+	//cout << glfwGetTime() << "\n" << endl;
 	
 }
 
-void Mygl::display()
+void Mygl::frameDisplay()
 {
 	static const float black[] = { 0.0f, 0.0f, 0.0f, 0.0f };
 	glClearBufferfv(GL_COLOR, 0, black); //设置默认清除色black
 
 
-	XaxisShader.use();
-	glBindVertexArray(VAOs[VAO_Xaxis]);
-	glDrawArrays(GL_LINE_STRIP, 0, NumVertices_Xaxis);
+	FrameShader.use();
+	glBindVertexArray(VAOs[VAO_Frame]);
+	glDrawArrays(GL_LINE_STRIP, 0, NumVertices_Frame);
 
 	//***************************************************************
 
+	/*
 	SamDataShader.use();
 	glBindVertexArray(VAOs[VAO_SamData]);
 	glBindBuffer(GL_ARRAY_BUFFER, VBOs[VBO_SamData]);
 	glDrawArrays(GL_LINE_STRIP, 0, SamCount);
+	*/
 
-	
 }
 
 void Mygl::PscaleRedistribute(Wave_IDs wId, GLint operand, Wave_Operate rMod)
@@ -240,26 +242,7 @@ void Mygl::PscaleRedistribute(Wave_IDs wId, GLint operand, Wave_Operate rMod)
 
 }
 
-GLuint Mygl::Run()
-{
-	while (!glfwWindowShouldClose(window))
-	{
-		/* 在这里做渲染 */
-		//int width, height;
-		//glfwGetFramebufferSize(window, &width, &height);
-		//glViewport(0, 0, width, height);
-		//glClear(GL_COLOR_BUFFER_BIT);
-		display();
-		/* 交换缓冲区，即在window上更新内容 */
-		glfwSwapBuffers(window);
 
-		/* 轮询事件 */
-		//glfwPollEvents();
-		glfwWaitEvents();
-	}
-
-	return GLuint();
-}
 
 Mygl::Mygl()
 {

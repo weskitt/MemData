@@ -1,10 +1,5 @@
 #pragma once
 
-
-
-
-
-
 struct ALL_KEY_CHUNKS
 {
 
@@ -18,10 +13,11 @@ class READWAVE
 {
 	AUDIO_METHOD AudioMethod;
 	Vawave splitWave;
-	Vshort vSamples;
+	//Vshort vSamples;
 
 public:
-	int GetData(char *); //返回采集到vSamples中的样本数量
+	Vshort vSamples;
+	int GetPCMData(char *); //返回采集到vSamples中的样本数量
 	//void split();
 
 	READWAVE();

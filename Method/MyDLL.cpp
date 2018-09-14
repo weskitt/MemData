@@ -22,55 +22,60 @@ int AUDIO_METHOD::SampleGetFromFile(char *url)
 	return FormatSampleSize;
 }
 
-void AUDIO_METHOD::LoopAnalyseSample(Vshort &vSample)
+void AUDIO_METHOD::LoopAnalyseSample(Vshort &vSample, bool ver)
 {
-	SetBeginSample();
 	RichSample rSample;
-	PART part;
-
-	int PosPreOffset = 0;
-	int NegPreOffset = 0;
-
-	int PosSampleCount = 0;
-	int NegSampleCount = 0;
-
-	for (; AddrOffset < FormatSampleSize; AddrOffset++)
+	SetBeginSample();
+	if (!ver)
 	{
-		//part.setRsample(AddrOffset, BeginSample[AddrOffset]);
-		rSample.Set(AddrOffset, BeginSample[AddrOffset]);
+		for (; AddrOffset < FormatSampleSize; AddrOffset++)
+			vSample.push_back(BeginSample[AddrOffset]);
+		delete (FormatSamples);
+	}
+	else
+	{
+		
+		PART part;
 
-		if (rSample.data > 0) //if (PosSampleCount == 0){
-							  //	PosPreOffset = AddrOffset;
-							  //	NegSampleCount = 0;}
-							  //++PosSampleCount;
-							  //part.countSamMax();
-							  //part.countRelativeOffset(PosPreOffset);
-							  //part.SamplePart(vSampleChunkPos);//PosPreOffset = AddrOffset;
+		int PosPreOffset = 0;
+		int NegPreOffset = 0;
+
+		int PosSampleCount = 0;
+		int NegSampleCount = 0;
+
+		for (; AddrOffset < FormatSampleSize; AddrOffset++)
 		{
-			vSampleInPos.push_back(rSample); //样本正区间分组
+			//part.setRsample(AddrOffset, BeginSample[AddrOffset]);
+			rSample.Set(AddrOffset, BeginSample[AddrOffset]);
+
+			if (rSample.data > 0)
+			{
+				vSampleInPos.push_back(rSample); //样本正区间分组
+			}
+			else if (rSample.data < 0)
+			{
+				vSampleInNeg.push_back(rSample); //样本负区间分组
+			}
+			//vSample.push_back( BeginSample[AddrOffset] ); //跳过振幅为零的样本
 		}
-		else if (rSample.data < 0)
+		delete (FormatSamples);
+
+		PosPreOffset = vSampleInPos[0].addr;
+		NegPreOffset = vSampleInNeg[0].addr;
+
+		for (RichSample &var : vSampleInPos)
 		{
-			vSampleInNeg.push_back(rSample); //样本负区间分组
+			var.CountOffset(PosPreOffset);
+			part.SamplePart(vSampleChunkPos, var);
+			PosPreOffset = var.addr;
 		}
-		//vSample.push_back( BeginSample[AddrOffset] ); //跳过振幅为零的样本
+		for (RichSample &var : vSampleInNeg)
+		{
+			var.CountOffset(NegPreOffset);
+			NegPreOffset = var.addr;
+		}
 	}
-	delete (FormatSamples);
-
-	PosPreOffset = vSampleInPos[0].addr;
-	NegPreOffset = vSampleInNeg[0].addr;
-
-	for (RichSample &var : vSampleInPos)
-	{
-		var.CountOffset(PosPreOffset);
-		part.SamplePart(vSampleChunkPos, var);
-		PosPreOffset = var.addr;
-	}
-	for (RichSample &var : vSampleInNeg)
-	{
-		var.CountOffset(NegPreOffset);
-		NegPreOffset = var.addr;
-	}
+	
 }
 
 void PART::SamplePart(VsampleChunk &vSampleChunk, RichSample &rSample)
@@ -143,12 +148,6 @@ void AUDIO_METHOD::SetBeginSample()
 	}
 	BeginSample = FormatSamples + i;
 	FormatSampleSize = FormatSampleSize - i;
-
-	//samB = BeginSample[AddrOffset];
-	//samA = BeginSample[++AddrOffset];
-	//if (samB < samA) WaveStateRise = true;//预测波峰
-	//else			 WaveStateDown = true;//预测波谷
-	//return BeginSample;
 }
 
 VshortIter AUDIO_METHOD::SampleFindKey(VshortIter &iter, VshortIter SampleEnd, Vpair &PeakSamples, Vpair &TroughSamples)

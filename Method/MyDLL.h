@@ -173,7 +173,7 @@ private:
 public:
 	_declspec(dllexport) int SampleGetFromFile(char * url);
 	//_declspec(dllexport) 
-	_declspec(dllexport) void LoopAnalyseSample(Vshort &vSample);
+	_declspec(dllexport) void LoopAnalyseSample(Vshort &vSample, bool ver);
 	_declspec(dllexport) VshortIter SampleFindKey(VshortIter &iter, VshortIter SampleEnd, Vpair &PeakSamples, Vpair &TroughSamples);
 
 private:

@@ -150,7 +150,7 @@ class AUDIO_METHOD
 	ifstream	fin;
 public:
 	bool		start = true;//默认起步开关
-	short		StartSampleGate = 400;  //起步采样阀门,起步时过滤低于该值以下的采样
+	short		StartSampleGate = 200;  //起步采样阀门,起步时过滤低于该值以下的采样
 
 private:
 	short	  * FormatSamples;

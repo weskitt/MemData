@@ -1,13 +1,13 @@
 #include "stdafx.h"
 #include "Mygl.h"
 
-bool Mygl::Wflag = false;
+bool Mygl::Wflag = true;
 
 static void key_callback(GLFWwindow* window, int key, int scancode, int action, int mods)
 {
 	switch (key)
 	{
-	case GLFW_KEY_0:
+	case GLFW_KEY_2:
 		Mygl::Wflag = false;
 		break;
 	case GLFW_KEY_1:
@@ -53,15 +53,9 @@ GLuint Mygl::GLInit()
 	glVersion();
 }
 
-GLuint Mygl::DataInit()
-{
+GLuint Mygl::GLUpload()
+{   
 	//glfwGetTime();
-
-	GLfloat ZeroLine[2][2] ={
-		{ -1.5f, 0.0f },{ 1.5f, 0.0f }
-	};
-
-
 	glCreateVertexArrays(NumVAO, VAOs);  //等效glGenVertexArrays(NumVAOs, VAOs)
 										  //创建 NumVAOs 个未使用的 VAO对象 到数组VAOs中
 	glCreateBuffers(NumVBO, VBOs);  //等效glGenBuffers(NumBuffers, Buffers);
@@ -93,16 +87,12 @@ GLuint Mygl::DataInit()
 	*/
 	glBindVertexArray(VAOs[VAO_Frame]);
 	glBindBuffer(GL_ARRAY_BUFFER, VBOs[VBO_Frame]);
-	glBufferData(GL_ARRAY_BUFFER, sizeof(ZeroLine), ZeroLine, GL_DYNAMIC_DRAW);
+	glBufferData(GL_ARRAY_BUFFER, sizeof(Frame), Frame, GL_DYNAMIC_DRAW);
 	glVertexAttribPointer(vPos, 2, GL_FLOAT, GL_FALSE, 2 * sizeof(GLfloat), BUFFER_OFFSET(0));
 	glEnableVertexAttribArray(vPos); 
 
 
 	glBindVertexArray(0);
-	Error = checkError();
-
-	FrameShader = Shader("shaders/triangles/Frame.vert", "shaders/triangles/Frame.frag");
-	SamDataShader = Shader("shaders/triangles/SamData.vert", "shaders/triangles/SamData.frag");
 
 	return GLuint();
 }

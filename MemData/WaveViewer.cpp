@@ -7,7 +7,14 @@ bool WaveViewer::Init(char * file)
 	GLInit();
 
 	/************************************************************************/
+	Frame[0].Position[0] = -1.5f;
+	Frame[0].Position[1] =  0.0f;
+	Frame[1].Position[0] =  1.5f;
+	Frame[1].Position[1] =  0.0f;
+	NumVertices_Frame = 2;
+	/************************************************************************/
 	GetPCMData(file);
+
 	SamCount = vSamples.size();
 	vertices = new Vertex[SamCount];
 	for (size_t i = 0; i < SamCount; i++)
@@ -15,9 +22,14 @@ bool WaveViewer::Init(char * file)
 		vertices[i].Position[0] = -1.0f + (i / (GLfloat)(SamCount - 1))*2.0f;
 		vertices[i].Position[1] = (GLfloat)vSamples[i] / SHRT_MAX;  //SHRT_MAX 32767
 	}
+
+	GLUpload();
 	/***********************************************************************/
 	
-	DataInit();
+
+	FrameShader = Shader("shaders/triangles/Frame.vert", "shaders/triangles/Frame.frag");
+	SamDataShader = Shader("shaders/triangles/SamData.vert", "shaders/triangles/SamData.frag");
+
 	return true;
 }
 

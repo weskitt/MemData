@@ -5,14 +5,22 @@
 bool WaveViewer::Init(char * file)
 {
 	GLInit();
+
+	/************************************************************************/
 	GetPCMData(file);
 	SamCount = vSamples.size();
-	Vertex *vertices = new Vertex[SamCount];
+	//unique_ptr<Vertex[]> vertices(new Vertex[SamCount]);
+	vertices = new Vertex[SamCount];
+	//vertices.
 	for (size_t i = 0; i < SamCount; i++)
 	{
-		vertices[i].Position[0] = i;
-		vertices[i].Position[1] = vSamples[i] / SHRT_MAX;
+		vertices[i].Position[0] = -1.0f + (i / (GLfloat)(SamCount - 1))*2.0f;
+		vertices[i].Position[1] = (GLfloat)vSamples[i] / SHRT_MAX;  //SHRT_MAX 32767
+		//cout << "i = " << i << endl;
+		//cout << "vertices[i].Position[0] = " << vertices[i].Position[0] << endl;
+		//cout << "vertices[i].Position[1] = " << vertices[i].Position[1] << endl;
 	}
+	/***********************************************************************/
 	DataInit();
 	return true;
 }
@@ -50,19 +58,15 @@ void WaveViewer::display()
 	frameDisplay();
 	//***************************************************************
 	PCMdisplay();
+	Error = checkError();
 }
 
 void WaveViewer::PCMdisplay()
 {
-	Error = checkError();
 	SamDataShader.use();
-	Error = checkError();
 	glBindVertexArray(VAOs[VAO_SamData]);
-	Error = checkError();
 	glBindBuffer(GL_ARRAY_BUFFER, VBOs[VBO_SamData]);
-	Error = checkError();
-	glDrawArrays(GL_POINT, 0, SamCount);
-	Error = checkError();
+	glDrawArrays(GL_LINE_STRIP, 0, SamCount);
 }
 
 void WaveViewer::COMdisplay()

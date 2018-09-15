@@ -57,7 +57,7 @@ GLuint Mygl::GLInit()
 
 	glewInit();
 
-	glPointSize(4);  //设置4个像素为一点
+	glPointSize(1);  //设置4个像素为一点
 	glLineWidth(1);  //设置线宽为4
 
 	glVersion();
@@ -93,7 +93,7 @@ GLuint Mygl::DataInit()
 	Error = checkError();
 	glBindVertexArray(VAOs[VAO_SamData]);
 	glBindBuffer(GL_ARRAY_BUFFER, VBOs[VBO_SamData]);
-	glBufferData(GL_ARRAY_BUFFER, sizeof(vertices), vertices, GL_DYNAMIC_DRAW);
+	glBufferData(GL_ARRAY_BUFFER, sizeof(GLfloat)*2*SamCount, vertices, GL_DYNAMIC_DRAW);
 	glVertexAttribPointer(vPos, 2, GL_FLOAT, GL_FALSE, sizeof(Vertex), BUFFER_OFFSET(0));  
 	glEnableVertexAttribArray(vPos); 
 	Error = checkError();

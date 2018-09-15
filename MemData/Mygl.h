@@ -39,6 +39,7 @@ public:
 	{
 		GLfloat Position[2];
 	};
+	Vertex * vertices;
 	int SamCount;
 public:
 	enum Attrib_IDs { vPos, vOffset, vScale };          // Ù–‘œ‡πÿID
@@ -55,7 +56,7 @@ public:
 
 	
 
-	Vertex * vertices;
+	
 
 	Shader FrameShader;
 	Shader SamDataShader;

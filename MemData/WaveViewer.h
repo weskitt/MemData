@@ -4,6 +4,12 @@ class WaveViewer :
 	public Mygl, READWAVE
 {
 public:
+	//struct Vertex
+	//{
+	//	GLfloat Position[2];
+	//};
+	//Vertex * vertices;
+public:
 	bool Init(char * file);
 	void Run();
 	WaveViewer();

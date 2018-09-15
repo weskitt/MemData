@@ -7,9 +7,8 @@ class Mygl
 public:	
 	GLFWwindow* window;   /* 初始化glfw库 */
 	char* Error;
-	
-	static const GLint AddsOperand;
-	static const GLint SubtractsOperand;
+	static bool Wflag;
+
 
 	enum VAO_IDs { VAO_Frame, VAO_SamData, NumVAO };    //顶点数组对象相关ID
 	
@@ -27,14 +26,7 @@ public:
 		Zero_Dim, One_Dim, Two_Dim, Three_Dim,
 		NumVertices_Frame = 2
 	};
-	static GLfloat baseT;
-	static GLfloat curT;
-	struct WaveParam
-	{
-		GLfloat wT = 0.0f;
-		GLfloat pScale = 0.0f;
-		GLfloat weight = 0.0f;
-	};
+
 	struct Vertex
 	{
 		GLfloat Position[2];
@@ -45,18 +37,13 @@ public:
 	enum Attrib_IDs { vPos, vOffset, vScale };          //属性相关ID
 	enum Sample_IDs { SamUp, SamDown, NumYaxis, NumSam=2 };
 
-	static GLuint VAOs[NumVAO];         //定义 顶点数组对象数组
-	static GLuint VBOs[NumVBO];		 //定义 缓冲对象     数组
+	GLuint VAOs[NumVAO];         //定义 顶点数组对象数组
+	GLuint VBOs[NumVBO];		 //定义 缓冲对象     数组
 	
 
 	const GLfloat ScaleFactor = 0.2f;
 	const GLfloat PI = 3.1415926f;
-
-	static WaveParam wPams[WaveCount];
-
-	
-
-	
+	   	
 
 	Shader FrameShader;
 	Shader SamDataShader;
@@ -72,9 +59,7 @@ public:
 
 	void glVersion();
 	void frameDisplay();
-	//void creatTestWave(GLfloat t, GLfloat scale_Y, GLfloat beginoffset, GLuint wx,  GLfloat (&waveData)[WaveCount][SamCount]);Vertex vertices[SamCount]
-	//static void creatTestWave(Vertex (&vertices)[SamCount]);
-	static void PscaleRedistribute(Wave_IDs wId, GLint operand, Wave_Operate rMod);
+	
 	Mygl();
 	~Mygl();
 };

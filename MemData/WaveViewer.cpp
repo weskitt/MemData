@@ -9,18 +9,14 @@ bool WaveViewer::Init(char * file)
 	/************************************************************************/
 	GetPCMData(file);
 	SamCount = vSamples.size();
-	//unique_ptr<Vertex[]> vertices(new Vertex[SamCount]);
 	vertices = new Vertex[SamCount];
-	//vertices.
 	for (size_t i = 0; i < SamCount; i++)
 	{
 		vertices[i].Position[0] = -1.0f + (i / (GLfloat)(SamCount - 1))*2.0f;
 		vertices[i].Position[1] = (GLfloat)vSamples[i] / SHRT_MAX;  //SHRT_MAX 32767
-		//cout << "i = " << i << endl;
-		//cout << "vertices[i].Position[0] = " << vertices[i].Position[0] << endl;
-		//cout << "vertices[i].Position[1] = " << vertices[i].Position[1] << endl;
 	}
 	/***********************************************************************/
+	
 	DataInit();
 	return true;
 }
@@ -57,7 +53,11 @@ void WaveViewer::display()
 {
 	frameDisplay();
 	//***************************************************************
-	PCMdisplay();
+	if(Wflag)
+		PCMdisplay();
+	else
+		COMdisplay();
+
 	Error = checkError();
 }
 
@@ -65,7 +65,6 @@ void WaveViewer::PCMdisplay()
 {
 	SamDataShader.use();
 	glBindVertexArray(VAOs[VAO_SamData]);
-	glBindBuffer(GL_ARRAY_BUFFER, VBOs[VBO_SamData]);
 	glDrawArrays(GL_LINE_STRIP, 0, SamCount);
 }
 

@@ -1,27 +1,17 @@
 #include "stdafx.h"
 #include "Mygl.h"
 
-
-GLuint Mygl::VAOs[Mygl::NumVAO];         //定义 顶点数组对象 数组
-GLuint Mygl::VBOs[Mygl::NumVBO];		 //定义 缓冲对象     数组
-GLfloat Mygl::baseT;
-GLfloat Mygl::curT;
-Mygl::WaveParam Mygl::wPams[Mygl::WaveCount];
-//Mygl::Vertex Mygl::vertices[Mygl::SamCount];
-
-const GLint Mygl::AddsOperand = 0.5;
-const GLint Mygl::SubtractsOperand = -1;
+bool Mygl::Wflag = false;
 
 static void key_callback(GLFWwindow* window, int key, int scancode, int action, int mods)
 {
 	switch (key)
 	{
-	case GLFW_KEY_Q:
-		if (mods == GLFW_MOD_SHIFT)
-			Mygl::PscaleRedistribute(Mygl::w1, Mygl::SubtractsOperand, Mygl::AverageMod);
-		else
-			Mygl::PscaleRedistribute(Mygl::w1, Mygl::AddsOperand, Mygl::AverageMod);
-		//Mygl::UpdateSample();
+	case GLFW_KEY_0:
+		Mygl::Wflag = false;
+		break;
+	case GLFW_KEY_1:
+		Mygl::Wflag = true;
 		break;
 	case GLFW_KEY_ESCAPE:
 		glfwSetWindowShouldClose(window, GL_TRUE);
@@ -61,42 +51,27 @@ GLuint Mygl::GLInit()
 	glLineWidth(1);  //设置线宽为4
 
 	glVersion();
-	//DataInit();
 }
 
 GLuint Mygl::DataInit()
 {
-	
-	//Rwave.GetData("cai3.wav");
+	//glfwGetTime();
 
-	baseT = 20.0f;
-	curT = glfwGetTime();
-	for (size_t i = 0; i < WaveCount; i++)
-	{
-		wPams[i].wT = baseT * i;
-		wPams[i].pScale = 10;
-	}
-
-	//creatTestWave(vertices);
-	//UpdateSample();
-		
 	GLfloat ZeroLine[2][2] ={
 		{ -1.5f, 0.0f },{ 1.5f, 0.0f }
 	};
-
 
 
 	glCreateVertexArrays(NumVAO, VAOs);  //等效glGenVertexArrays(NumVAOs, VAOs)
 										  //创建 NumVAOs 个未使用的 VAO对象 到数组VAOs中
 	glCreateBuffers(NumVBO, VBOs);  //等效glGenBuffers(NumBuffers, Buffers);
 										   //创建 NumBuffers 个未使用的 缓冲对象VBO 到数组Buffers中
-	Error = checkError();
+
 	glBindVertexArray(VAOs[VAO_SamData]);
 	glBindBuffer(GL_ARRAY_BUFFER, VBOs[VBO_SamData]);
 	glBufferData(GL_ARRAY_BUFFER, sizeof(GLfloat)*2*SamCount, vertices, GL_DYNAMIC_DRAW);
 	glVertexAttribPointer(vPos, 2, GL_FLOAT, GL_FALSE, sizeof(Vertex), BUFFER_OFFSET(0));  
 	glEnableVertexAttribArray(vPos); 
-	Error = checkError();
 	/*glBindBuffer(GL_ARRAY_BUFFER, VBOs[VBO_Instance_Offset]);
 	glBufferData(GL_ARRAY_BUFFER, sizeof(glm::vec2) * SamCount, &offsets[0], GL_STATIC_DRAW);
 	glVertexAttribPointer(vOffset, 2, GL_FLOAT, GL_FALSE, 2 * sizeof(GLfloat), BUFFER_OFFSET(0));
@@ -121,6 +96,8 @@ GLuint Mygl::DataInit()
 	glBufferData(GL_ARRAY_BUFFER, sizeof(ZeroLine), ZeroLine, GL_DYNAMIC_DRAW);
 	glVertexAttribPointer(vPos, 2, GL_FLOAT, GL_FALSE, 2 * sizeof(GLfloat), BUFFER_OFFSET(0));
 	glEnableVertexAttribArray(vPos); 
+
+
 	glBindVertexArray(0);
 	Error = checkError();
 
@@ -151,11 +128,11 @@ GLuint Mygl::UpdateSample()
 			+ sin(x * wPams[w9].wT) / wPams[w9].pScale;
 	}
 	*/
+	glBindVertexArray(VAOs[VAO_SamData]);
 	glBindBuffer(GL_ARRAY_BUFFER, VBOs[VBO_SamData]);
-	glBufferSubData(GL_ARRAY_BUFFER, 0, sizeof(vertices), &vertices[0]);
+	glBufferSubData(GL_ARRAY_BUFFER, 0, sizeof(GLfloat) * 2 * SamCount, &vertices[0]);
 	glBindBuffer(GL_ARRAY_BUFFER, 0);
 
-	//Run();
 	return 0;
 }
 
@@ -213,35 +190,10 @@ void Mygl::frameDisplay()
 	static const float black[] = { 0.0f, 0.0f, 0.0f, 0.0f };
 	glClearBufferfv(GL_COLOR, 0, black); //设置默认清除色black
 
-
 	FrameShader.use();
 	glBindVertexArray(VAOs[VAO_Frame]);
 	glDrawArrays(GL_LINE_STRIP, 0, NumVertices_Frame);
-
-	//***************************************************************
-
-	/*
-	SamDataShader.use();
-	glBindVertexArray(VAOs[VAO_SamData]);
-	glBindBuffer(GL_ARRAY_BUFFER, VBOs[VBO_SamData]);
-	glDrawArrays(GL_LINE_STRIP, 0, SamCount);
-	*/
-
 }
-
-void Mygl::PscaleRedistribute(Wave_IDs wId, GLint operand, Wave_Operate rMod)
-{
-	GLfloat re8 = operand / 8;
-	for (size_t i = 1; i < WaveCount; i++)
-	{
-		if (i != wId)
-			wPams[i].pScale += re8;
-		else 
-			wPams[wId].pScale += operand;
-	}
-
-}
-
 
 
 Mygl::Mygl()

@@ -4,7 +4,8 @@ class WaveViewer :
 	public Mygl, READWAVE
 {
 public:
-
+	int PCMSamCount;
+	int COMSamCount;
 public:
 	bool Init(char * file);
 	void Run();

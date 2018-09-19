@@ -53,7 +53,7 @@ GLuint Mygl::GLInit()
 	glVersion();
 }
 
-GLuint Mygl::GLUpload()
+GLuint Mygl::GLUpload(int PCMSamCount, int COMSamCount)
 {   
 	//glfwGetTime();
 	glCreateVertexArrays(NumVAO, VAOs);  //等效glGenVertexArrays(NumVAOs, VAOs)
@@ -61,9 +61,9 @@ GLuint Mygl::GLUpload()
 	glCreateBuffers(NumVBO, VBOs);  //等效glGenBuffers(NumBuffers, Buffers);
 										   //创建 NumBuffers 个未使用的 缓冲对象VBO 到数组Buffers中
 
-	glBindVertexArray(VAOs[VAO_SamData]);
-	glBindBuffer(GL_ARRAY_BUFFER, VBOs[VBO_SamData]);
-	glBufferData(GL_ARRAY_BUFFER, sizeof(GLfloat)*2*SamCount, vertices, GL_DYNAMIC_DRAW);
+	glBindVertexArray(VAOs[VAO_PCMSamData]);
+	glBindBuffer(GL_ARRAY_BUFFER, VBOs[VBO_PCMSamData]);
+	glBufferData(GL_ARRAY_BUFFER, sizeof(GLfloat)*2*PCMSamCount, PCMvertices, GL_DYNAMIC_DRAW);
 	glVertexAttribPointer(vPos, 2, GL_FLOAT, GL_FALSE, sizeof(Vertex), BUFFER_OFFSET(0));  
 	glEnableVertexAttribArray(vPos); 
 	/*glBindBuffer(GL_ARRAY_BUFFER, VBOs[VBO_Instance_Offset]);
@@ -97,7 +97,7 @@ GLuint Mygl::GLUpload()
 	return GLuint();
 }
 
-GLuint Mygl::UpdateSample()
+GLuint Mygl::UpdateSample(int PCMSamCount)
 {
 	//this->Sample[]
 	/*
@@ -118,9 +118,9 @@ GLuint Mygl::UpdateSample()
 			+ sin(x * wPams[w9].wT) / wPams[w9].pScale;
 	}
 	*/
-	glBindVertexArray(VAOs[VAO_SamData]);
-	glBindBuffer(GL_ARRAY_BUFFER, VBOs[VBO_SamData]);
-	glBufferSubData(GL_ARRAY_BUFFER, 0, sizeof(GLfloat) * 2 * SamCount, &vertices[0]);
+	glBindVertexArray(VAOs[VAO_PCMSamData]);
+	glBindBuffer(GL_ARRAY_BUFFER, VBOs[VBO_PCMSamData]);
+	glBufferSubData(GL_ARRAY_BUFFER, 0, sizeof(GLfloat) * 2 * PCMSamCount, &PCMvertices[0]);
 	glBindBuffer(GL_ARRAY_BUFFER, 0);
 
 	return 0;

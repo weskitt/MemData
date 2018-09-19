@@ -9,10 +9,11 @@ public:
 	char* Error;
 	static bool Wflag;
 
-	enum VAO_IDs { VAO_Frame, VAO_SamData, NumVAO };    //顶点数组对象相关ID
+	enum VAO_IDs { VAO_Frame, VAO_PCMSamData, VAO_COMSamData, NumVAO };    //顶点数组对象相关ID
 	
 	enum VBO_IDs { VBO_Frame,
-				   VBO_SamData, 
+				   VBO_PCMSamData, 
+				   VBO_COMSamData, 
 				   VBO_Instance_Offset, 
 				   VBO_Instance_Scale, 
 				   NumVBO }; //数组缓冲相关ID
@@ -23,9 +24,10 @@ public:
 	{
 		GLfloat Position[2];
 	};
-	Vertex * vertices;
+	Vertex * PCMvertices;
+	Vertex * COMvertices;
 	Vertex Frame[2];
-	int SamCount;
+
 	int NumVertices_Frame;
 public:
 	enum Attrib_IDs { vPos, vOffset, vScale };          //属性相关ID
@@ -38,9 +40,9 @@ public:
 	
 public:
 	GLuint GLInit();
-	GLuint GLUpload();
+	GLuint GLUpload(int PCMSamCount, int COMSamCount);
 
-	GLuint UpdateSample();
+	GLuint UpdateSample(int COMSamCount);
 
 	char* checkError();
 

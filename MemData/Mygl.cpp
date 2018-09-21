@@ -66,6 +66,13 @@ GLuint Mygl::GLUpload(int PCMSamCount, int COMSamCount)
 	glBufferData(GL_ARRAY_BUFFER, sizeof(GLfloat)*2*PCMSamCount, PCMvertices, GL_DYNAMIC_DRAW);
 	glVertexAttribPointer(vPos, 2, GL_FLOAT, GL_FALSE, sizeof(Vertex), BUFFER_OFFSET(0));  
 	glEnableVertexAttribArray(vPos); 
+	checkError();
+	glBindVertexArray(VAOs[VAO_COMSamData]);
+	glBindBuffer(GL_ARRAY_BUFFER, VBOs[VBO_COMSamData]);
+	glBufferData(GL_ARRAY_BUFFER, sizeof(GLfloat) * 2 * COMSamCount, COMvertices, GL_DYNAMIC_DRAW);
+	glVertexAttribPointer(vPos, 2, GL_FLOAT, GL_FALSE, sizeof(Vertex), BUFFER_OFFSET(0));
+	glEnableVertexAttribArray(vPos);
+	checkError();
 	/*glBindBuffer(GL_ARRAY_BUFFER, VBOs[VBO_Instance_Offset]);
 	glBufferData(GL_ARRAY_BUFFER, sizeof(glm::vec2) * SamCount, &offsets[0], GL_STATIC_DRAW);
 	glVertexAttribPointer(vOffset, 2, GL_FLOAT, GL_FALSE, 2 * sizeof(GLfloat), BUFFER_OFFSET(0));
@@ -135,24 +142,32 @@ char* Mygl::checkError()
 	switch (glGetError())
 	{
 	case  GL_NO_ERROR:
+		cout << "GL_NO_ERROR\n" << endl;
 		return ("GL_NO_ERROR\n");
 	case GL_INVALID_ENUM:
+		cout << "GL Invalid Enum\n" << endl;
 		return ("GL Invalid Enum\n");
 	case GL_INVALID_VALUE:
+		cout << "GL Invalid Value\n" << endl;
 		return ("GL Invalid Value\n");
 	case GL_INVALID_OPERATION:
+		cout << "GL Invalid Operation\n" << endl;
 		return ("GL Invalid Operation\n");
 	case GL_OUT_OF_MEMORY:
+		cout << "GL Out Of Memory\n" << endl;
 		return ("GL Out Of Memory\n");
 		//case GL_INVALID_FRAMEBUFFER_OPERATION:  
 		//  return ("GL Invalid FrameBuffer Operation\n");  
 	case  GL_STACK_OVERFLOW:
+		cout << "GL Stack Overflow\n" << endl;
 		return ("GL Stack Overflow\n");
 	case GL_STACK_UNDERFLOW:
+		cout << "GL Stack Underflow\n" << endl;
 		return ("GL Stack Underflow\n");
 		//case GL_TABLE_TOO_LARGE:  
 		//  return ("GL Table Too Large\n");  
 	};
+	cout << "GL Undefined Error\n" << endl;
 	return "GL Undefined Error";
 }
 

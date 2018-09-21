@@ -21,16 +21,24 @@ bool WaveViewer::Init(char * file)
 		PCMvertices[i].Position[0] = -1.0f + (i / (GLfloat)(PCMSamCount - 1))*2.0f;
 		PCMvertices[i].Position[1] = (GLfloat)vSamples[i] / SHRT_MAX;  //SHRT_MAX 32767
 	}
-
+	/*-----------------------------------------------------------------------*/
 	GLfloat preAmp=0.3;
 	int relativeStep=12;
-	int T_step=38;
+	int T_step=20;
 	int PackStep = relativeStep + T_step;
-	COMSamCount = PackStep / 1920;
+	COMSamCount = 1920 / PackStep;
 	COMvertices = new Vertex[COMSamCount];
-	for (size_t curX = 0; curX < 1920; curX++)
+
+	int curX = 0;
+	for (size_t i = 0; i < COMSamCount; i++)
 	{
-		COMvertices[curX].Position[0]=
+		curX = i * PackStep;
+		COMvertices[i].Position[0] = -1.0f + (curX / (GLfloat)(1920 - 1))*2.0f;
+		COMvertices[i].Position[1] = preAmp;
+		++i;
+		curX += relativeStep;
+		COMvertices[i].Position[0] = -1.0f + (curX / (GLfloat)(1920 - 1))*2.0f;
+		COMvertices[i].Position[1] = -preAmp;
 	}
 
 	/***********************************************************************/
@@ -44,6 +52,7 @@ bool WaveViewer::Init(char * file)
 
 void WaveViewer::Run()
 {
+	checkError();
 	while (!glfwWindowShouldClose(window))
 	{
 		/* 在这里做渲染 */
@@ -79,7 +88,7 @@ void WaveViewer::display()
 	else
 		COMdisplay();
 
-	Error = checkError();
+	//Error = checkError();
 }
 
 void WaveViewer::PCMdisplay()
@@ -91,4 +100,7 @@ void WaveViewer::PCMdisplay()
 
 void WaveViewer::COMdisplay()
 {
+	SamDataShader.use();
+	glBindVertexArray(VAOs[VAO_COMSamData]);
+	glDrawArrays(GL_LINE_STRIP, 0, COMSamCount);
 }

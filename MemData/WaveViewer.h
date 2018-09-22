@@ -6,6 +6,17 @@ class WaveViewer :
 public:
 	int PCMSamCount;
 	int COMSamCount;
+	struct Additional_Information
+	{
+		int begin;
+		int endl;
+		int rate;
+	};
+
+	map<int, GLfloat, less<void>> COMSamplesMap;
+
+	typedef map<int, GLfloat, less<void>>::iterator MapIter;
+
 public:
 	bool Init(char * file);
 	void Run();
@@ -13,11 +24,11 @@ public:
 	~WaveViewer();
 
 public:
-	GLfloat GeneralCoordinate(int curX){ 
+	GLfloat general_x(int curX){ 
 		return -1.0f + (curX / (GLfloat)(1920 - 1))*2.0f;  
 	}
-
 	void GerneralWave();
+	void MapToVertex();
 	void display();
 	void PCMdisplay();
 	void COMdisplay();

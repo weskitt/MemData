@@ -23,7 +23,7 @@ bool WaveViewer::Init(char * file)
 	}
 	/*-----------------------------------------------------------------------*/
 	GerneralWave();
-
+	MapToVertex();
 	/***********************************************************************/
 	GLUpload(PCMSamCount, COMSamCount);	
 
@@ -75,12 +75,26 @@ void WaveViewer::GerneralWave()
 	for (size_t i = 0; i < COMSamCount; i++)
 	{
 		curX = i * PackStep;
-		COMvertices[i].Position[0] = GeneralCoordinate(curX);
-		COMvertices[i].Position[1] = preAmp;
+		COMSamplesMap[curX] = preAmp;
+
 		++i;
 		curX += relativeStep;
-		COMvertices[i].Position[0] = GeneralCoordinate(curX);
-		COMvertices[i].Position[1] = -preAmp;
+		COMSamplesMap[curX] = -preAmp;
+	}
+}
+
+void WaveViewer::MapToVertex()
+{
+	int count = COMSamplesMap.size();
+	COMvertices = new Vertex[count];
+
+	int index = -1;
+	for each (auto var in COMSamplesMap)
+	{
+		index += 1;
+		COMvertices[index].Position[0] = general_x(var.first);
+		COMvertices[index].Position[1] = var.second;
+		
 	}
 }
 

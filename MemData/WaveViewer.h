@@ -6,12 +6,7 @@ class WaveViewer :
 public:
 	int PCMSamCount;
 	int COMSamCount;
-	struct Additional_Information
-	{
-		int begin;
-		int endl;
-		int rate;
-	};
+
 
 	map<int, GLfloat, less<void>> COMSamplesMap;
 

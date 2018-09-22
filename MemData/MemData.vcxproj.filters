@@ -78,6 +78,9 @@
     <ClInclude Include="WaveViewer.h">
       <Filter>头文件</Filter>
     </ClInclude>
+    <ClInclude Include="AllDataBase.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="stdafx.cpp">
@@ -129,6 +132,9 @@
       <Filter>源文件</Filter>
     </ClCompile>
     <ClCompile Include="WaveViewer.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="AllDataBase.cpp">
       <Filter>源文件</Filter>
     </ClCompile>
   </ItemGroup>

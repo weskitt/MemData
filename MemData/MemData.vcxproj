@@ -150,6 +150,7 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClInclude Include="AllDataBase.h" />
     <ClInclude Include="CENTER.h" />
     <ClInclude Include="DATA_NET.h" />
     <ClInclude Include="HearSensor.h" />
@@ -171,6 +172,7 @@
     <ClInclude Include="WISH.h" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="AllDataBase.cpp" />
     <ClCompile Include="CENTER.cpp" />
     <ClCompile Include="DATA_NET.cpp" />
     <ClCompile Include="HearSensor.cpp" />

@@ -1,4 +1,6 @@
 #pragma once
+using namespace std;
+
 
 //传感器位置
 const int senEye	= 0;	//分析图像

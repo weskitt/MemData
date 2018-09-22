@@ -1,13 +1,13 @@
 #pragma once
-#include "Mygl.h"
+//#include "Mygl.h"  ´ý²âÊÔ×¢ÊÍ
 class WaveViewer :
-	public Mygl, READWAVE
+	public Mygl, READWAVE, AllDataBase
 {
 public:
 	int PCMSamCount;
 	int COMSamCount;
 
-
+	
 	map<int, GLfloat, less<void>> COMSamplesMap;
 
 	typedef map<int, GLfloat, less<void>>::iterator MapIter;

@@ -2,13 +2,14 @@
 class AllDataBase
 {
 public: //关于语音
+
 	struct PhonationInfo
 	{
-		int begin;
-		int endl;
-		int rate; //该区域变化率
+		float begin; //区域描述起点
+		float end;   //区域描述终点
+		int RootRate; //该区域变化率
 
-		int rate0; //附加变化率，用于修改主rate，实现:变加速，变减速
+		int rate0 = 0; //附加变化率，用于修改主rate，实现:变加速，变减速
 	};
 	struct Voice
 	{

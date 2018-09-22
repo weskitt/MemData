@@ -64,9 +64,9 @@ WaveViewer::~WaveViewer()
 
 void WaveViewer::GerneralWave()
 {
-	GLfloat preAmp = 0.3;
-	int relativeStep = 12;
-	int T_step = 20;
+	GLfloat preAmp = 0.1;
+	int relativeStep = 5;
+	int T_step = 13;
 	int PackStep = relativeStep + T_step;
 	COMSamCount = 1920 / PackStep;
 	COMvertices = new Vertex[COMSamCount];
@@ -76,10 +76,42 @@ void WaveViewer::GerneralWave()
 	{
 		curX = i * PackStep;
 		COMSamplesMap[curX] = preAmp;
-
+		//创建基本数据
 		++i;
 		curX += relativeStep;
 		COMSamplesMap[curX] = -preAmp;
+	}
+
+	PhonationInfo tInfo;
+	Voice tVoice;
+	tInfo.begin = 0.0;
+	tInfo.end = 0.5;
+	tInfo.RootRate = 0.05; //膨胀
+	tVoice.info.push_back(tInfo);
+	tInfo.begin = 0.5; 
+	tInfo.end = 1.0;
+	tInfo.RootRate = -0.05;//收缩 连续变化
+	tVoice.info.push_back(tInfo);
+	GLfloat lastValue = preAmp;
+	float t_rate = 0.05;
+	for(auto &var : COMSamplesMap)
+	{
+		
+		if ( general_x(var.first) < 0.5 )
+		{
+			//var.second = lastValue;
+			var.second = var.second*(1 + t_rate);
+			t_rate += 0.05;
+			//lastValue = var.second;
+		}
+		else
+		{
+			//var.second = lastValue;
+			var.second = var.second*(1 - t_rate);
+			t_rate += 0.05;
+			//lastValue = var.second;
+		}
+		
 	}
 }
 

@@ -13,6 +13,11 @@ public:
 	~WaveViewer();
 
 public:
+	GLfloat GeneralCoordinate(int curX){ 
+		return -1.0f + (curX / (GLfloat)(1920 - 1))*2.0f;  
+	}
+
+	void GerneralWave();
 	void display();
 	void PCMdisplay();
 	void COMdisplay();

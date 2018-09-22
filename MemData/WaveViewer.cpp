@@ -22,24 +22,7 @@ bool WaveViewer::Init(char * file)
 		PCMvertices[i].Position[1] = (GLfloat)vSamples[i] / SHRT_MAX;  //SHRT_MAX 32767
 	}
 	/*-----------------------------------------------------------------------*/
-	GLfloat preAmp=0.3;
-	int relativeStep=12;
-	int T_step=20;
-	int PackStep = relativeStep + T_step;
-	COMSamCount = 1920 / PackStep;
-	COMvertices = new Vertex[COMSamCount];
-
-	int curX = 0;
-	for (size_t i = 0; i < COMSamCount; i++)
-	{
-		curX = i * PackStep;
-		COMvertices[i].Position[0] = -1.0f + (curX / (GLfloat)(1920 - 1))*2.0f;
-		COMvertices[i].Position[1] = preAmp;
-		++i;
-		curX += relativeStep;
-		COMvertices[i].Position[0] = -1.0f + (curX / (GLfloat)(1920 - 1))*2.0f;
-		COMvertices[i].Position[1] = -preAmp;
-	}
+	GerneralWave();
 
 	/***********************************************************************/
 	GLUpload(PCMSamCount, COMSamCount);	
@@ -77,6 +60,28 @@ WaveViewer::WaveViewer()
 
 WaveViewer::~WaveViewer()
 {
+}
+
+void WaveViewer::GerneralWave()
+{
+	GLfloat preAmp = 0.3;
+	int relativeStep = 12;
+	int T_step = 20;
+	int PackStep = relativeStep + T_step;
+	COMSamCount = 1920 / PackStep;
+	COMvertices = new Vertex[COMSamCount];
+
+	int curX = 0;
+	for (size_t i = 0; i < COMSamCount; i++)
+	{
+		curX = i * PackStep;
+		COMvertices[i].Position[0] = GeneralCoordinate(curX);
+		COMvertices[i].Position[1] = preAmp;
+		++i;
+		curX += relativeStep;
+		COMvertices[i].Position[0] = GeneralCoordinate(curX);
+		COMvertices[i].Position[1] = -preAmp;
+	}
 }
 
 void WaveViewer::display()

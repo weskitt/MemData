@@ -5,6 +5,7 @@ public: //关于语音
 
 	struct PhonationInfo
 	{
+		int areaID;
 		float begin; //区域描述起点
 		float end;   //区域描述终点
 		int RootRate; //该区域变化率
@@ -16,7 +17,8 @@ public: //关于语音
 		string symbol; //符号，用于存储显示字符
 		string pinyin; //符号发音
 		int tone;  //声调
-		vector<PhonationInfo> info;
+		//vector<PhonationInfo> info;
+		map<int, PhonationInfo> info;
 		map<int, int> keyData;
 		vector<int> data; //发音具体数据
 	};

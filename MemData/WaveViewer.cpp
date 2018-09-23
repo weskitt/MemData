@@ -64,13 +64,13 @@ WaveViewer::~WaveViewer()
 
 void WaveViewer::GerneralWave()
 {
-	GLfloat preAmp = 0.1;
+	//创建基本数据
+	GLfloat preAmp = 0.05;
 	int relativeStep = 5;
 	int T_step = 13;
 	int PackStep = relativeStep + T_step;
 	COMSamCount = 1920 / PackStep;
 	COMvertices = new Vertex[COMSamCount];
-
 	int curX = 0;
 	for (size_t i = 0; i < COMSamCount; i++)
 	{
@@ -81,27 +81,31 @@ void WaveViewer::GerneralWave()
 		curX += relativeStep;
 		COMSamplesMap[curX] = -preAmp;
 	}
-
+	/******************************************************************/
+	//塑形计算
 	PhonationInfo tInfo;
 	Voice tVoice;
-	tInfo.begin = 0.0;
-	tInfo.end = 0.5;
+	tInfo.areaID = 1;
+	tInfo.begin = -1.0;
+	tInfo.end = 0.0;
 	tInfo.RootRate = 0.05; //膨胀
-	tVoice.info.push_back(tInfo);
-	tInfo.begin = 0.5; 
+	tVoice.info.insert(make_pair(tInfo.areaID, tInfo));
+
+	tInfo.areaID = 2;
+	tInfo.begin = 0.0; 
 	tInfo.end = 1.0;
 	tInfo.RootRate = -0.05;//收缩 连续变化
-	tVoice.info.push_back(tInfo);
+	tVoice.info.insert(make_pair(tInfo.areaID, tInfo));
 	GLfloat lastValue = preAmp;
 	float t_rate = 0.05;
 	for(auto &var : COMSamplesMap)
 	{
 		
-		if ( general_x(var.first) < 0.5 )
+		if ( general_x(var.first) < 0 )
 		{
 			//var.second = lastValue;
-			var.second = var.second*(1 + t_rate);
-			t_rate += 0.05;
+			var.second = var.second + t_rate;
+			t_rate += 0.01;
 			//lastValue = var.second;
 		}
 		else
@@ -113,6 +117,10 @@ void WaveViewer::GerneralWave()
 		}
 		
 	}
+
+	/******************************************************************/
+	//数据补完
+
 }
 
 void WaveViewer::MapToVertex()

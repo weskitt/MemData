@@ -1,7 +1,7 @@
 #include "stdafx.h"
 #include "Mygl.h"
 
-bool Mygl::Wflag = true;
+bool Mygl::Wflag = false;
 
 static void key_callback(GLFWwindow* window, int key, int scancode, int action, int mods)
 {

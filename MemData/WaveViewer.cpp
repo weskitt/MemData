@@ -94,26 +94,56 @@ void WaveViewer::GerneralWave()
 	tInfo.areaID = 2;
 	tInfo.begin = 0.0; 
 	tInfo.end = 1.0;
-	tInfo.RootRate = -0.05;//收缩 连续变化
+	tInfo.RootRate = 0.01;//收缩 连续变化
 	tVoice.info.insert(make_pair(tInfo.areaID, tInfo));
 	GLfloat lastValue = preAmp;
 	float t_rate = 0.05;
+	float lastU = preAmp;
+	float lastD = -preAmp;
+
+	for (InfoIter iter = tVoice.info.begin() ; iter != tVoice.info.end(); iter++)
+	{
+		
+		if ( general_x(iter->first) < 0) {
+
+		}
+		for (auto vin : tVoice.info)
+		{
+
+		}
+
+	}
+
 	for(auto &var : COMSamplesMap)
 	{
+
 		
 		if ( general_x(var.first) < 0 )
 		{
-			//var.second = lastValue;
-			var.second = var.second + t_rate;
-			t_rate += 0.01;
-			//lastValue = var.second;
+			if (var.second > 0)
+			{
+				var.second = lastU + tInfo.RootRate;
+				lastU = var.second;
+			}
+			else if(var.second < 0)
+			{
+				var.second = lastD - tInfo.RootRate;
+				lastD = var.second;
+			}
+			
 		}
 		else
 		{
-			//var.second = lastValue;
-			var.second = var.second*(1 - t_rate);
-			t_rate += 0.05;
-			//lastValue = var.second;
+			if (var.second > 0)
+			{
+				var.second = lastU - tInfo.RootRate;
+				lastU = var.second;
+			}
+			else if (var.second < 0)
+			{
+				var.second = lastD + tInfo.RootRate;
+				lastD = var.second;
+			}
 		}
 		
 	}

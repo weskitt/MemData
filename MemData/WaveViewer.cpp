@@ -62,24 +62,23 @@ WaveViewer::~WaveViewer()
 {
 }
 
-void WaveViewer::shape(GLfloat & value, float rootRate)
+void WaveViewer::shape(GLfloat & value, float & rootRate, float rate0)
 {
-	if (value > 0)
-	{
-		//comIter->second = lastU + rootRate;
-		//lastU = comIter->second;
+	if (value > 0){
+		value = lastU + rootRate;
+		lastU = value;
+		rootRate += rate0;
 	}
-	else if (value < 0)
-	{
-		//comIter->second = lastD - rootRate;
-		//lastD = comIter->second;
+	else if (value < 0){
+		value = lastD - rootRate;
+		lastD = value;
+		rootRate += rate0;
 	}
 }
-
 void WaveViewer::GerneralWave()
 {
 	//创建base基本数据
-	GLfloat preAmp = 0.01;
+	GLfloat preAmp = 0.001;  
 	int relativeStep = 5;
 	int T_step = 13;
 	int PackStep = relativeStep + T_step;
@@ -103,6 +102,7 @@ void WaveViewer::GerneralWave()
 	tInfo.begin = -1.0;
 	tInfo.end = 0.0;
 	tInfo.RootRate = 0.01; //膨胀
+	tInfo.rate0 = 0.0004;
 	tVoice.vinfo.push_back(tInfo);
 	//tVoice.info.insert(make_pair(tInfo.areaID, tInfo));
 
@@ -110,39 +110,31 @@ void WaveViewer::GerneralWave()
 	tInfo.begin = 0.0; 
 	tInfo.end = 1.0;
 	tInfo.RootRate = -0.01;//收缩 连续变化
+	tInfo.rate0 = -0.0004;
 	tVoice.vinfo.push_back(tInfo);
-	//tVoice.info.insert(make_pair(tInfo.areaID, tInfo));
-	GLfloat lastValue = preAmp;
-	float t_rate = 0.05;
-	
-	GLfloat lastU = preAmp;
-	GLfloat lastD = -preAmp;
-
+	//tVoice.info.insert(make_pair(tInfo.areaID, tInfo));	
+	lastU = preAmp;
+	lastD = -preAmp;
 	VInfoIter infoPart = tVoice.vinfo.begin();
 	BaseMapIter comIter = BaseSamplesMap.begin();
-
 	while ( infoPart != tVoice.vinfo.end() && comIter!= BaseSamplesMap.end() )
 	{
-
-		if ( general_x(comIter->first) >= infoPart->begin && general_x(comIter->first) < infoPart->end) 
-		{
-			//shape(comIter->second, infoPart->RootRate);
-
-			if (comIter->second > 0)
-			{
-				comIter->second = lastU + infoPart->RootRate;
-				lastU = comIter->second;
-			}
-			else if (comIter->second < 0)
-			{
-				comIter->second = lastD - infoPart->RootRate;
-				lastD = comIter->second;
-			}
-
+		if ( general_x(comIter->first) >= infoPart->begin && general_x(comIter->first) < infoPart->end) {
+			shape(comIter->second, infoPart->RootRate, infoPart->rate0);
+			//if (comIter->second > 0)
+			//{
+			//	comIter->second = lastU + infoPart->RootRate;
+			//	lastU = comIter->second;
+			//}
+			//else if (comIter->second < 0)
+			//{
+			//	comIter->second = lastD - infoPart->RootRate;
+			//	lastD = comIter->second;
+			//}
 		}
-		else
-		{
+		else{
 			++infoPart;
+			--comIter;
 		}
 		++comIter;
 	}

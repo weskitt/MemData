@@ -23,7 +23,7 @@ public:
 	GLfloat general_x(int curX){ 
 		return -1.0f + (curX / (GLfloat)(1920 - 1))*2.0f;  
 	}
-	void shape(GLfloat &value, float rootRate);
+	void shape(GLfloat &value, float &rootRate, float rate0);
 	void GerneralWave();
 	void MapToVertex();
 	void display();

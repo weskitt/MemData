@@ -25,7 +25,7 @@ bool WaveViewer::Init(char * file)
 	GerneralWave();
 	MapToVertex();
 	/***********************************************************************/
-	GLUpload(PCMSamCount, COMSamCount);	
+	GLUpload(PCMSamCount, BaseSamCount);	
 
 	FrameShader = Shader("shaders/triangles/Frame.vert", "shaders/triangles/Frame.frag");
 	SamDataShader = Shader("shaders/triangles/SamData.vert", "shaders/triangles/SamData.frag");
@@ -62,90 +62,89 @@ WaveViewer::~WaveViewer()
 {
 }
 
+void WaveViewer::shape(GLfloat & value, float rootRate)
+{
+	if (value > 0)
+	{
+		//comIter->second = lastU + rootRate;
+		//lastU = comIter->second;
+	}
+	else if (value < 0)
+	{
+		//comIter->second = lastD - rootRate;
+		//lastD = comIter->second;
+	}
+}
+
 void WaveViewer::GerneralWave()
 {
-	//创建基本数据
-	GLfloat preAmp = 0.05;
+	//创建base基本数据
+	GLfloat preAmp = 0.01;
 	int relativeStep = 5;
 	int T_step = 13;
 	int PackStep = relativeStep + T_step;
-	COMSamCount = 1920 / PackStep;
-	COMvertices = new Vertex[COMSamCount];
+	BaseSamCount = 1920 / PackStep;
+	COMvertices = new Vertex[BaseSamCount];
 	int curX = 0;
-	for (size_t i = 0; i < COMSamCount; i++)
+	for (size_t i = 0; i < BaseSamCount; i++)
 	{
 		curX = i * PackStep;
-		COMSamplesMap[curX] = preAmp;
+		BaseSamplesMap[curX] = preAmp;
 		//创建基本数据
 		++i;
 		curX += relativeStep;
-		COMSamplesMap[curX] = -preAmp;
+		BaseSamplesMap[curX] = -preAmp;
 	}
 	/******************************************************************/
-	//塑形计算
+	//塑形计算   数据修饰
 	PhonationInfo tInfo;
 	Voice tVoice;
 	tInfo.areaID = 1;
 	tInfo.begin = -1.0;
 	tInfo.end = 0.0;
-	tInfo.RootRate = 0.05; //膨胀
-	tVoice.info.insert(make_pair(tInfo.areaID, tInfo));
+	tInfo.RootRate = 0.01; //膨胀
+	tVoice.vinfo.push_back(tInfo);
+	//tVoice.info.insert(make_pair(tInfo.areaID, tInfo));
 
 	tInfo.areaID = 2;
 	tInfo.begin = 0.0; 
 	tInfo.end = 1.0;
-	tInfo.RootRate = 0.01;//收缩 连续变化
-	tVoice.info.insert(make_pair(tInfo.areaID, tInfo));
+	tInfo.RootRate = -0.01;//收缩 连续变化
+	tVoice.vinfo.push_back(tInfo);
+	//tVoice.info.insert(make_pair(tInfo.areaID, tInfo));
 	GLfloat lastValue = preAmp;
 	float t_rate = 0.05;
-	float lastU = preAmp;
-	float lastD = -preAmp;
+	
+	GLfloat lastU = preAmp;
+	GLfloat lastD = -preAmp;
 
-	for (InfoIter iter = tVoice.info.begin() ; iter != tVoice.info.end(); iter++)
-	{
-		
-		if ( general_x(iter->first) < 0) {
+	VInfoIter infoPart = tVoice.vinfo.begin();
+	BaseMapIter comIter = BaseSamplesMap.begin();
 
-		}
-		for (auto vin : tVoice.info)
-		{
-
-		}
-
-	}
-
-	for(auto &var : COMSamplesMap)
+	while ( infoPart != tVoice.vinfo.end() && comIter!= BaseSamplesMap.end() )
 	{
 
-		
-		if ( general_x(var.first) < 0 )
+		if ( general_x(comIter->first) >= infoPart->begin && general_x(comIter->first) < infoPart->end) 
 		{
-			if (var.second > 0)
+			//shape(comIter->second, infoPart->RootRate);
+
+			if (comIter->second > 0)
 			{
-				var.second = lastU + tInfo.RootRate;
-				lastU = var.second;
+				comIter->second = lastU + infoPart->RootRate;
+				lastU = comIter->second;
 			}
-			else if(var.second < 0)
+			else if (comIter->second < 0)
 			{
-				var.second = lastD - tInfo.RootRate;
-				lastD = var.second;
+				comIter->second = lastD - infoPart->RootRate;
+				lastD = comIter->second;
 			}
-			
+
 		}
 		else
 		{
-			if (var.second > 0)
-			{
-				var.second = lastU - tInfo.RootRate;
-				lastU = var.second;
-			}
-			else if (var.second < 0)
-			{
-				var.second = lastD + tInfo.RootRate;
-				lastD = var.second;
-			}
+			++infoPart;
 		}
-		
+		++comIter;
 	}
 
 	/******************************************************************/
@@ -155,11 +154,11 @@ void WaveViewer::GerneralWave()
 
 void WaveViewer::MapToVertex()
 {
-	int count = COMSamplesMap.size();
+	int count = BaseSamplesMap.size();
 	COMvertices = new Vertex[count];
 
 	int index = -1;
-	for each (auto var in COMSamplesMap)
+	for each (auto var in BaseSamplesMap)
 	{
 		index += 1;
 		COMvertices[index].Position[0] = general_x(var.first);
@@ -191,5 +190,5 @@ void WaveViewer::COMdisplay()
 {
 	SamDataShader.use();
 	glBindVertexArray(VAOs[VAO_COMSamData]);
-	glDrawArrays(GL_LINE_STRIP, 0, COMSamCount);
+	glDrawArrays(GL_LINE_STRIP, 0, BaseSamCount);
 }

@@ -17,12 +17,14 @@ public: //关于语音
 		string symbol; //符号，用于存储显示字符
 		string pinyin; //符号发音
 		int tone;  //声调
-		map<int, PhonationInfo> info;
-		map<int, int> keyData;
+		map< int, PhonationInfo, less<void> > info;
+		vector<PhonationInfo> vinfo;
+		map<int, int, less<void> > keyData;  //间断不连续关键帧数据
 		vector<int> data; //发音具体数据
 	};
 
 	typedef map<int, PhonationInfo>::iterator InfoIter;
+	typedef vector<PhonationInfo>::iterator VInfoIter;
 	typedef map<int, int>::iterator KeyDataIter;
 
 public:

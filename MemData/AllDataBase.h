@@ -8,9 +8,18 @@ public: //关于语音
 		int areaID;
 		float begin; //区域描述起点
 		float end;   //区域描述终点
-		float RootRate; //该区域变化率
+		float ort;
+		bool gesture=false;
+		static float RootRate; //该区域变化率
 
-		float rate0 = 0; //附加变化率，用于修改主rate，实现:变加速，变减速
+		float rate0; //附加变化率，用于修改主rate，实现:变加速，变减速
+		static float fusion(PhonationInfo &pinfo){
+			if (!pinfo.gesture) {
+				RootRate *= pinfo.ort;
+				pinfo.gesture = true;
+			}
+			return RootRate+=pinfo.rate0;
+		}
 	};
 	struct Voice
 	{

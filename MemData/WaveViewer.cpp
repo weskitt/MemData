@@ -62,17 +62,17 @@ WaveViewer::~WaveViewer()
 {
 }
 
-void WaveViewer::shape(GLfloat & value, float & rootRate, float rate0)
+void WaveViewer::shape(GLfloat & value, VInfoIter info)
 {
 	if (value > 0){
-		value = lastU + rootRate;
+		value = lastU + info->fusion(*info);
 		lastU = value;
-		rootRate += rate0;
+		//rootRate += rate0;
 	}
 	else if (value < 0){
-		value = lastD - rootRate;
+		value = lastD - info->fusion(*info);
 		lastD = value;
-		rootRate += rate0;
+		//rootRate += rate0;
 	}
 }
 void WaveViewer::GerneralWave()
@@ -96,21 +96,30 @@ void WaveViewer::GerneralWave()
 	}
 	/******************************************************************/
 	//塑形计算   数据修饰
+	PhonationInfo::RootRate=0.04;
 	PhonationInfo tInfo;
 	Voice tVoice;
+
 	tInfo.areaID = 1;
 	tInfo.begin = -1.0;
-	tInfo.end = 0.0;
-	tInfo.RootRate = 0.01; //膨胀
-	tInfo.rate0 = 0.0004;
+	tInfo.end = -0.3;
+	tInfo.ort = 1.0; //膨胀
+	tInfo.rate0 = -0.0005; //膨胀时， 为负-则外凸， 为正-则内凹
 	tVoice.vinfo.push_back(tInfo);
 	//tVoice.info.insert(make_pair(tInfo.areaID, tInfo));
 
 	tInfo.areaID = 2;
-	tInfo.begin = 0.0; 
+	tInfo.begin = -0.3;
+	tInfo.end = 0.3;
+	tInfo.ort = 1.0;//膨胀 连续变化
+	tInfo.rate0 = -0.0016;
+	tVoice.vinfo.push_back(tInfo);
+
+	tInfo.areaID = 3;
+	tInfo.begin = 0.3;
 	tInfo.end = 1.0;
-	tInfo.RootRate = -0.01;//收缩 连续变化
-	tInfo.rate0 = -0.0004;
+	tInfo.ort = -1.0;//收缩 连续变化
+	tInfo.rate0 = -0.0020; //收缩时， 为负-则外凸， 为正-则内凹
 	tVoice.vinfo.push_back(tInfo);
 	//tVoice.info.insert(make_pair(tInfo.areaID, tInfo));	
 	lastU = preAmp;
@@ -120,7 +129,7 @@ void WaveViewer::GerneralWave()
 	while ( infoPart != tVoice.vinfo.end() && comIter!= BaseSamplesMap.end() )
 	{
 		if ( general_x(comIter->first) >= infoPart->begin && general_x(comIter->first) < infoPart->end) {
-			shape(comIter->second, infoPart->RootRate, infoPart->rate0);
+			shape(comIter->second, infoPart);
 			//if (comIter->second > 0)
 			//{
 			//	comIter->second = lastU + infoPart->RootRate;

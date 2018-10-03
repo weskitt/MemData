@@ -77,8 +77,8 @@
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
     <LinkIncremental>true</LinkIncremental>
-    <LibraryPath>C:\Users\wkitt4\OneDrive\glew\lib\Release\x64;C:\Users\wkitt4\OneDrive\glfw\lib;$(LibraryPath)</LibraryPath>
-    <IncludePath>C:\Users\wkitt4\OneDrive\glm;C:\Users\wkitt4\OneDrive\glew\include;C:\Users\wkitt4\OneDrive\glfw\include;$(IncludePath)</IncludePath>
+    <LibraryPath>C:\Users\weskitt\OneDrive\glew\lib\Release\x64;C:\Users\weskitt\OneDrive\glfw\lib;$(LibraryPath)</LibraryPath>
+    <IncludePath>C:\Users\weskitt\OneDrive\glm;C:\Users\weskitt\OneDrive\glew\include;C:\Users\weskitt\OneDrive\glfw\include;$(IncludePath)</IncludePath>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
     <LinkIncremental>false</LinkIncremental>
@@ -107,7 +107,7 @@
       <Optimization>Disabled</Optimization>
       <SDLCheck>true</SDLCheck>
       <PreprocessorDefinitions>_DEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
-      <AdditionalIncludeDirectories>C:\Users\wkitt4\source\repos\MemData\Method;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>C:\Users\weskitt\source\repos\MemData\Method;C:\Users\weskitt\source\repos\weskitt\MemData\Method;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
@@ -203,12 +203,12 @@
     <None Include="shaders\triangles\Frame.vert" />
   </ItemGroup>
   <ItemGroup>
+    <Text Include="Text.txt" />
+  </ItemGroup>
+  <ItemGroup>
     <ProjectReference Include="..\Method\Method.vcxproj">
       <Project>{543146b3-6b14-497e-be68-d37c5522ae0b}</Project>
     </ProjectReference>
-  </ItemGroup>
-  <ItemGroup>
-    <Text Include="Text.txt" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets" />

@@ -62,41 +62,48 @@ WaveViewer::~WaveViewer()
 {
 }
 
-void WaveViewer::shape(GLfloat & value, VInfoIter info)
+void WaveViewer::shape(BaseVoiceSamp &samp, VInfoIter info)
 {
-	if (value > 0){
-		value = lastU + info->fusion(*info);
-		lastU = value;
+	//if (samp.value > 0){
+	//samp.value = lastU + info->fusion(*info);
+	//lastU = samp.value;
 		//rootRate += rate0;
-	}
-	else if (value < 0){
-		value = lastD - info->fusion(*info);
-		lastD = value;
+	//}
+	//else if (samp.value < 0){
+	//	samp.value = lastD - info->fusion(*info);
+	//	lastD = samp.value;
 		//rootRate += rate0;
-	}
+	//}
 }
 void WaveViewer::GerneralWave()
 {
 	//创建base基本数据
-	GLfloat preAmp = 0.001;  
-	int relativeStep = 5;
-	int T_step = 13;
-	int PackStep = relativeStep + T_step;
-	BaseSamCount = 1920 / PackStep;
+	float preAmp = 0.03;
+	int diffStep = 5;
+	int T_step = 28;
+	int PackStep = diffStep + T_step;
+	int PairCount = 1920 / PackStep;
+	BaseSamCount = PairCount*2;
 	COMvertices = new Vertex[BaseSamCount];
-	int curX = 0;
-	for (size_t i = 0; i < BaseSamCount; i++)
+	//int curX = 0;
+	BaseVoiceSamp t_bvs;
+
+	for (size_t i = 0; i < PairCount; i++)
 	{
-		curX = i * PackStep;
-		BaseSamplesMap[curX] = preAmp;
+		//SHRT_MAX
+		//curX = i * PackStep;
+		t_bvs.index = i * PackStep;
+		t_bvs.value = preAmp;
+		t_bvs.invertPoint = 0;
+		BaseSampMap[t_bvs.index] = t_bvs;
 		//创建基本数据
-		++i;
-		curX += relativeStep;
-		BaseSamplesMap[curX] = -preAmp;
+		//++i;
+		//curX += diffStep;
+		//BaseSampMap[curX] = -preAmp;
 	}
 	/******************************************************************/
 	//塑形计算   数据修饰
-	PhonationInfo::RootRate=0.04;
+	//PhonationInfo::RootRate=0.04;
 	PhonationInfo tInfo;
 	Voice tVoice;
 
@@ -104,7 +111,8 @@ void WaveViewer::GerneralWave()
 	tInfo.begin = -1.0;
 	tInfo.end = -0.3;
 	tInfo.ort = 1.0; //膨胀
-	tInfo.rate0 = -0.0005; //膨胀时， 为负-则外凸， 为正-则内凹
+	tInfo.RootRate = 0.008;
+	tInfo.Arate0 = 0.03; //膨胀时， 为负-则外凸， 为正-则内凹
 	tVoice.vinfo.push_back(tInfo);
 	//tVoice.info.insert(make_pair(tInfo.areaID, tInfo));
 
@@ -112,24 +120,31 @@ void WaveViewer::GerneralWave()
 	tInfo.begin = -0.3;
 	tInfo.end = 0.3;
 	tInfo.ort = 1.0;//膨胀 连续变化
-	tInfo.rate0 = -0.0016;
+	tInfo.RootRate = 0.010;
+	tInfo.Arate0 = 0.01;
 	tVoice.vinfo.push_back(tInfo);
 
 	tInfo.areaID = 3;
 	tInfo.begin = 0.3;
 	tInfo.end = 1.0;
 	tInfo.ort = -1.0;//收缩 连续变化
-	tInfo.rate0 = -0.0020; //收缩时， 为负-则外凸， 为正-则内凹
+	tInfo.RootRate = 0.013;
+	tInfo.Arate0 = 0.02; //收缩时， 为负-则外凸， 为正-则内凹
 	tVoice.vinfo.push_back(tInfo);
 	//tVoice.info.insert(make_pair(tInfo.areaID, tInfo));	
 	lastU = preAmp;
-	lastD = -preAmp;
 	VInfoIter infoPart = tVoice.vinfo.begin();
-	BaseMapIter comIter = BaseSamplesMap.begin();
-	while ( infoPart != tVoice.vinfo.end() && comIter!= BaseSamplesMap.end() )
+	BaseMapIter comIter = BaseSampMap.begin();
+
+	while ( infoPart != tVoice.vinfo.end() && comIter!= BaseSampMap.end() )
 	{
 		if ( general_x(comIter->first) >= infoPart->begin && general_x(comIter->first) < infoPart->end) {
-			shape(comIter->second, infoPart);
+			
+			comIter->second.value = lastU + infoPart->fusion(comIter->second);
+			lastU = comIter->second.value;
+
+			//
+			//shape(comIter->second, infoPart);
 			//if (comIter->second > 0)
 			//{
 			//	comIter->second = lastU + infoPart->RootRate;
@@ -150,20 +165,30 @@ void WaveViewer::GerneralWave()
 
 	/******************************************************************/
 	//数据补完
+	//一:补全逆转数据
+	for (auto samp : BaseSampMap)
+	{
+		t_bvs.index = samp.second.index + diffStep;
+		t_bvs.invertPoint = samp.second.invertPoint;
+		t_bvs.value = t_bvs.invertPoint - samp.second.value;
 
+		BaseSampMap2[samp.second.index] = samp.second;
+		BaseSampMap2[t_bvs.index] = t_bvs;
+	}
 }
 
 void WaveViewer::MapToVertex()
 {
-	int count = BaseSamplesMap.size();
+	int count = BaseSampMap2.size();
 	COMvertices = new Vertex[count];
 
 	int index = -1;
-	for each (auto var in BaseSamplesMap)
+	for each (auto var in BaseSampMap2)
 	{
 		index += 1;
-		COMvertices[index].Position[0] = general_x(var.first);
-		COMvertices[index].Position[1] = var.second;
+		COMvertices[index].Position[0] = general_x(var.second.index);
+		cout << COMvertices[index].Position[0] << endl;
+		COMvertices[index].Position[1] = var.second.value;
 		
 	}
 }

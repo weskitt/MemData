@@ -6,12 +6,13 @@ class WaveViewer :
 public:
 	int PCMSamCount;
 	int BaseSamCount;
-	GLfloat lastU;
-	GLfloat lastD;
+	float lastU;
+	float lastD;
 	
-	map<int, GLfloat, less<void>> BaseSamplesMap;
-
-	typedef map<int, GLfloat, less<void>>::iterator BaseMapIter;
+	//map<int, GLfloat, less<void>> BaseSamplesMap;
+	map<int, BaseVoiceSamp, less<void>> BaseSampMap;
+	map<int, BaseVoiceSamp, less<void>> BaseSampMap2;
+	typedef map<int, BaseVoiceSamp, less<void>>::iterator BaseMapIter;
 
 public:
 	bool Init(char * file);
@@ -23,7 +24,7 @@ public:
 	GLfloat general_x(int curX){ 
 		return -1.0f + (curX / (GLfloat)(1920 - 1))*2.0f;  
 	}
-	void shape(GLfloat &value, VInfoIter info);
+	void shape(BaseVoiceSamp &samp, VInfoIter info);
 	void GerneralWave();
 	void MapToVertex();
 	void display();

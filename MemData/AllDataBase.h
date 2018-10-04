@@ -19,31 +19,34 @@ public: //关于语音
 		float ort;
 		bool effected=false;
 		//static float RootRate; //该区域变化率
-		bool averageRate=false;
+		bool averageRate = false;
+		bool aeraAmp = false;
+		float startAmp;
+		bool InitlastU = true;
 		float RootRate;
-		
-
 		float baseN;
 		int counter=0;
 
 		float Arate0; //附加变化率，用于修改主rate，实现:变加速，变减速
-		float fusion()
+		void fusion(BaseVoiceSamp& bvs, float &lastU)
 		{
-			
-			if (!averageRate) //非匀速增长变化
+			if (aeraAmp) {
+				bvs.value = startAmp;
+				if (!InitlastU) {
+					lastU = bvs.value;
+					InitlastU = true;
+				}
+			}
+			if (!averageRate) //非匀速变化
 			{
 				counter += Arate0;
 				RootRate = baseN * counter * ort;
+
+				bvs.value = lastU + RootRate;
+				lastU = bvs.value;
 			}
 
-			return RootRate;
-			/*if (effected)
-				return RootRate;
-			else
-			{
-				effected = true;
-				return RootRate *= ort;
-			}*/
+
 		}
 	};
 	struct Voice

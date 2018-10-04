@@ -108,15 +108,22 @@ void WaveViewer::GerneralWave()
 	Voice tVoice;
 
 	tInfo.areaID = 1;
+	tInfo.aeraAmp = true;
+	tInfo.startAmp = 0.15;
+	tInfo.InitlastU = false;
+	tInfo.effected = false;
 	tInfo.begin = -1.0;
 	tInfo.end = -0.3;
-	tInfo.ort = -1.0; //收缩
-	tInfo.baseN = 0.0015;
+	tInfo.ort = 1.0; //收缩
+	tInfo.baseN = 0.0008;
 	tInfo.Arate0 = 1; //变化加速率
 	tVoice.vinfo.push_back(tInfo);
 	//tVoice.info.insert(make_pair(tInfo.areaID, tInfo));
 
 	tInfo.areaID = 2;
+	tInfo.aeraAmp = false;
+	tInfo.InitlastU = true;
+	tInfo.effected = false;
 	tInfo.begin = -0.3;
 	tInfo.end = 0.3;
 	tInfo.ort = 1.0;//膨胀 连续变化
@@ -125,6 +132,9 @@ void WaveViewer::GerneralWave()
 	tVoice.vinfo.push_back(tInfo);
 
 	tInfo.areaID = 3;
+	tInfo.aeraAmp = false;
+	tInfo.InitlastU = true;
+	tInfo.effected = false;
 	tInfo.begin = 0.3;
 	tInfo.end = 1.0;
 	tInfo.ort = -1.0;//收缩 连续变化
@@ -139,22 +149,7 @@ void WaveViewer::GerneralWave()
 	while ( infoPart != tVoice.vinfo.end() && comIter!= BaseSampMap.end() )
 	{
 		if ( general_x(comIter->first) >= infoPart->begin && general_x(comIter->first) < infoPart->end) {
-			
-			comIter->second.value = lastU + infoPart->fusion();
-			lastU = comIter->second.value;
-
-			//
-			//shape(comIter->second, infoPart);
-			//if (comIter->second > 0)
-			//{
-			//	comIter->second = lastU + infoPart->RootRate;
-			//	lastU = comIter->second;
-			//}
-			//else if (comIter->second < 0)
-			//{
-			//	comIter->second = lastD - infoPart->RootRate;
-			//	lastD = comIter->second;
-			//}
+			infoPart->fusion(comIter->second, lastU);
 		}
 		else{
 			++infoPart;

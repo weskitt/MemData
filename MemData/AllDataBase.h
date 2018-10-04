@@ -14,22 +14,36 @@ public: //关于语音
 		int areaID;
 		float begin; //区域描述起点
 		float end;   //区域描述终点
+		int countEnd;
+
 		float ort;
 		bool effected=false;
 		//static float RootRate; //该区域变化率
-		bool averageRate=true;
+		bool averageRate=false;
 		float RootRate;
+		
+
+		float baseN;
+		int counter=0;
 
 		float Arate0; //附加变化率，用于修改主rate，实现:变加速，变减速
-		float fusion(BaseVoiceSamp &samp){
-			//if (!effected) {
-			//	RootRate = Arate0*samp.index;
-			//	effected = true;
-			//}
+		float fusion()
+		{
+			
 			if (!averageRate) //非匀速增长变化
-				RootRate = Arate0 * samp.index;
+			{
+				counter += Arate0;
+				RootRate = baseN * counter * ort;
+			}
 
-			return RootRate *= ort;
+			return RootRate;
+			/*if (effected)
+				return RootRate;
+			else
+			{
+				effected = true;
+				return RootRate *= ort;
+			}*/
 		}
 	};
 	struct Voice

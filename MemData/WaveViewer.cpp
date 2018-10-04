@@ -78,8 +78,8 @@ void WaveViewer::shape(BaseVoiceSamp &samp, VInfoIter info)
 void WaveViewer::GerneralWave()
 {
 	//创建base基本数据
-	float preAmp = 0.03;
-	int diffStep = 5;
+	float preAmp = 0.5;
+	int diffStep = 1;
 	int T_step = 28;
 	int PackStep = diffStep + T_step;
 	int PairCount = 1920 / PackStep;
@@ -110,9 +110,9 @@ void WaveViewer::GerneralWave()
 	tInfo.areaID = 1;
 	tInfo.begin = -1.0;
 	tInfo.end = -0.3;
-	tInfo.ort = 1.0; //膨胀
-	tInfo.RootRate = 0.008;
-	tInfo.Arate0 = 0.03; //膨胀时， 为负-则外凸， 为正-则内凹
+	tInfo.ort = -1.0; //收缩
+	tInfo.baseN = 0.0015;
+	tInfo.Arate0 = 1; //变化加速率
 	tVoice.vinfo.push_back(tInfo);
 	//tVoice.info.insert(make_pair(tInfo.areaID, tInfo));
 
@@ -120,16 +120,16 @@ void WaveViewer::GerneralWave()
 	tInfo.begin = -0.3;
 	tInfo.end = 0.3;
 	tInfo.ort = 1.0;//膨胀 连续变化
-	tInfo.RootRate = 0.010;
-	tInfo.Arate0 = 0.01;
+	tInfo.baseN = 0.004;
+	tInfo.Arate0 = 1;
 	tVoice.vinfo.push_back(tInfo);
 
 	tInfo.areaID = 3;
 	tInfo.begin = 0.3;
 	tInfo.end = 1.0;
 	tInfo.ort = -1.0;//收缩 连续变化
-	tInfo.RootRate = 0.013;
-	tInfo.Arate0 = 0.02; //收缩时， 为负-则外凸， 为正-则内凹
+	tInfo.baseN = 0.003;
+	tInfo.Arate0 = 1; //收缩时， 为负-则外凸， 为正-则内凹
 	tVoice.vinfo.push_back(tInfo);
 	//tVoice.info.insert(make_pair(tInfo.areaID, tInfo));	
 	lastU = preAmp;
@@ -140,7 +140,7 @@ void WaveViewer::GerneralWave()
 	{
 		if ( general_x(comIter->first) >= infoPart->begin && general_x(comIter->first) < infoPart->end) {
 			
-			comIter->second.value = lastU + infoPart->fusion(comIter->second);
+			comIter->second.value = lastU + infoPart->fusion();
 			lastU = comIter->second.value;
 
 			//

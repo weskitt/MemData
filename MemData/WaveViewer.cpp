@@ -78,7 +78,7 @@ void WaveViewer::shape(BaseVoiceSamp &samp, VInfoIter info)
 void WaveViewer::GerneralWave()
 {
 	//创建base基本数据
-	float preAmp = 0.5;
+	float preAmp = 0.00000001;
 	int diffStep = 1;
 	int T_step = 28;
 	int PackStep = diffStep + T_step;
@@ -108,40 +108,41 @@ void WaveViewer::GerneralWave()
 	Voice tVoice;
 
 	tInfo.areaID = 1;
-	tInfo.aeraAmp = true;
-	tInfo.startAmp = 0.15;
-	tInfo.InitlastU = false;
-	tInfo.effected = false;
+	tInfo.preVoice = true;
+	tInfo.InitlastU = true;
+	tInfo.Initbegin = false;
+
+	tInfo.startAmp = 0.03;
 	tInfo.begin = -1.0;
-	tInfo.end = -0.3;
-	tInfo.ort = 1.0; //收缩
-	tInfo.baseN = 0.0008;
-	tInfo.Arate0 = 1; //变化加速率
+	tInfo.end = -0.8;
 	tVoice.vinfo.push_back(tInfo);
-	//tVoice.info.insert(make_pair(tInfo.areaID, tInfo));
 
 	tInfo.areaID = 2;
-	tInfo.aeraAmp = false;
-	tInfo.InitlastU = true;
-	tInfo.effected = false;
-	tInfo.begin = -0.3;
+	tInfo.preVoice = false;
+	tInfo.InitlastU = false;
+	tInfo.Initbegin = true;
+	tInfo.beginData = 0.5;
+
+	tInfo.begin = -0.8;
 	tInfo.end = 0.3;
-	tInfo.ort = 1.0;//膨胀 连续变化
-	tInfo.baseN = 0.004;
-	tInfo.Arate0 = 1;
+	tInfo.ort = -0.001;//0不变，-1收缩，1膨胀
+	tInfo.RootRate = 8;
+	tInfo.Arate0 = 3;
+	tInfo.Arate1 = -0.08;
 	tVoice.vinfo.push_back(tInfo);
 
 	tInfo.areaID = 3;
-	tInfo.aeraAmp = false;
-	tInfo.InitlastU = true;
-	tInfo.effected = false;
-	tInfo.begin = 0.3;
+	tInfo.preVoice = false;
+	tInfo.InitlastU = false;
+	tInfo.Initbegin = false;
+	tInfo.begin = 0.03;
 	tInfo.end = 1.0;
-	tInfo.ort = -1.0;//收缩 连续变化
-	tInfo.baseN = 0.003;
-	tInfo.Arate0 = 1; //收缩时， 为负-则外凸， 为正-则内凹
+	tInfo.ort = 0.001;//0不变，-1收缩，1膨胀
+	tInfo.RootRate = 8;
+	tInfo.Arate0 = 3	; //收缩时， 为负-则外凸， 为正-则内凹
+	tInfo.Arate1 = -0.08;
 	tVoice.vinfo.push_back(tInfo);
-	//tVoice.info.insert(make_pair(tInfo.areaID, tInfo));	
+
 	lastU = preAmp;
 	VInfoIter infoPart = tVoice.vinfo.begin();
 	BaseMapIter comIter = BaseSampMap.begin();

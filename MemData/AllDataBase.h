@@ -8,6 +8,7 @@ public: //关于语音
 		int index;
 		float value;
 		int invertPoint; //反转点 ，Y轴值
+		int areaID;
 	};
 	struct PhonationInfo
 	{
@@ -15,34 +16,52 @@ public: //关于语音
 		float begin; //区域描述起点
 		float end;   //区域描述终点
 		int countEnd;
+		float beginData = 0.5;
 
-		float ort;
-		bool effected=false;
-		//static float RootRate; //该区域变化率
-		bool averageRate = false;
-		bool aeraAmp = false;
+		
+		bool Initbegin=false;
+		bool preVoice = false;
 		float startAmp;
-		bool InitlastU = true;
+		bool InitlastU = false;
+		
+		float ort;
 		float RootRate;
-		float baseN;
-		int counter=0;
-
 		float Arate0; //附加变化率，用于修改主rate，实现:变加速，变减速
+		float Arate1;
+		float Arate2;
+		float baseN;
+
 		void fusion(BaseVoiceSamp& bvs, float &lastU)
 		{
-			if (aeraAmp) {
-				bvs.value = startAmp;
-				if (!InitlastU) {
-					lastU = bvs.value;
-					InitlastU = true;
-				}
-			}
-			if (!averageRate) //非匀速变化
+			if (preVoice) 
 			{
-				counter += Arate0;
-				RootRate = baseN * counter * ort;
+				if (InitlastU) {
+					lastU = startAmp;
+					InitlastU = false;
+				}
+				bvs.value = lastU;
+				lastU = bvs.value;
+			}
+			/*
+			if (preVoice && preVoiceEnd)  //
+			{
+				lastU = 0.000001;
+				preVoiceEnd = true;
+			}
+			*/
+			//if (!averageRate) //非匀速变化
+			else
+			{
+				if (Initbegin){
+					lastU = beginData;
+					Initbegin = false;
+				}
+				//counter += 1; //加速参数
 
-				bvs.value = lastU + RootRate;
+				Arate0 += Arate1;
+
+				baseN = Arate0 * RootRate* ort;
+				bvs.value = lastU + baseN;
 				lastU = bvs.value;
 			}
 

@@ -90,20 +90,15 @@ void WaveViewer::GerneralWave()
 
 	for (size_t i = 0; i < PairCount; i++)
 	{
-		//SHRT_MAX
-		//curX = i * PackStep;
 		t_bvs.index = i * PackStep;
 		t_bvs.value = preAmp;
 		t_bvs.invertPoint = 0;
 		BaseSampMap[t_bvs.index] = t_bvs;
-		//创建基本数据
-		//++i;
-		//curX += diffStep;
-		//BaseSampMap[curX] = -preAmp;
 	}
+
+
 	/******************************************************************/
 	//塑形计算   数据修饰
-	//PhonationInfo::RootRate=0.04;
 	PhonationInfo tInfo;
 	Voice tVoice;
 
@@ -158,6 +153,7 @@ void WaveViewer::GerneralWave()
 		}
 		++comIter;
 	}
+
 
 	/******************************************************************/
 	//数据补完

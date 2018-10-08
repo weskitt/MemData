@@ -42,14 +42,6 @@ public: //关于语音
 				bvs.value = lastU;
 				lastU = bvs.value;
 			}
-			/*
-			if (preVoice && preVoiceEnd)  //
-			{
-				lastU = 0.000001;
-				preVoiceEnd = true;
-			}
-			*/
-			//if (!averageRate) //非匀速变化
 			else
 			{
 				if (Initbegin){
@@ -64,8 +56,6 @@ public: //关于语音
 				bvs.value = lastU + baseN;
 				lastU = bvs.value;
 			}
-
-
 		}
 	};
 	struct Voice

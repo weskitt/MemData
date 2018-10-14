@@ -27,7 +27,7 @@ bool WaveViewer::Init(char * file)
 	/***********************************************************************/
 	GLUpload(PCMSamCount, BaseSamCount);	
 
-	FrameShader = Shader("shaders/triangles/Frame.vert", "shaders/triangles/Frame.frag");
+	
 	SamDataShader = Shader("shaders/triangles/SamData.vert", "shaders/triangles/SamData.frag");
 	cout << checkError() << endl;
 	return true;

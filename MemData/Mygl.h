@@ -2,9 +2,11 @@
 
 #define BUFFER_OFFSET(a) ((void*)(a))
 
-class Mygl
+class Mygl :
+	public AllDataBase
 {
 public:	
+	const GLuint WIDTH = 1920, HEIGHT = 960;
 	GLFWwindow* window;   /* ≥ı ºªØglfwø‚ */
 	char* Error;
 	static bool Wflag;
@@ -37,11 +39,16 @@ public:
 
 	Shader FrameShader;
 	Shader SamDataShader;
-	
+
 public:
+	FT_Library ft;
+	FT_Face face;
+
+public:
+	void FTInit();
 	GLuint GLInit();
 	GLuint GLUpload(int PCMSamCount, int COMSamCount);
-
+	void RenderText(Shader &shader, std::string text, GLfloat x, GLfloat y, GLfloat scale, glm::vec3 color);
 	GLuint UpdateSample(int COMSamCount);
 
 	char* checkError();

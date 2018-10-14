@@ -24,6 +24,57 @@ static void error_callback(int error, const char* description)
 {
 	fprintf(stderr, "Error: %s\n", description);
 }
+void Mygl::FTInit()
+{
+	
+	if (FT_Init_FreeType(&ft))
+		cout << "ERROR::FREETYPE: Could not init FreeType Library" << endl;
+
+	
+	if (FT_New_Face(ft, "fonts/arial.ttf", 0, &face))
+		cout << "ERROR::FREETYPE: Failed to load font" << endl;
+
+	FT_Set_Pixel_Sizes(face, 0, 48);
+
+	glPixelStorei(GL_UNPACK_ALIGNMENT, 1); //禁用byte-alignment限制
+	for (GLubyte c = 0; c < 128; c++)
+	{
+		// 加载字符的字形 
+		if (FT_Load_Char(face, c, FT_LOAD_RENDER))
+		{
+			std::cout << "ERROR::FREETYTPE: Failed to load Glyph" << std::endl;
+			continue;
+		}
+		// 生成字形纹理
+		GLuint texture;
+		glGenTextures(1, &texture);
+		glBindTexture(GL_TEXTURE_2D, texture);
+		glTexImage2D(
+			GL_TEXTURE_2D,
+			0,
+			GL_RED,
+			face->glyph->bitmap.width,
+			face->glyph->bitmap.rows,
+			0,
+			GL_RED,
+			GL_UNSIGNED_BYTE,
+			face->glyph->bitmap.buffer
+		);
+		// 设置纹理选项
+		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
+		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
+		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
+		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+		// 将字符存储到字符表中备用
+		Character character = {
+			texture,
+			glm::ivec2(face->glyph->bitmap.width, face->glyph->bitmap.rows),
+			glm::ivec2(face->glyph->bitmap_left, face->glyph->bitmap_top),
+			face->glyph->advance.x
+		};
+		Characters.insert(std::pair<GLchar, Character>(c, character));
+	}
+}
 GLuint Mygl::GLInit()
 {
 	glfwSetErrorCallback(error_callback);
@@ -34,7 +85,7 @@ GLuint Mygl::GLInit()
 	glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 5);
 	glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
 
-	window = glfwCreateWindow(1920, 960, "Hello World", NULL, NULL);	
+	window = glfwCreateWindow(WIDTH, HEIGHT, "Hello World", NULL, NULL);	
 	if (!window)
 	{
 		/* 没有创建会返回NULL */
@@ -46,6 +97,20 @@ GLuint Mygl::GLInit()
 	glfwMakeContextCurrent(window);
 
 	glewInit();
+
+	// Define the viewport dimensions
+	glViewport(0, 0, WIDTH, HEIGHT);
+	//配置正投影
+	glm::mat4 projection = glm::ortho(0.0f, static_cast<GLfloat>(WIDTH), 0.0f, static_cast<GLfloat>(HEIGHT));
+	FrameShader = Shader("shaders/triangles/Frame.vert", "shaders/triangles/Frame.frag");
+	FrameShader.use();
+	glUniformMatrix4fv(glGetUniformLocation( , "projection"), 1, GL_FALSE, glm::value_ptr(projection));
+
+	// Set OpenGL options
+	glEnable(GL_CULL_FACE);
+	glEnable(GL_BLEND);
+	glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+
 
 	glPointSize(1);  //设置4个像素为一点
 	glLineWidth(1);  //设置线宽为4
@@ -102,6 +167,10 @@ GLuint Mygl::GLUpload(int PCMSamCount, int COMSamCount)
 	glBindVertexArray(0);
 
 	return GLuint();
+}
+
+void Mygl::RenderText(Shader & shader, std::string text, GLfloat x, GLfloat y, GLfloat scale, glm::vec3 color)
+{
 }
 
 GLuint Mygl::UpdateSample(int PCMSamCount)
@@ -204,7 +273,6 @@ void Mygl::frameDisplay()
 Mygl::Mygl()
 {
 }
-
 Mygl::~Mygl()
 {
 	glfwTerminate();

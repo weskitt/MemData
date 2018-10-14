@@ -1,6 +1,15 @@
 #pragma once
 class AllDataBase
 {
+public: //g关于字体
+	struct Character {
+		GLuint     TextureID;  // 字形纹理ID
+		glm::ivec2 Size;       // 字形大大小
+		glm::ivec2 Bearing;    // 字形基于基线和起点的位置
+		GLuint     Advance;    // 起点到下一个字形起点的距离
+	};
+	
+	
 public: //关于语音
 
 	struct BaseVoiceSamp
@@ -76,6 +85,7 @@ public: //关于语音
 public:
 
 public:
+	map<GLchar, Character> Characters;
 	map<string, Voice> VoiceData;
 	AllDataBase();
 	~AllDataBase();

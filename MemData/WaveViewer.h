@@ -1,7 +1,7 @@
 #pragma once
 //#include "Mygl.h"  ´ý²âÊÔ×¢ÊÍ
 class WaveViewer :
-	public Mygl, READWAVE, AllDataBase
+	public Mygl, READWAVE
 {
 public:
 	int PCMSamCount;

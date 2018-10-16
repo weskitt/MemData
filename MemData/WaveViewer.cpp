@@ -1,7 +1,7 @@
 #include "stdafx.h"
 #include "WaveViewer.h"
 
-
+   
 bool WaveViewer::Init(char * file)
 {
 	GLInit();

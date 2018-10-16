@@ -35,6 +35,8 @@ void Mygl::FTInit()
 		cout << "ERROR::FREETYPE: Failed to load font" << endl;
 
 	FT_Set_Pixel_Sizes(face, 0, 48);
+	// Disable byte-alignment restriction
+	glPixelStorei(GL_UNPACK_ALIGNMENT, 1);
 
 	glPixelStorei(GL_UNPACK_ALIGNMENT, 1); //禁用byte-alignment限制
 	for (GLubyte c = 0; c < 128; c++)
@@ -74,6 +76,12 @@ void Mygl::FTInit()
 		};
 		Characters.insert(std::pair<GLchar, Character>(c, character));
 	}
+	glBindTexture(GL_TEXTURE_2D, 0);
+	// Destroy FreeType once we're finished
+	FT_Done_Face(face);
+	FT_Done_FreeType(ft);
+
+
 }
 GLuint Mygl::GLInit()
 {
@@ -100,20 +108,23 @@ GLuint Mygl::GLInit()
 
 	// Define the viewport dimensions
 	glViewport(0, 0, WIDTH, HEIGHT);
+	// Set OpenGL options
+	glEnable(GL_CULL_FACE);
+	//glEnable(GL_BLEND);
+	glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+	glPointSize(1);  //设置4个像素为一点
+	glLineWidth(1);  //设置线宽为4
+
+
 	//配置正投影
 	glm::mat4 projection = glm::ortho(0.0f, static_cast<GLfloat>(WIDTH), 0.0f, static_cast<GLfloat>(HEIGHT));
 	FrameShader = Shader("shaders/triangles/Frame.vert", "shaders/triangles/Frame.frag");
-	FrameShader.use();
-	glUniformMatrix4fv(glGetUniformLocation( , "projection"), 1, GL_FALSE, glm::value_ptr(projection));
-
-	// Set OpenGL options
-	glEnable(GL_CULL_FACE);
-	glEnable(GL_BLEND);
-	glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+	//FrameShader.use();
 
 
-	glPointSize(1);  //设置4个像素为一点
-	glLineWidth(1);  //设置线宽为4
+	glUniformMatrix4fv(glGetUniformLocation( FrameShader.ID, "projection"), 1, GL_FALSE, glm::value_ptr(projection));
+	FTInit();
+
 
 	glVersion();
 }
@@ -129,15 +140,15 @@ GLuint Mygl::GLUpload(int PCMSamCount, int COMSamCount)
 	glBindVertexArray(VAOs[VAO_PCMSamData]);
 	glBindBuffer(GL_ARRAY_BUFFER, VBOs[VBO_PCMSamData]);
 	glBufferData(GL_ARRAY_BUFFER, sizeof(GLfloat)*2*PCMSamCount, PCMvertices, GL_DYNAMIC_DRAW);
-	glVertexAttribPointer(vPos, 2, GL_FLOAT, GL_FALSE, sizeof(Vertex), BUFFER_OFFSET(0));  
-	glEnableVertexAttribArray(vPos); 
-	checkError();
+	glVertexAttribPointer(vType_Position, 2, GL_FLOAT, GL_FALSE, sizeof(Vertex), BUFFER_OFFSET(0));  
+	glEnableVertexAttribArray(vType_Position); 
+	Error = checkError();
 	glBindVertexArray(VAOs[VAO_COMSamData]);
 	glBindBuffer(GL_ARRAY_BUFFER, VBOs[VBO_COMSamData]);
 	glBufferData(GL_ARRAY_BUFFER, sizeof(GLfloat) * 2 * COMSamCount, COMvertices, GL_DYNAMIC_DRAW);
-	glVertexAttribPointer(vPos, 2, GL_FLOAT, GL_FALSE, sizeof(Vertex), BUFFER_OFFSET(0));
-	glEnableVertexAttribArray(vPos);
-	checkError();
+	glVertexAttribPointer(vType_Position, 2, GL_FLOAT, GL_FALSE, sizeof(Vertex), BUFFER_OFFSET(0));
+	glEnableVertexAttribArray(vType_Position);
+	Error = checkError();
 	/*glBindBuffer(GL_ARRAY_BUFFER, VBOs[VBO_Instance_Offset]);
 	glBufferData(GL_ARRAY_BUFFER, sizeof(glm::vec2) * SamCount, &offsets[0], GL_STATIC_DRAW);
 	glVertexAttribPointer(vOffset, 2, GL_FLOAT, GL_FALSE, 2 * sizeof(GLfloat), BUFFER_OFFSET(0));
@@ -160,10 +171,16 @@ GLuint Mygl::GLUpload(int PCMSamCount, int COMSamCount)
 	glBindVertexArray(VAOs[VAO_Frame]);
 	glBindBuffer(GL_ARRAY_BUFFER, VBOs[VBO_Frame]);
 	glBufferData(GL_ARRAY_BUFFER, sizeof(Frame), Frame, GL_DYNAMIC_DRAW);
-	glVertexAttribPointer(vPos, 2, GL_FLOAT, GL_FALSE, 2 * sizeof(GLfloat), BUFFER_OFFSET(0));
-	glEnableVertexAttribArray(vPos); 
-
-
+	glVertexAttribPointer(vType_Position, 2, GL_FLOAT, GL_FALSE, 2 * sizeof(GLfloat), BUFFER_OFFSET(0));
+	glEnableVertexAttribArray(vType_Position); 
+	Error = checkError();
+	// text display
+	glBindVertexArray(VAOs[VAO_Text]);
+	glBindBuffer(GL_ARRAY_BUFFER, VBOs[VBO_Text]);
+	glBufferData(GL_ARRAY_BUFFER, sizeof(GLfloat) * 6 * 4, NULL, GL_DYNAMIC_DRAW);
+	glVertexAttribPointer(0, 4, GL_FLOAT, GL_FALSE, 4 * sizeof(GLfloat), 0);
+	glEnableVertexAttribArray(vType_Position);
+	Error = checkError();
 	glBindVertexArray(0);
 
 	return GLuint();
@@ -171,6 +188,49 @@ GLuint Mygl::GLUpload(int PCMSamCount, int COMSamCount)
 
 void Mygl::RenderText(Shader & shader, std::string text, GLfloat x, GLfloat y, GLfloat scale, glm::vec3 color)
 {
+	// Activate corresponding render state	
+	shader.use();
+	glUniform3f(glGetUniformLocation(shader.ID, "textColor"), color.x, color.y, color.z);
+	glActiveTexture(GL_TEXTURE0);
+	glBindVertexArray(VAOs[VAO_Text]);
+
+	// Iterate through all characters
+	std::string::const_iterator c;
+	for (c = text.begin(); c != text.end(); c++)
+	{
+		Character ch = Characters[*c];
+
+		GLfloat xpos = x + ch.Bearing.x * scale;
+		GLfloat ypos = y - (ch.Size.y - ch.Bearing.y) * scale;
+
+		GLfloat w = ch.Size.x * scale;
+		GLfloat h = ch.Size.y * scale;
+		// Update VBO for each character
+		GLfloat vertices[6][4] = {
+			{ xpos,     ypos + h,   0.0, 0.0 },
+			{ xpos,     ypos,       0.0, 1.0 },
+			{ xpos + w, ypos,       1.0, 1.0 },
+
+			{ xpos,     ypos + h,   0.0, 0.0 },
+			{ xpos + w, ypos,       1.0, 1.0 },
+			{ xpos + w, ypos + h,   1.0, 0.0 }
+		};
+		// 绘制 字形 纹理 于四边形上
+		glBindTexture(GL_TEXTURE_2D, ch.TextureID);
+
+		// 更新 内容 于 VBO memory
+		// 使用 glBufferSubData 而不是 glBufferData
+		glBindBuffer(GL_ARRAY_BUFFER, VBOs[VBO_Text]);
+		glBufferSubData(GL_ARRAY_BUFFER, 0, sizeof(vertices), vertices); 
+
+		glBindBuffer(GL_ARRAY_BUFFER, 0);
+		// 绘制四边形
+		glDrawArrays(GL_TRIANGLES, 0, 6);
+		// 更新位置到下一个字形的原点，注意单位是1/64像素
+		x += (ch.Advance >> 6) * scale; // 位偏移6个单位来获取单位为像素的值 (2^6 = 64)
+	}
+	glBindVertexArray(0);
+	glBindTexture(GL_TEXTURE_2D, 0);
 }
 
 GLuint Mygl::UpdateSample(int PCMSamCount)
@@ -263,11 +323,15 @@ void Mygl::frameDisplay()
 {
 	static const float black[] = { 0.0f, 0.0f, 0.0f, 0.0f };
 	glClearBufferfv(GL_COLOR, 0, black); //设置默认清除色black
-
+	//Error=checkError();
 	FrameShader.use();
 	glBindVertexArray(VAOs[VAO_Frame]);
 	glDrawArrays(GL_LINE_STRIP, 0, NumVertices_Frame);
+	RenderText(FrameShader, "This is sample text", 25.0f, 25.0f, 1.0f, glm::vec3(0.5, 0.8f, 0.2f));
+	RenderText(FrameShader, "(C) LearnOpenGL.com", 540.0f, 570.0f, 0.5f, glm::vec3(0.3, 0.7f, 0.9f));
+	//Error = checkError();
 }
+
 
 
 Mygl::Mygl()

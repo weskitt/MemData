@@ -189,10 +189,10 @@ void WaveViewer::display()
 {
 	frameDisplay();
 	//***************************************************************
-	if(Wflag)
-		PCMdisplay();
-	else
-		COMdisplay();
+	//if (Wflag)
+		//PCMdisplay();
+	//else
+		//COMdisplay();
 
 	//Error = checkError();
 }

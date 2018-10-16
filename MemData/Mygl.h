@@ -11,13 +11,18 @@ public:
 	char* Error;
 	static bool Wflag;
 
-	enum VAO_IDs { VAO_Frame, VAO_PCMSamData, VAO_COMSamData, NumVAO };    //顶点数组对象相关ID
+	enum VAO_IDs { VAO_Frame, 
+				   VAO_Text, 
+				   VAO_PCMSamData, 
+				   VAO_COMSamData, 
+				   NumVAO };    //顶点数组对象相关ID
 	
 	enum VBO_IDs { VBO_Frame,
+				   VBO_Text,
 				   VBO_PCMSamData, 
 				   VBO_COMSamData, 
-				   VBO_Instance_Offset, 
-				   VBO_Instance_Scale, 
+				   //VBO_Instance_Offset, 
+				   //VBO_Instance_Scale, 
 				   NumVBO }; //数组缓冲相关ID
 
 	enum Wave_IDs { w0, w1, w2, w3, w4, w5, w6, w7, w8, w9, WaveCount };
@@ -32,7 +37,7 @@ public:
 
 	int NumVertices_Frame;
 public:
-	enum Attrib_IDs { vPos, vOffset, vScale };          //属性相关ID
+	enum Attrib_IDs { vType_Position, vType_Offset, vType_Scale };          //属性相关ID
 
 	GLuint VAOs[NumVAO];         //定义 顶点数组对象数组
 	GLuint VBOs[NumVBO];		 //定义 缓冲对象     数组

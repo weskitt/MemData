@@ -4,7 +4,8 @@
 int AUDIO_METHOD::SampleGetFromFile(char *url)
 {
 	fin.open(url, ios::binary);
-	fin.read((char *)&wave_tag, sizeof(WAVE_HEAD));
+	auto sz = sizeof(WAVE_HEAD);
+	fin.read((char *)&wave_tag, sz);
 	int srcSize = wave_tag.dataSize; //数据长度
 	FormatSampleSize = srcSize / 2;
 

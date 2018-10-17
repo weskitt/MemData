@@ -155,18 +155,6 @@ void WaveViewer::GerneralWave()
 		}
 	}
 
-	//while ( modInfo != tVoice.vinfo.end() && comIter!= BaseSampSingle.end() )
-	//{
-	//	if ( general_x(comIter->first) >= modInfo->begin && general_x(comIter->first) < modInfo->end) {
-	//		modInfo->fusion(comIter->second, lastU);
-	//	}
-	//	else{
-	//		++modInfo;
-	//		continue;
-	//	}
-	//	++comIter;
-	//}
-
 
 	/******************************************************************/
 	//สýพÝฒนอ๊

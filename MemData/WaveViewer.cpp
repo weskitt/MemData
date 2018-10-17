@@ -93,7 +93,7 @@ void WaveViewer::GerneralWave()
 		t_bvs.index = i * PackStep;
 		t_bvs.value = preAmp;
 		t_bvs.invertPoint = 0;
-		BaseSampMap[t_bvs.index] = t_bvs;
+		BaseSampSingle[t_bvs.index] = t_bvs;
 	}
 
 
@@ -139,43 +139,56 @@ void WaveViewer::GerneralWave()
 	tVoice.vinfo.push_back(tInfo);
 
 	lastU = preAmp;
-	VInfoIter infoPart = tVoice.vinfo.begin();
-	BaseMapIter comIter = BaseSampMap.begin();
+	VInfoIter modInfo = tVoice.vinfo.begin();
+	BaseMapIter comIter = BaseSampSingle.begin();
 
-	while ( infoPart != tVoice.vinfo.end() && comIter!= BaseSampMap.end() )
+	for(auto &item : BaseSampSingle)
 	{
-		if ( general_x(comIter->first) >= infoPart->begin && general_x(comIter->first) < infoPart->end) {
-			infoPart->fusion(comIter->second, lastU);
+	NewMod:
+		if (general_x(item.first) >= modInfo->begin && general_x(item.first) < modInfo->end) {
+			modInfo->fusion(item.second, lastU);
 		}
-		else{
-			++infoPart;
-			--comIter;
+		else
+		{
+			++modInfo;
+			goto NewMod;
 		}
-		++comIter;
 	}
+
+	//while ( modInfo != tVoice.vinfo.end() && comIter!= BaseSampSingle.end() )
+	//{
+	//	if ( general_x(comIter->first) >= modInfo->begin && general_x(comIter->first) < modInfo->end) {
+	//		modInfo->fusion(comIter->second, lastU);
+	//	}
+	//	else{
+	//		++modInfo;
+	//		continue;
+	//	}
+	//	++comIter;
+	//}
 
 
 	/******************************************************************/
 	//数据补完
 	//一:补全逆转数据
-	for (auto samp : BaseSampMap)
+	for (auto samp : BaseSampSingle)
 	{
 		t_bvs.index = samp.second.index + diffStep;
 		t_bvs.invertPoint = samp.second.invertPoint;
 		t_bvs.value = t_bvs.invertPoint - samp.second.value;
 
-		BaseSampMap2[samp.second.index] = samp.second;
-		BaseSampMap2[t_bvs.index] = t_bvs;
+		BaseSamps[samp.second.index] = samp.second;
+		BaseSamps[t_bvs.index] = t_bvs;
 	}
 }
 
 void WaveViewer::MapToVertex()
 {
-	int count = BaseSampMap2.size();
+	int count = BaseSamps.size();
 	COMvertices = new Vertex[count];
 
 	int index = -1;
-	for each (auto var in BaseSampMap2)
+	for each (auto var in BaseSamps)
 	{
 		index += 1;
 		COMvertices[index].Position[0] = general_x(var.second.index);

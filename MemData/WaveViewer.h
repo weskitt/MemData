@@ -10,8 +10,8 @@ public:
 	float lastD;
 	
 	//map<int, GLfloat, less<void>> BaseSamplesMap;
-	map<int, BaseVoiceSamp, less<void>> BaseSampMap;
-	map<int, BaseVoiceSamp, less<void>> BaseSampMap2;
+	map<int, BaseVoiceSamp, less<void>> BaseSampSingle;
+	map<int, BaseVoiceSamp, less<void>> BaseSamps;
 	typedef map<int, BaseVoiceSamp, less<void>>::iterator BaseMapIter;
 
 public:

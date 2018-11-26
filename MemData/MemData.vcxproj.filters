@@ -19,6 +19,9 @@
     <Filter Include="shader">
       <UniqueIdentifier>{6eb47e64-8fc0-4a60-a63c-668d6b457e8a}</UniqueIdentifier>
     </Filter>
+    <Filter Include="sensor">
+      <UniqueIdentifier>{1e6cf3bc-f3fe-4a76-88ed-8e7b8e310583}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="stdafx.h">
@@ -69,17 +72,23 @@
     <ClInclude Include="SENSOR.h">
       <Filter>头文件</Filter>
     </ClInclude>
-    <ClInclude Include="ViewSensor.h">
-      <Filter>头文件</Filter>
-    </ClInclude>
-    <ClInclude Include="HearSensor.h">
-      <Filter>头文件</Filter>
-    </ClInclude>
     <ClInclude Include="WaveViewer.h">
       <Filter>头文件</Filter>
     </ClInclude>
     <ClInclude Include="AllDataBase.h">
       <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="ViewSensor.h">
+      <Filter>sensor</Filter>
+    </ClInclude>
+    <ClInclude Include="HearSensor.h">
+      <Filter>sensor</Filter>
+    </ClInclude>
+    <ClInclude Include="TouchSensor.h">
+      <Filter>sensor</Filter>
+    </ClInclude>
+    <ClInclude Include="WordsSensor.h">
+      <Filter>sensor</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -123,12 +132,6 @@
       <Filter>源文件</Filter>
     </ClCompile>
     <ClCompile Include="SENSOR.cpp">
-      <Filter>源文件</Filter>
-    </ClCompile>
-    <ClCompile Include="ViewSensor.cpp">
-      <Filter>源文件</Filter>
-    </ClCompile>
-    <ClCompile Include="HearSensor.cpp">
       <Filter>源文件</Filter>
     </ClCompile>
     <ClCompile Include="WaveViewer.cpp">

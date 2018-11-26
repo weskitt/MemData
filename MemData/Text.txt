@@ -1,11 +1,11 @@
 记忆块-部件(感觉传感器)->作用->情绪感情变量(影响全局)					-
-																		-
+center																		-
 --记忆块:memory															-
 	创建->读取部件感觉													-
 	储存																-		1/25ms  所有Objects反馈感觉---2生成情绪--3记忆感觉
 	刷新																-		2/25ms  所有Objects反馈感觉---2生成情绪--3记忆感觉
 	回想(阅读)															-		3/25ms  所有Objects反馈感觉---2生成情绪--3记忆感觉	
-																		-		...
+body																		-		...
 --部件:objects															-		25/25ms  所有Objects反馈感觉---2生成情绪--3记忆感觉
 	适应性感觉--长期处于一种环境取得的Suitable Sensation				-		...
 				(OriginalSuitableSensation)								-

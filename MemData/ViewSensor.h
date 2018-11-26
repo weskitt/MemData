@@ -1,10 +1,18 @@
 #pragma once
-#include "SENSOR.h"
-class ViewSensor :
-	public SENSOR
+class ViewSensor
 {
 public:
 	ViewSensor();
 	~ViewSensor();
 };
 
+
+
+ViewSensor::ViewSensor()
+{
+}
+
+
+ViewSensor::~ViewSensor()
+{
+}

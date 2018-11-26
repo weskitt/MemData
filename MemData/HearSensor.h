@@ -1,11 +1,19 @@
 #pragma once
-#include "SENSOR.h"
-class HearSensor :
-	public SENSOR
+class HearSensor
 {
-
+public:
 public:
 	HearSensor();
 	~HearSensor();
 };
 
+
+
+HearSensor::HearSensor()
+{
+}
+
+
+HearSensor::~HearSensor()
+{
+}

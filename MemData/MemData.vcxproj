@@ -161,6 +161,7 @@
     <ClInclude Include="SENSOR.h" />
     <ClInclude Include="Shader.h" />
     <ClInclude Include="SOUND.h" />
+    <ClInclude Include="TouchSensor.h" />
     <ClInclude Include="UNIT.h" />
     <ClInclude Include="GENERAL_DATA.h" />
     <ClInclude Include="HeadFile.h" />
@@ -170,12 +171,12 @@
     <ClInclude Include="ViewSensor.h" />
     <ClInclude Include="WaveViewer.h" />
     <ClInclude Include="WISH.h" />
+    <ClInclude Include="WordsSensor.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="AllDataBase.cpp" />
     <ClCompile Include="CENTER.cpp" />
     <ClCompile Include="DATA_NET.cpp" />
-    <ClCompile Include="HearSensor.cpp" />
     <ClCompile Include="LEARNSOUND.cpp" />
     <ClCompile Include="LoadShaders.cpp" />
     <ClCompile Include="Mygl.cpp" />
@@ -192,7 +193,6 @@
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Create</PrecompiledHeader>
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Create</PrecompiledHeader>
     </ClCompile>
-    <ClCompile Include="ViewSensor.cpp" />
     <ClCompile Include="WaveViewer.cpp" />
     <ClCompile Include="WISH.cpp" />
   </ItemGroup>
